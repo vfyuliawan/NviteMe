@@ -281,45 +281,72 @@ class _AddUserScreenState extends State<AddUserScreen> {
                     backgroundColor:
                         !enableApply ? Colors.grey : Constans.secondaryColor),
                 onPressed: () async {
-                  print(userId.toJson());
-                  setState(() {
-                    loading = true;
-                  });
-                  await AddProjectController()
-                      .uploadDataToFirestore(userId)
-                      .then((value) {
-                    if (value) {
-                      setState(() {
-                        loading = false;
-                      });
-                      Alert(
-                        context: context,
-                        type: AlertType.success,
-                        title: "Berhasil menambahkan Project",
-                        style: AlertStyle(
-                          titleStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          descStyle: TextStyle(fontSize: 16),
-                        ),
-                        desc: "Klik Perview untuk melihat perubahan.",
-                        buttons: [
-                          DialogButton(
-                            child: Text(
-                              "Oke",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                  if (enableApply) {
+                    print(userId.toJson());
+                    setState(() {
+                      loading = true;
+                    });
+                    await AddProjectController()
+                        .uploadDataToFirestore(userId)
+                        .then((value) {
+                      if (value) {
+                        setState(() {
+                          loading = false;
+                        });
+                        Alert(
+                          context: context,
+                          type: AlertType.success,
+                          title: "Berhasil menambahkan Project",
+                          style: AlertStyle(
+                            titleStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            width: 120,
-                          )
-                        ],
-                      ).show();
-                    }
-                  });
+                            descStyle: TextStyle(fontSize: 16),
+                          ),
+                          desc: "Klik Perview untuk melihat perubahan.",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Oke",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                      }
+                    });
+                  } else {
+                    Alert(
+                      context: context,
+                      type: AlertType.error,
+                      title: "Gagal",
+                      style: AlertStyle(
+                        titleStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        descStyle: TextStyle(fontSize: 16),
+                      ),
+                      desc: "Pastikan Semua Form Telah Terisi.",
+                      buttons: [
+                        DialogButton(
+                          child: Text(
+                            "Oke",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          width: 120,
+                        )
+                      ],
+                    ).show();
+                  }
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 30),

@@ -35,6 +35,7 @@ class UserIdModel {
   String? slug;
   String? themeName;
   String? themeSong;
+  String? uid;
   bool? guestBarcode;
 
   UserIdModel({
@@ -52,6 +53,7 @@ class UserIdModel {
     this.slug,
     this.themeName,
     this.themeSong,
+    this.uid,
     this.guestBarcode,
   })  : message = message ?? MessageModel(),
         footer = footer ?? FooterModel();
@@ -76,6 +78,7 @@ class UserIdModel {
           ? CountDownModel.fromJson(json["CountDown"])
           : CountDownModel(),
       slug: json["Slug"],
+      uid: json["uid"],
       themeName: json["ThemeName"] ?? "RedEssence",
       themeSong: json["ThemeSong"],
       guestBarcode: json["GuestBarcode"] ?? false,
@@ -98,6 +101,7 @@ class UserIdModel {
         "Slug": slug,
         "ThemeName": themeName,
         "ThemeSong": themeSong,
-        "GuestBarcode": guestBarcode
+        "GuestBarcode": guestBarcode,
+        "uid": uid
       };
 }

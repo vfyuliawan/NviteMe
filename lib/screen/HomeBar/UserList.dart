@@ -4,9 +4,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/UserIdModel.dart';
-import 'package:nvite_me/screen/AddUser/AddUserScreen.dart';
+import 'package:nvite_me/model/UserLoginModel.dart';
+import 'package:nvite_me/screen/AddUser/AddProjectScreen.dart';
 import 'package:nvite_me/screen/DetailUserScreen.dart';
 
 class UserList extends StatefulWidget {
@@ -18,17 +20,33 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> {
   late bool isOpenDashboard;
+  late String uid;
   @override
   void initState() {
     super.initState();
     isOpenDashboard = true;
+    uid = "";
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<UserLoginModel>(
+      future: AuthController().getUserInfo(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          uid = snapshot.data!.uid!;
+          return _listWidget(uid);
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _listWidget(String uid) {
     return Scaffold(
       body: StreamBuilder(
-        stream: OurProjectController().getAlldata(),
+        stream: OurProjectController().getAlldata(uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(

@@ -12,6 +12,7 @@ class FormTextField extends StatefulWidget {
   final bool? enable;
   final bool? sufix;
   final Color? fillColor;
+  final bool? obscureText;
 
   const FormTextField({
     Key? key,
@@ -23,6 +24,7 @@ class FormTextField extends StatefulWidget {
     this.enable,
     this.sufix,
     this.fillColor,
+    this.obscureText,
   }) : super(key: key);
 
   @override
@@ -46,8 +48,9 @@ class _FormTextFieldState extends State<FormTextField> {
         controller: _controller,
         onChanged: widget.onChanged,
         enabled: widget.enable ?? true,
-        maxLines: widget.line,
+        maxLines: widget.line ?? 1,
         style: TextStyle(fontSize: 14),
+        obscureText: widget.obscureText ?? false,
         decoration: InputDecoration(
           fillColor: widget.fillColor ?? Colors.white,
           filled: true,
@@ -60,7 +63,7 @@ class _FormTextFieldState extends State<FormTextField> {
                   color: Colors.blue,
                 )
               : null,
-          labelStyle: TextStyle(fontSize: 16),
+          labelStyle: TextStyle(fontSize: 14),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(width: 1, color: Colors.black26),
             borderRadius: BorderRadius.circular(10.0),

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/controller/AuthController.dart';
+import 'package:nvite_me/screen/LoginScreen.dart';
 import 'package:nvite_me/screen/RootPage.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -26,12 +28,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             padding: EdgeInsets.only(right: 20, top: 20),
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const RootPage(),
-                  ),
-                );
+                AuthController().cekAuthenticationSignIn().then((value) {
+                  print(value);
+                  if (!value) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const LoginScreen(),
+                      ),
+                    );
+                  } else {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const RootPage(),
+                      ),
+                    );
+                  }
+                });
               },
               child: Text(
                 "Skip",
@@ -90,12 +104,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             curve: Curves.bounceIn);
                       }
                     } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RootPage(),
-                        ),
-                      );
+                      AuthController().cekAuthenticationSignIn().then((value) {
+                        print(value);
+                        if (!value) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LoginScreen(),
+                            ),
+                          );
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const RootPage(),
+                            ),
+                          );
+                        }
+                      });
                     }
                   })
                 },

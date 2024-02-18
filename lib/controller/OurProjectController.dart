@@ -18,10 +18,11 @@ import 'package:nvite_me/utils/utils.dart';
 import 'package:path/path.dart';
 
 class OurProjectController {
-  Stream<List<UserIdModel>> getAlldata() {
+  Stream<List<UserIdModel>> getAlldata(String uid) {
     try {
       return FirebaseFirestore.instance
           .collection("UserId")
+          .where("uid", isEqualTo: uid)
           .snapshots()
           .map((querySnapshot) {
         return querySnapshot.docs.map((documentSnapshot) {

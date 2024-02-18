@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/model/UserIdModel.dart';
+import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:path/path.dart';
 
 class AddProjectController {
@@ -24,6 +26,10 @@ class AddProjectController {
 
   Future<bool> uploadDataToFirestore(UserIdModel userData) async {
     try {
+      await AuthController().getUserInfo().then((UserLoginModel userModel) {
+        userData.uid = userModel.uid;
+      });
+
       userData.cover!.imgCover = await uploadImageToStorage(
           userData.cover!.imgFileCover!, userData.slug!);
       userData.home!.homeImg = await uploadImageToStorage(
@@ -48,13 +54,11 @@ class AddProjectController {
           await Future.wait(userData.galery!.imageFile!.map((imageFile) {
         return uploadImageToStorage(imageFile, userData.slug!);
       }));
-
       userData.footer!.image = await uploadImageToStorage(
           userData.cover!.imgFileCover!, userData.slug!);
       userData.footer!.name = userData.cover!.titleCover;
       userData.footer!.qutes =
           "Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas kehadiran dan doa restunya, kami mengucapkan terima kasih";
-
       await FirebaseFirestore.instance
           .collection('UserId')
           .add(userData.toJson());
