@@ -6,10 +6,10 @@ import 'package:nvite_me/model/UserIdModel.dart';
 import 'package:path/path.dart';
 
 class AddProjectController {
-  Future<String> uploadImageToStorage(File imageFile) async {
+  Future<String> uploadImageToStorage(File imageFile, String slug) async {
     try {
       final fileName = basename(imageFile.path);
-      final path = 'files/test/$fileName}';
+      final path = 'files/$slug/$fileName}';
       final file = File(imageFile.path);
       final ref = await FirebaseStorage.instance.ref().child(path);
       final uploadTask = ref.putFile(file);
@@ -24,32 +24,33 @@ class AddProjectController {
 
   Future<bool> uploadDataToFirestore(UserIdModel userData) async {
     try {
-      userData.cover!.imgCover =
-          await uploadImageToStorage(userData.cover!.imgFileCover!);
-      userData.home!.homeImg =
-          await uploadImageToStorage(userData.home!.homeImgFile!);
-      userData.hero!.heroImg =
-          await uploadImageToStorage(userData.hero!.heroImgFile!);
-      userData.maleFemale!.female!.photo =
-          await uploadImageToStorage(userData.maleFemale!.female!.photoFile!);
-      userData.maleFemale!.male!.photo =
-          await uploadImageToStorage(userData.maleFemale!.male!.photoFile!);
+      userData.cover!.imgCover = await uploadImageToStorage(
+          userData.cover!.imgFileCover!, userData.slug!);
+      userData.home!.homeImg = await uploadImageToStorage(
+          userData.home!.homeImgFile!, userData.slug!);
+      userData.hero!.heroImg = await uploadImageToStorage(
+          userData.hero!.heroImgFile!, userData.slug!);
+      userData.maleFemale!.female!.photo = await uploadImageToStorage(
+          userData.maleFemale!.female!.photoFile!, userData.slug!);
+      userData.maleFemale!.male!.photo = await uploadImageToStorage(
+          userData.maleFemale!.male!.photoFile!, userData.slug!);
       userData.infoAcara!.infoAcara!.map((item) async {
-        item.photo = await uploadImageToStorage(item.photoFile!);
+        item.photo =
+            await uploadImageToStorage(item.photoFile!, userData.slug!);
       }).toList();
-      userData.ourStory!.first!.photo =
-          await uploadImageToStorage(userData.ourStory!.first!.photoFile!);
-      userData.ourStory!.second!.photo =
-          await uploadImageToStorage(userData.ourStory!.second!.photoFile!);
-      userData.ourStory!.third!.photo =
-          await uploadImageToStorage(userData.ourStory!.third!.photoFile!);
+      userData.ourStory!.first!.photo = await uploadImageToStorage(
+          userData.ourStory!.first!.photoFile!, userData.slug!);
+      userData.ourStory!.second!.photo = await uploadImageToStorage(
+          userData.ourStory!.second!.photoFile!, userData.slug!);
+      userData.ourStory!.third!.photo = await uploadImageToStorage(
+          userData.ourStory!.third!.photoFile!, userData.slug!);
       userData.galery!.image =
           await Future.wait(userData.galery!.imageFile!.map((imageFile) {
-        return uploadImageToStorage(imageFile);
+        return uploadImageToStorage(imageFile, userData.slug!);
       }));
 
-      userData.footer!.image =
-          await uploadImageToStorage(userData.cover!.imgFileCover!);
+      userData.footer!.image = await uploadImageToStorage(
+          userData.cover!.imgFileCover!, userData.slug!);
       userData.footer!.name = userData.cover!.titleCover;
       userData.footer!.qutes =
           "Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas kehadiran dan doa restunya, kami mengucapkan terima kasih";

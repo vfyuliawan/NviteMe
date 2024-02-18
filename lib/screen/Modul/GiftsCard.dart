@@ -26,12 +26,6 @@ class _GiftsCardState extends State<GiftsCard> {
   Widget build(BuildContext context) {
     GiftstModel data = widget.gifts!;
 
-    List<String> listOfCard = [
-      "ImageBca",
-      "ImageBri",
-      "ImageOvo",
-    ];
-
     return loading
         ? Center(
             child: CircularProgressIndicator(),
@@ -94,7 +88,7 @@ class _GiftsCardState extends State<GiftsCard> {
                           ),
                   ),
                   data.isOpen
-                      ? _formBody(context, data, listOfCard)
+                      ? _formBody(context, data, Constans.listDebitCard)
                       : Container()
                 ],
               ),

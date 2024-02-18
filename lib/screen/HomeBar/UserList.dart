@@ -256,12 +256,12 @@ class _UserListState extends State<UserList> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Icon(
-                                              Icons.monetization_on,
+                                              Icons.monetization_on_outlined,
                                               size: 30,
                                               color: Colors.white,
                                             ),
                                             Text(
-                                              "Play Edsense",
+                                              "Play Adsense",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18,
@@ -299,7 +299,7 @@ class _UserListState extends State<UserList> {
                           topRight: Radius.circular(25),
                         )),
                     width: MediaQuery.of(context).size.width,
-                    height: 550,
+                    height: isOpenDashboard ? 550 : 640,
                     child: Stack(
                       children: [
                         SingleChildScrollView(

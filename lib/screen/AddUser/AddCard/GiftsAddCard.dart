@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, library_private_types_in_public_api, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_element
 
 import 'package:flutter/material.dart';
+import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/model/GiftsModel.dart';
 import 'package:nvite_me/widgets/DropDownWidget.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
@@ -25,12 +26,6 @@ class _GiftsAddCardState extends State<GiftsAddCard> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> listOfCard = [
-      "ImageBca",
-      "ImageBri",
-      "ImageOvo",
-    ];
-
     return loading
         ? Center(
             child: CircularProgressIndicator(),
@@ -95,7 +90,8 @@ class _GiftsAddCardState extends State<GiftsAddCard> {
                           ),
                   ),
                   widget.gifts!.isOpen
-                      ? _formBody(context, widget.gifts!, listOfCard)
+                      ? _formBody(
+                          context, widget.gifts!, Constans.listDebitCard)
                       : Container()
                 ],
               ),
