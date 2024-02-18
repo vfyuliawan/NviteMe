@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class FormTextField extends StatefulWidget {
   final double? topSpace;
   final bool? enable;
   final bool? sufix;
+  final Color? fillColor;
 
   const FormTextField({
     Key? key,
@@ -20,6 +22,7 @@ class FormTextField extends StatefulWidget {
     this.topSpace,
     this.enable,
     this.sufix,
+    this.fillColor,
   }) : super(key: key);
 
   @override
@@ -46,13 +49,13 @@ class _FormTextFieldState extends State<FormTextField> {
         maxLines: widget.line,
         style: TextStyle(fontSize: 14),
         decoration: InputDecoration(
-          fillColor: Colors.white,
+          fillColor: widget.fillColor ?? Colors.white,
           filled: true,
           labelText: widget.labelText,
           suffixIconColor: Colors.blue,
           suffix: widget.sufix == true
               ? Icon(
-                  Icons.keyboard_arrow_right,
+                  Icons.copy,
                   size: 32,
                   color: Colors.blue,
                 )

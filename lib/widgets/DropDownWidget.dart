@@ -35,7 +35,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
       decoration: BoxDecoration(color: Colors.white),
       width: MediaQuery.of(context).size.width,
       child: DropdownMenu<String>(
-        width: 335,
+        width: MediaQuery.of(context).size.width * 0.87,
         label: Text(
           widget.initial!,
           style: TextStyle(

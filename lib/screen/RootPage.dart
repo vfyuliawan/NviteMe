@@ -3,8 +3,8 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/screen/HomeBar/TearmCondition.dart';
 import 'package:nvite_me/screen/HomeBar/UserList.dart';
-import 'package:nvite_me/screen/HomeBar/OurProject.dart';
 
 class RootPage extends StatefulWidget {
   const RootPage({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   int _bottomNavIndex = 0;
   List<Widget> pages = [
     UserList(),
-    OurProject(),
+    TearmCondition(),
   ];
 
   List<IconData> iconList = [

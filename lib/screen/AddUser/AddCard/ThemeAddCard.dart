@@ -31,21 +31,6 @@ class ThemeAddCard extends StatefulWidget {
 }
 
 class _ThemeAddCardState extends State<ThemeAddCard> {
-  List<String> listTheme = [
-    "RedEssence",
-    "BluePremium",
-    // "PastelBehavior",
-    // "GreenLuxury",
-    // "BlackPasta"
-  ];
-  List<String> musicTheme = [
-    "Payung-Teduh-Akad",
-    "Komang-Raim-Laode",
-    // "Merry-Your-Doughter",
-    // "Green Luxury",
-    // "Black Pasta"
-  ];
-
   late bool isOpen = true;
   @override
   void initState() {
@@ -120,7 +105,6 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                                     decoration: TextDecoration.underline,
                                     decorationColor: Colors.blueAccent),
                               )),
-
                       !widget.guestBarcode!
                           ? Container(
                               alignment: Alignment.bottomLeft,
@@ -162,7 +146,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                       SizedBox(height: 10),
                       DropdownWidget(
                         icon: Icons.area_chart,
-                        list: listTheme,
+                        list: Constans.listTheme,
                         initial: widget.thema,
                         setValue: (String value) {
                           setState(() {
@@ -179,7 +163,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                       SizedBox(height: 10),
                       DropdownWidget(
                         icon: Icons.music_note,
-                        list: musicTheme,
+                        list: Constans.listThemeSong,
                         initial: widget.song,
                         setValue: (String value) {
                           setState(() {
@@ -190,68 +174,6 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                         },
                       ),
                       SizedBox(height: 10),
-                      // Container(
-                      //   margin: EdgeInsets.symmetric(horizontal: 0),
-                      //   child: TextButton(
-                      //     style: TextButton.styleFrom(
-                      //         backgroundColor: Constans.secondaryColor),
-                      //     onPressed: () {
-                      //       OurProjectController()
-                      //           .editTheme(
-                      //         song: widget.song!,
-                      //         slug: widget.slug!,
-                      //         themeName: widget.thema,
-                      //       )
-                      //           .then((value) {
-                      //         if (value) {
-                      //           Alert(
-                      //             context: context,
-                      //             type: AlertType.success,
-                      //             title: "Update Tema Berhasil",
-                      //             style: AlertStyle(
-                      //               titleStyle: TextStyle(
-                      //                 fontWeight: FontWeight.bold,
-                      //               ),
-                      //               descStyle: TextStyle(fontSize: 16),
-                      //             ),
-                      //             desc: "Klik Perview untuk melihat perubahan.",
-                      //             buttons: [
-                      //               DialogButton(
-                      //                 child: Text(
-                      //                   "Oke",
-                      //                   style: TextStyle(
-                      //                       color: Colors.white, fontSize: 20),
-                      //                 ),
-                      //                 onPressed: () {
-                      //                   Navigator.pop(context);
-                      //                 },
-                      //                 width: 120,
-                      //               )
-                      //             ],
-                      //           ).show();
-                      //         }
-                      //       });
-                      //     },
-                      //     child: Container(
-                      //       margin: EdgeInsets.symmetric(horizontal: 30),
-                      //       child: Row(
-                      //         mainAxisAlignment: MainAxisAlignment.center,
-                      //         crossAxisAlignment: CrossAxisAlignment.center,
-                      //         children: [
-                      //           Icon(Icons.add_to_home_screen_outlined,
-                      //               color: Colors.white),
-                      //           SizedBox(
-                      //             width: 4,
-                      //           ),
-                      //           Text(
-                      //             'Apply',
-                      //             style: TextStyle(color: Colors.white),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       SizedBox(height: 15),
                     ],
                   )

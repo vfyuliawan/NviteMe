@@ -220,7 +220,7 @@ class _UserListState extends State<UserList> {
                                           ],
                                         ),
                                         Text(
-                                          "1",
+                                          "20",
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -261,7 +261,7 @@ class _UserListState extends State<UserList> {
                                               color: Colors.white,
                                             ),
                                             Text(
-                                              "Saldo",
+                                              "Play Edsense",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18,
@@ -271,7 +271,7 @@ class _UserListState extends State<UserList> {
                                           ],
                                         ),
                                         Text(
-                                          "Rp. 150.000",
+                                          "USD. 8.122",
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -310,7 +310,7 @@ class _UserListState extends State<UserList> {
                                 height: 20,
                               ),
                               Text(
-                                "List of Your Project (1)",
+                                "List of Your Project (${snapshot.data!.length})",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),

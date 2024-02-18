@@ -487,8 +487,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
       children: [
         ThemeAddCard(
           slug: userId.slug ?? "",
-          song: userId.themeSong ?? "",
-          thema: userId.themeName ?? "RedEssence",
+          song: userId.themeSong ?? Constans.listThemeSong.first,
+          thema: userId.themeName ?? Constans.listTheme.first,
           guestBarcode: userId.guestBarcode ?? false,
           onChange: (String? slug, String? themeSong, String? themeName,
               bool? guestBarcode) {

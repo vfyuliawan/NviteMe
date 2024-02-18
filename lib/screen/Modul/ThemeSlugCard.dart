@@ -2,6 +2,7 @@
 // ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'package:nvite_me/constans.dart';
@@ -30,21 +31,6 @@ class ThemeSlugCard extends StatefulWidget {
 }
 
 class _ThemeSlugCardState extends State<ThemeSlugCard> {
-  List<String> listTheme = [
-    "RedEssence",
-    "BluePremium",
-    // "PastelBehavior",
-    // "GreenLuxury",
-    // "BlackPasta"
-  ];
-  List<String> musicTheme = [
-    "Payung-Teduh-Akad",
-    "Komang-Raim-Laode",
-    // "Merry-Your-Doughter",
-    // "Green Luxury",
-    // "Black Pasta"
-  ];
-
   late bool isOpen = true;
   @override
   void initState() {
@@ -82,47 +68,6 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
             isOpen
                 ? Column(
                     children: [
-                      SwitchComponent(
-                          value: widget.guestBarcode!,
-                          onChange: (value) {
-                            setState(() {
-                              widget.guestBarcode = !widget.guestBarcode!;
-                            });
-                          },
-                          label: "Manage Guest"),
-                      !widget.guestBarcode!
-                          ? Column(
-                              children: [
-                                FormTextField(
-                                  initialValue: Constans.baseUrlDeploy +
-                                      widget.slug! +
-                                      '&to=Your_Guest',
-                                  onChanged: (value) {},
-                                  labelText: "Your Link",
-                                ),
-                                Container(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Text(
-                                      "Replace your_guest with your guest name",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                    )),
-                              ],
-                            )
-                          : Container(
-                              margin: EdgeInsets.symmetric(vertical: 15),
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Kelola Tamu Undangan",
-                                style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Colors.blueAccent),
-                              )),
                       FormTextField(
                         initialValue: widget.slug!,
                         onChanged: (value) {
@@ -148,7 +93,7 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                       SizedBox(height: 10),
                       DropdownWidget(
                         icon: Icons.area_chart,
-                        list: listTheme,
+                        list: Constans.listTheme,
                         initial: widget.thema,
                         setValue: (String value) {
                           setState(() {
@@ -159,7 +104,7 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                       SizedBox(height: 10),
                       DropdownWidget(
                         icon: Icons.music_note,
-                        list: musicTheme,
+                        list: Constans.listThemeSong,
                         initial: widget.song,
                         setValue: (String value) {
                           setState(() {
@@ -167,6 +112,63 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                           });
                         },
                       ),
+                      SizedBox(height: 10),
+                      SwitchComponent(
+                        onChange: (value) {
+                          setState(() {
+                            widget.guestBarcode = !widget.guestBarcode!;
+                          });
+                        },
+                        value: widget.guestBarcode!,
+                        label: 'Tampilkan Cover',
+                      ),
+                      !widget.guestBarcode!
+                          ? Container()
+                          : Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Kelola Tamu Undangan",
+                                style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: Colors.blueAccent),
+                              ),
+                            ),
+                      GestureDetector(
+                        onTap: () {
+                          if (!widget.guestBarcode!) {
+                            Clipboard.setData(ClipboardData(
+                                text: Constans.baseUrlDeploy +
+                                    widget.slug! +
+                                    '&to=Your_Guest'));
+                          }
+                        },
+                        child: FormTextField(
+                          fillColor: widget.guestBarcode!
+                              ? Colors.black12
+                              : Colors.black12,
+                          sufix: widget.guestBarcode! ? false : true,
+                          enable: widget.guestBarcode! ? false : false,
+                          initialValue: Constans.baseUrlDeploy +
+                              widget.slug! +
+                              '&to=Your_Guest',
+                          onChanged: (value) {},
+                          labelText: "Your Link",
+                        ),
+                      ),
+                      !widget.guestBarcode!
+                          ? Container(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                "Replace your_guest with your guest name",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ))
+                          : Container(),
                       SizedBox(height: 10),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 0),

@@ -52,7 +52,7 @@ class UserIdModel {
     this.slug,
     this.themeName,
     this.themeSong,
-    this.guestBarcode = true,
+    this.guestBarcode,
   })  : message = message ?? MessageModel(),
         footer = footer ?? FooterModel();
 

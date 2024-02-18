@@ -9,4 +9,20 @@ class Constans {
   static var baseUrlDev = 'localhost:3000/?a=';
   static var baseUrlDeploy =
       'https://your-wedding-day-git-main-vfyuliawans-projects.vercel.app/?a=';
+
+  static List<String> listDebitCard = [];
+  static List<String> listTheme = [
+    "RedEssence",
+    "BluePremium",
+    // "PastelBehavior",
+    // "GreenLuxury",
+    // "BlackPasta"
+  ];
+  static List<String> listThemeSong = [
+    "Payung-Teduh-Akad",
+    "Komang-Raim-Laode",
+    // "Merry-Your-Doughter",
+    // "Green Luxury",
+    // "Black Pasta"
+  ];
 }
