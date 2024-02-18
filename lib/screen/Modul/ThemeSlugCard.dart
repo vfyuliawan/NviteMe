@@ -70,12 +70,18 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                     children: [
                       FormTextField(
                         initialValue: widget.slug!,
+                        fillColor: Colors.black12,
+                        enable: false,
                         onChanged: (value) {
                           setState(() {
                             widget.slug = value;
                           });
                         },
                         labelText: "Slug",
+                      ),
+                      Text(
+                        "For chnage slug URL please contact administrator",
+                        style: TextStyle(fontSize: 12, color: Colors.red),
                       ),
                       SizedBox(height: 10),
                       Container(
@@ -120,7 +126,7 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                           });
                         },
                         value: widget.guestBarcode!,
-                        label: 'Tampilkan Cover',
+                        label: 'Tampilkan Slug',
                       ),
                       !widget.guestBarcode!
                           ? Container()
@@ -180,6 +186,7 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                                 .editTheme(
                               song: widget.song!,
                               slug: widget.slug!,
+                              guestBarcode: widget.guestBarcode!,
                               themeName: widget.thema,
                             )
                                 .then((value) {

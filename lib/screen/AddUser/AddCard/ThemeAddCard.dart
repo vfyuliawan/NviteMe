@@ -85,7 +85,8 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                       !widget.guestBarcode!
                           ? Container(
                               child: FormTextField(
-                                enable: true,
+                                enable: false,
+                                fillColor: Colors.black12,
                                 initialValue: Constans.baseUrlDeploy +
                                     widget.slug! +
                                     '&to=Your_Guest',
@@ -129,6 +130,13 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                           });
                         },
                         labelText: "Slug",
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Make Sure Your Slug URL, it cannot change after process",
+                          style: TextStyle(fontSize: 12, color: Colors.red),
+                        ),
                       ),
                       SizedBox(height: 10),
                       Container(

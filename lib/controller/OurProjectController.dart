@@ -57,8 +57,12 @@ class OurProjectController {
     }
   }
 
-  Future<bool> editTheme(
-      {String? themeName, required String slug, required String song}) async {
+  Future<bool> editTheme({
+    String? themeName,
+    required String slug,
+    required String song,
+    required bool guestBarcode,
+  }) async {
     try {
       QuerySnapshot userQuery = await FirebaseFirestore.instance
           .collection("UserId")
@@ -67,8 +71,12 @@ class OurProjectController {
 
       if (userQuery.docs.isNotEmpty) {
         DocumentReference documentReference = userQuery.docs.first.reference;
-        await documentReference
-            .update({'ThemeName': themeName!, 'Slug': slug, "ThemeSong": song});
+        await documentReference.update({
+          'ThemeName': themeName!,
+          'Slug': slug,
+          "ThemeSong": song,
+          "GuestBarcode": guestBarcode
+        });
         return true;
       } else {
         print(slug);

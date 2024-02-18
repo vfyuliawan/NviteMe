@@ -66,7 +66,7 @@ class _FormTextFieldState extends State<FormTextField> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Colors.blue),
+            borderSide: BorderSide(width: 1, color: Colors.black26),
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
