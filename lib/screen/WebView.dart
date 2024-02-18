@@ -36,7 +36,6 @@ class _WebViewState extends State<WebView> {
           },
         ),
       )
-      // https://your-wedding-day-git-main-vfyuliawans-projects.vercel.app/?a=Debby-Surya&to=GALANG
       ..loadRequest(Uri.parse('${Constans.baseUrlDeploy}${widget.slug}'));
     super.initState();
   }
