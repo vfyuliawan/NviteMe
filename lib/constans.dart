@@ -18,6 +18,7 @@ class Constans {
   static List<String> listTheme = [
     "RedEssence",
     "BluePremium",
+    "LuxuryCream",
     // "PastelBehavior",
     // "GreenLuxury",
     // "BlackPasta"
