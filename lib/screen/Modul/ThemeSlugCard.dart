@@ -126,7 +126,7 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                           });
                         },
                         value: widget.guestBarcode!,
-                        label: 'Tampilkan Slug',
+                        label: 'Kelola Tamu',
                       ),
                       !widget.guestBarcode!
                           ? Container()

@@ -134,7 +134,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                       Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "Make Sure Your Slug URL, it cannot change after process",
+                          "it more prefere for not use (Space) and make sure your Slug URL is correct, it cannot change after process",
                           style: TextStyle(fontSize: 12, color: Colors.red),
                         ),
                       ),

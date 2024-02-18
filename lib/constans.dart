@@ -19,6 +19,8 @@ class Constans {
     "RedEssence",
     "BluePremium",
     "LuxuryCream",
+    "LuxuryGreen",
+    "LuxuryPink"
     // "PastelBehavior",
     // "GreenLuxury",
     // "BlackPasta"
