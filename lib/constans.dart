@@ -6,6 +6,7 @@ class Constans {
   static var thirdColor = const Color(0xffEBD9B4);
   static var fourthColor = const Color(0xffFBF9F1);
   static var fivethColor = const Color(0xffd2c1b9);
+  static var sixth = const Color(0xffe3b480);
   static var baseUrlDev = 'localhost:3000/?a=';
   static var baseUrlDeploy =
       'https://your-wedding-day-git-main-vfyuliawans-projects.vercel.app/?a=';
@@ -20,16 +21,13 @@ class Constans {
     "BluePremium",
     "LuxuryCream",
     "LuxuryGreen",
-    "LuxuryPink"
-    // "PastelBehavior",
+    "LuxuryPink",
+    "GreenFloral",
     // "GreenLuxury",
     // "BlackPasta"
   ];
   static List<String> listThemeSong = [
     "Payung-Teduh-Akad",
     "Komang-Raim-Laode",
-    // "Merry-Your-Doughter",
-    // "Green Luxury",
-    // "Black Pasta"
   ];
 }

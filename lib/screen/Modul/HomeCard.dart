@@ -99,6 +99,7 @@ class _HomeTextFieldCardState extends State<HomeTextFieldCard> {
                             ),
                             FormTextField(
                               initialValue: widget.data!.homeQuotes!,
+                              line: 4,
                               onChanged: (value) {
                                 setState(() {
                                   widget.data!.homeQuotes = value;

@@ -10,7 +10,7 @@ class FormTextField extends StatefulWidget {
   final int? line;
   final double? topSpace;
   final bool? enable;
-  final bool? sufix;
+  final Widget? suffix;
   final Color? fillColor;
   final bool? obscureText;
 
@@ -22,7 +22,7 @@ class FormTextField extends StatefulWidget {
     this.line,
     this.topSpace,
     this.enable,
-    this.sufix,
+    this.suffix,
     this.fillColor,
     this.obscureText,
   }) : super(key: key);
@@ -56,13 +56,7 @@ class _FormTextFieldState extends State<FormTextField> {
           filled: true,
           labelText: widget.labelText,
           suffixIconColor: Colors.blue,
-          suffix: widget.sufix == true
-              ? Icon(
-                  Icons.copy,
-                  size: 32,
-                  color: Colors.blue,
-                )
-              : null,
+          suffix: widget.suffix ?? null,
           labelStyle: TextStyle(fontSize: 14),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(width: 1, color: Colors.black26),

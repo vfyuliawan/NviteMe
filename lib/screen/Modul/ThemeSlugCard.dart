@@ -156,12 +156,14 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                           fillColor: widget.guestBarcode!
                               ? Colors.black12
                               : Colors.black12,
-                          sufix: widget.guestBarcode! ? false : true,
+                          suffix:
+                              widget.guestBarcode! ? null : Icon(Icons.copy),
                           enable: widget.guestBarcode! ? false : false,
                           initialValue: Constans.baseUrlDeploy +
                               widget.slug! +
                               '&to=Your_Guest',
                           onChanged: (value) {},
+                          line: 2,
                           labelText: "Your Link",
                         ),
                       ),

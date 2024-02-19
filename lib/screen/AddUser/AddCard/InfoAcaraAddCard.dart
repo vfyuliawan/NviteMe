@@ -178,6 +178,7 @@ class _InfoAcaraAddCardState extends State<InfoAcaraAddCard> {
                       labelText: "Judul",
                     ),
                     FormTextField(
+                      line: 3,
                       initialValue: data.place ?? "",
                       onChanged: (value) {
                         setState(() {

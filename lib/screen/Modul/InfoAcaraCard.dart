@@ -241,6 +241,7 @@ class _InfoAcaraCardState extends State<InfoAcaraCard> {
                         });
                       },
                       labelText: "Place",
+                      line: 3,
                     ),
                     FormTextField(
                       initialValue: data.map!,

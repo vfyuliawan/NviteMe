@@ -86,6 +86,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                           ? Container(
                               child: FormTextField(
                                 enable: false,
+                                line: 2,
                                 fillColor: Colors.black12,
                                 initialValue: Constans.baseUrlDeploy +
                                     widget.slug! +

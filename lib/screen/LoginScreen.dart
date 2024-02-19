@@ -15,6 +15,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late String email;
   late String password;
+
+  late bool hidePassword = true;
   @override
   void initState() {
     email = "";
@@ -61,14 +63,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         textAlign: TextAlign.center,
                         "Make Your Weddinig Digitalize",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Constans.sixth,
                           fontFamily: 'Pacifico',
                           fontSize: 32,
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 200,
+                      height: 20,
+                    ),
+                    AspectRatio(
+                      aspectRatio: 3,
+                      child: Image.asset(
+                        "assets/icons/nmlogo2.png",
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 25),
@@ -85,8 +96,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             enable: true,
                           ),
                           FormTextField(
-                            obscureText: true,
+                            obscureText: hidePassword,
                             initialValue: password,
+                            suffix: hidePassword
+                                ? GestureDetector(
+                                    onTap: () => setState(() {
+                                          hidePassword = !hidePassword;
+                                        }),
+                                    child: Icon(Icons.visibility))
+                                : GestureDetector(
+                                    onTap: () => setState(() {
+                                          hidePassword = !hidePassword;
+                                        }),
+                                    child: Icon(Icons.visibility_off)),
                             labelText: "Password",
                             onChanged: (value) {
                               setState(() {
@@ -96,13 +118,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             enable: true,
                           ),
                           SizedBox(
-                            height: 25,
+                            height: 20,
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 0),
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                  backgroundColor: Constans.secondaryColor),
+                                  backgroundColor: Constans.sixth),
                               onPressed: () async {
                                 await AuthController()
                                     .signIn(context, email, password);
