@@ -8,6 +8,7 @@ import 'package:nvite_me/model/CoverModel.dart';
 import 'package:nvite_me/model/FooterModel.dart';
 import 'package:nvite_me/model/GaleryModel.dart';
 import 'package:nvite_me/model/GiftsModel.dart';
+import 'package:nvite_me/model/GuestModel.dart';
 import 'package:nvite_me/model/HeroModel.dart';
 import 'package:nvite_me/model/HomeModel.dart';
 import 'package:nvite_me/model/InfoAcaraModel.dart';
@@ -32,14 +33,17 @@ class UserIdModel {
   CountDownModel? countDown;
   MessageModel? message;
   FooterModel? footer;
+  GuestModel? guest;
   String? slug;
   String? themeName;
   String? themeSong;
   String? uid;
   bool? guestBarcode;
+  String? embeded;
 
   UserIdModel({
     MessageModel? message,
+    FooterModel? footer,
     this.home,
     this.cover,
     this.hero,
@@ -48,15 +52,27 @@ class UserIdModel {
     this.ourStory,
     this.galery,
     this.gifts,
-    this.countDown,
-    FooterModel? footer,
+    CountDownModel? countDown,
+    GuestModel? guest,
     this.slug,
     this.themeName,
     this.themeSong,
     this.uid,
     this.guestBarcode,
+    this.embeded,
   })  : message = message ?? MessageModel(),
-        footer = footer ?? FooterModel();
+        footer = footer ?? FooterModel(),
+        guest = guest ??
+            GuestModel(guest: [
+              GuestModelKeyValue(
+                attendance: true,
+                share: true,
+                guestId: "0",
+                name: "Example",
+                phone: "08123456789",
+              )
+            ]),
+        countDown = countDown ?? CountDownModel();
 
   factory UserIdModel.fromJson(Map<String, dynamic> json) {
     return UserIdModel(
@@ -77,10 +93,12 @@ class UserIdModel {
       countDown: json["CountDown"] != null
           ? CountDownModel.fromJson(json["CountDown"])
           : CountDownModel(),
+      guest: json["Guest"] != null ? GuestModel.fromJson(json["Guest"]) : null,
       slug: json["Slug"],
       uid: json["uid"],
       themeName: json["ThemeName"] ?? "RedEssence",
       themeSong: json["ThemeSong"],
+      embeded: json["Embeded"],
       guestBarcode: json["GuestBarcode"] ?? false,
     );
   }
@@ -91,6 +109,7 @@ class UserIdModel {
         "Hero": hero?.toJson(),
         "InfoAcara":
             List<dynamic>.from(infoAcara!.infoAcara!.map((x) => x.toJson())),
+        "Guest": List<dynamic>.from(guest!.guest!.map((x) => x.toJson())),
         "MaleFemale": maleFemale?.toJson(),
         "OurStory": ourStory?.toJson(),
         "Galery": galery?.toJson(),
@@ -102,6 +121,7 @@ class UserIdModel {
         "ThemeName": themeName,
         "ThemeSong": themeSong,
         "GuestBarcode": guestBarcode,
+        "Embeded": embeded,
         "uid": uid
       };
 }

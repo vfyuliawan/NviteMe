@@ -36,8 +36,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: Image.asset("assets/images/loginFloral4.jpg",
-                    fit: BoxFit.cover),
+                child: Image.asset(
+                  "assets/images/loginFloral4.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Opacity(

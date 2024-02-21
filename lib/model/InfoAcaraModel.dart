@@ -2,15 +2,9 @@
 //
 //     final infoAcara = infoAcaraFromJson(jsonString);
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-InfoAcaraModel infoAcaraFromJson(String str) =>
-    InfoAcaraModel.fromJson(json.decode(str));
-
-String infoAcaraToJson(InfoAcaraModel data) => json.encode(data.toJson());
 
 class InfoAcaraModel {
   List<InfoAcaraElement>? infoAcara;

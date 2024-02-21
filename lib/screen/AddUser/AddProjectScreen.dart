@@ -415,7 +415,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                                 const Text(
                                   "Add Project",
                                   style: TextStyle(
-                                    fontFamily: 'Roboto',
+                                    fontFamily: 'Pacifico',
                                     fontSize: 25,
                                     color: Colors.white,
                                     decoration: TextDecoration.none,
@@ -426,55 +426,35 @@ class _AddUserScreenState extends State<AddUserScreen> {
                           ),
                         ),
                         Container(
-                          height: 100,
-                          margin: const EdgeInsets.only(top: 80),
-                          decoration: BoxDecoration(
-                              color: Constans.thirdColor,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(25),
-                                topRight: Radius.circular(25),
-                              )),
-                          width: MediaQuery.of(context).size.width,
-                          child: Stack(
-                            fit: StackFit.loose,
-                            alignment: Alignment.center,
-                            children: [
-                              Positioned(
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 100,
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                        color: Constans.secondaryColor,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10))),
-                                    child: const Row(children: [
-                                      Icon(
-                                        Icons.remove_red_eye,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        "Perview",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontFamily: 'Roboto',
-                                          decoration: TextDecoration.none,
-                                        ),
-                                      ),
-                                    ]),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                            height: 100,
+                            margin: const EdgeInsets.only(top: 80),
+                            decoration: BoxDecoration(
+                                color: Constans.thirdColor,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(25),
+                                  topRight: Radius.circular(25),
+                                )),
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                bottom: 24,
+                                left: 10,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Add Your Project",
+                                    style: TextStyle(
+                                      fontFamily: "Pacifico",
+                                      fontSize: 18,
+                                      color: Constans.textColor,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )),
                         Container(
                           margin: const EdgeInsets.only(top: 160),
                           height: MediaQuery.of(context).size.height - 228,
@@ -517,13 +497,15 @@ class _AddUserScreenState extends State<AddUserScreen> {
           song: userId.themeSong ?? Constans.listThemeSong.first,
           thema: userId.themeName ?? Constans.listTheme.first,
           guestBarcode: userId.guestBarcode ?? false,
+          embeded: userId.embeded ?? "",
           onChange: (String? slug, String? themeSong, String? themeName,
-              bool? guestBarcode) {
+              bool? guestBarcode, String embeded) {
             setState(() {
               userId.slug = slug;
               userId.themeName = themeName;
               userId.themeSong = themeSong;
               userId.guestBarcode = guestBarcode;
+              userId.embeded = embeded;
             });
             cekallValidation();
           },

@@ -14,8 +14,9 @@ class ThemeAddCard extends StatefulWidget {
   late String? thema;
   late String? song;
   late bool? guestBarcode;
+  late String embeded;
   final Function(String? slug, String? themeSong, String? themeName,
-      bool? guestBarcode) onChange;
+      bool? guestBarcode, String embeded) onChange;
 
   ThemeAddCard({
     Key? key,
@@ -23,6 +24,7 @@ class ThemeAddCard extends StatefulWidget {
     this.thema,
     this.song,
     this.guestBarcode,
+    required this.embeded,
     required this.onChange,
   }) : super(key: key);
 
@@ -78,6 +80,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                                 widget.song,
                                 widget.thema,
                                 widget.guestBarcode,
+                                widget.embeded,
                               );
                             });
                           },
@@ -127,6 +130,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                               widget.song,
                               widget.thema,
                               widget.guestBarcode,
+                              widget.embeded,
                             );
                           });
                         },
@@ -137,6 +141,30 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                         child: Text(
                           "it more prefere for not use (Space) and make sure your Slug URL is correct, it cannot change after process",
                           style: TextStyle(fontSize: 12, color: Colors.red),
+                        ),
+                      ),
+                      FormTextField(
+                        initialValue: widget.embeded,
+                        line: 5,
+                        onChanged: (value) {
+                          setState(() {
+                            widget.embeded = value;
+                            widget.onChange(
+                              widget.slug,
+                              widget.song,
+                              widget.thema,
+                              widget.guestBarcode,
+                              widget.embeded,
+                            );
+                          });
+                        },
+                        labelText: "Embeded",
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Copy only Embeded Link From The Google Map",
+                          style: TextStyle(fontSize: 12, color: Colors.green),
                         ),
                       ),
                       SizedBox(height: 10),
@@ -165,6 +193,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                               widget.song,
                               widget.thema,
                               widget.guestBarcode,
+                              widget.embeded,
                             );
                           });
                         },
@@ -177,8 +206,13 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                         setValue: (String value) {
                           setState(() {
                             widget.song = value;
-                            widget.onChange(widget.slug, widget.song,
-                                widget.thema, widget.guestBarcode);
+                            widget.onChange(
+                              widget.slug,
+                              widget.song,
+                              widget.thema,
+                              widget.guestBarcode,
+                              widget.embeded,
+                            );
                           });
                         },
                       ),

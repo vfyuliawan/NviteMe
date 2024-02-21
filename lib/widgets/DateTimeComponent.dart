@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 
 class DateTimeComponent extends StatefulWidget {
@@ -22,12 +25,15 @@ class _DateTimeComponentState extends State<DateTimeComponent> {
     super.initState();
 
     dateTimeController = TextEditingController(
-      text: widget.dateValue.toString(),
+      text: DateTimeFormat.format(widget.dateValue!,
+          format: DateTimeFormats.american),
     );
   }
 
   Future<void> selectDateTime(BuildContext context) async {
     DateTime selectedDate = widget.dateValue ?? DateTime.now();
+    print(
+        DateTimeFormat.format(selectedDate, format: DateTimeFormats.american));
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -54,7 +60,8 @@ class _DateTimeComponentState extends State<DateTimeComponent> {
         if (selectedDate != widget.dateValue) {
           setState(() {
             widget.setValue(selectedDate);
-            dateTimeController.text = selectedDate.toString();
+            dateTimeController.text = DateTimeFormat.format(selectedDate,
+                format: DateTimeFormats.american);
           });
         }
       }

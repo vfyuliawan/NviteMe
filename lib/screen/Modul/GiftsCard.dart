@@ -232,12 +232,11 @@ class _GiftsCardState extends State<GiftsCard> {
                     DropdownWidget(
                       list: listOfCard,
                       initial: data.image,
+                      percentage: 0.84,
                       setValue: (String value) {
-                        setState(() {
-                          data.image = value;
-                        });
+                        setState(() {});
                       },
-                      icon: Icons.card_membership,
+                      icon: Icons.card_giftcard,
                     ),
                     FormTextField(
                       initialValue: data.name!,

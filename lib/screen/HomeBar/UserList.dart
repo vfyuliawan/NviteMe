@@ -10,6 +10,7 @@ import 'package:nvite_me/model/UserIdModel.dart';
 import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/screen/AddUser/AddProjectScreen.dart';
 import 'package:nvite_me/screen/DetailUserScreen.dart';
+import 'package:nvite_me/utils/utils.dart';
 
 class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
@@ -53,17 +54,16 @@ class _UserListState extends State<UserList> {
               child: Center(child: CircularProgressIndicator()),
             );
           } else if (snapshot.hasError) {
+            Utility.logger.e(snapshot.error);
             return Center(
               child: Container(
                 child: Text(
-                  "error ${snapshot}",
+                  "error ${snapshot.error}",
                 ),
               ),
             );
           } else if (snapshot.data!.isEmpty) {
-            return Center(
-              child: Text("Tidak Ada Data"),
-            );
+            return noDataUserFound();
           } else {
             return Stack(
               children: [
@@ -82,8 +82,8 @@ class _UserListState extends State<UserList> {
                         Text(
                           "Project   ",
                           style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 25,
+                            fontFamily: 'Pacifico',
+                            fontSize: 28,
                             color: Colors.white,
                             decoration: TextDecoration.none,
                           ),
@@ -113,9 +113,10 @@ class _UserListState extends State<UserList> {
                         Text(
                           "    Find Your Project",
                           style: TextStyle(
-                              fontFamily: "Roboto",
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black38),
+                            fontFamily: "Roboto",
+                            fontWeight: FontWeight.bold,
+                            color: Constans.textColor,
+                          ),
                         ),
                         Row(
                           children: [
@@ -176,21 +177,22 @@ class _UserListState extends State<UserList> {
                                   Text(
                                     "View Dashboard",
                                     style: TextStyle(
-                                        fontFamily: "Roboto",
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.black38),
+                                      fontFamily: "Roboto",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Constans.textColor,
+                                    ),
                                   ),
                                   isOpenDashboard
                                       ? Icon(
                                           Icons.arrow_drop_down,
                                           size: 40,
-                                          color: Colors.black38,
+                                          color: Constans.textColor,
                                         )
                                       : Icon(
                                           Icons.arrow_left,
                                           size: 40,
-                                          color: Colors.black38,
+                                          color: Constans.textColor,
                                         )
                                 ],
                               )),
@@ -330,7 +332,9 @@ class _UserListState extends State<UserList> {
                               Text(
                                 "List of Your Project (${snapshot.data!.length})",
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontFamily: "Roboto",
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w100),
                               ),
                               SingleChildScrollView(
                                 scrollDirection: Axis.vertical,
@@ -368,7 +372,7 @@ class _UserListState extends State<UserList> {
                                               title: Text(
                                                 'Nama ${item.slug!}',
                                                 style: TextStyle(
-                                                    fontFamily: 'Roboto',
+                                                    fontFamily: 'Pacifico',
                                                     color:
                                                         Constans.secondaryColor,
                                                     fontSize: 18,
@@ -384,7 +388,7 @@ class _UserListState extends State<UserList> {
                                                     Text(
                                                       'Tema : ${item.themeName!}',
                                                       style: TextStyle(
-                                                        fontFamily: 'Roboto',
+                                                        fontFamily: 'Pacifico',
                                                         fontSize: 14,
                                                       ),
                                                     ),
@@ -465,6 +469,284 @@ class _UserListState extends State<UserList> {
       ),
     );
   }
+
+  Widget noDataUserFound() {
+    return Stack(
+      children: [
+        Positioned(
+          top: 0,
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: Constans.secondaryColor,
+            ),
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "Project   ",
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 25,
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: 80,
+          child: Container(
+            height: isOpenDashboard ? 400 : 150,
+            decoration: BoxDecoration(
+                color: Constans.thirdColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                )),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "    Find Your Project",
+                  style: TextStyle(
+                    fontFamily: "Roboto",
+                    fontWeight: FontWeight.bold,
+                    color: Constans.textColor,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        width: 300,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            fillColor: Constans.thirdColor,
+                            filled: true,
+                            labelText: "Search",
+                            prefixIcon: Icon(
+                              Icons.search_outlined,
+                              size: 40,
+                            ),
+                            labelStyle:
+                                TextStyle(fontSize: 20, color: Colors.black38),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1, color: Constans.thirdColor),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddUserScreen(),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add_box_rounded,
+                        color: Constans.secondaryColor,
+                        size: 65,
+                      ),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isOpenDashboard = !isOpenDashboard;
+                    });
+                  },
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 13,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "View Dashboard",
+                            style: TextStyle(
+                                fontFamily: "Roboto",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.black38),
+                          ),
+                          isOpenDashboard
+                              ? Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 40,
+                                  color: Colors.black38,
+                                )
+                              : Icon(
+                                  Icons.arrow_left,
+                                  size: 40,
+                                  color: Colors.black38,
+                                )
+                        ],
+                      )),
+                ),
+                isOpenDashboard
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 120,
+                            width: 170,
+                            decoration: BoxDecoration(
+                              color: Constans.secondaryColor,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(0),
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(0),
+                                bottomRight: Radius.circular(30),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.monitor_heart_rounded,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      "Your Limit",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  "20",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            height: 120,
+                            width: 170,
+                            decoration: BoxDecoration(
+                              color: Constans.secondaryColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(0),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.monetization_on_outlined,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      "TopUp",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  "USD. 8.122",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    : Container()
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: isOpenDashboard ? 310 : 210,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+                color: Constans.fourthColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                )),
+            width: MediaQuery.of(context).size.width,
+            height: isOpenDashboard ? 550 : 640,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          "No Data Found, Create some Project!!",
+                          style: TextStyle(
+                            color: Constans.secondaryColor,
+                            fontSize: 16,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Positioned(top: 0, right: -200, child: BackgroundWidget()),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class SearchWidget extends StatelessWidget {
@@ -485,9 +767,10 @@ class SearchWidget extends StatelessWidget {
             Text(
               "    Find Your Project",
               style: TextStyle(
-                  fontFamily: "Roboto",
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black38),
+                fontFamily: "Roboto",
+                fontWeight: FontWeight.bold,
+                color: Constans.textColor,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

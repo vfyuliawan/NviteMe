@@ -87,7 +87,7 @@ class _DetailUserScreenState extends State<DetailUserScreen> {
                                       const Text(
                                         "Project Detail",
                                         style: TextStyle(
-                                          fontFamily: 'Roboto',
+                                          fontFamily: 'Pacifico',
                                           fontSize: 25,
                                           color: Colors.white,
                                           decoration: TextDecoration.none,
@@ -128,7 +128,8 @@ class _DetailUserScreenState extends State<DetailUserScreen> {
                                         Text(
                                           "You Using Theme ${widget.detailUser.themeName}",
                                           style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 18,
+                                              fontFamily: 'Pacifico',
                                               decoration: TextDecoration.none,
                                               fontWeight: FontWeight.bold,
                                               color: Constans.secondaryColor),
@@ -184,9 +185,9 @@ class _DetailUserScreenState extends State<DetailUserScreen> {
                                 ),
                               ),
                               Container(
-                                margin: const EdgeInsets.only(top: 300),
+                                margin: const EdgeInsets.only(top: 310),
                                 height:
-                                    MediaQuery.of(context).size.height - 300,
+                                    MediaQuery.of(context).size.height - 310,
                                 decoration: BoxDecoration(
                                     color: Constans.fourthColor,
                                     borderRadius: const BorderRadius.only(
@@ -225,10 +226,12 @@ class _DetailUserScreenState extends State<DetailUserScreen> {
     return Column(
       children: [
         ThemeSlugCard(
+          embeded: dataSnapShoot.embeded!,
           slug: dataSnapShoot.slug,
           thema: dataSnapShoot.themeName,
           guestBarcode: dataSnapShoot.guestBarcode,
           song: dataSnapShoot.themeSong,
+          guest: dataSnapShoot.guest!,
         ),
         const SizedBox(
           height: 10,

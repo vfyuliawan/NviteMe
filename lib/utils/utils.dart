@@ -23,4 +23,14 @@ class Utility {
       return '';
     }
   }
+
+  String removeSpaces(String phoneNumber) {
+    String cleanedPhoneNumber =
+        phoneNumber.replaceAll(' ', '').replaceAll('-', '');
+    if (cleanedPhoneNumber.startsWith('0')) {
+      return '+62${cleanedPhoneNumber.substring(1)}';
+    } else {
+      return cleanedPhoneNumber;
+    }
+  }
 }

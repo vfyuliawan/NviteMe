@@ -7,6 +7,8 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
+import 'package:nvite_me/model/GuestModel.dart';
+import 'package:nvite_me/screen/GuestScreen.dart';
 import 'package:nvite_me/widgets/DropDownWidget.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/SwitchComponent.dart';
@@ -17,6 +19,8 @@ class ThemeSlugCard extends StatefulWidget {
   late String? thema;
   late String? song;
   late bool? guestBarcode;
+  late String embeded;
+  late GuestModel guest;
 
   ThemeSlugCard({
     Key? key,
@@ -24,6 +28,8 @@ class ThemeSlugCard extends StatefulWidget {
     this.thema,
     this.song,
     this.guestBarcode,
+    required this.embeded,
+    required this.guest,
   }) : super(key: key);
 
   @override
@@ -79,9 +85,30 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                         },
                         labelText: "Slug",
                       ),
-                      Text(
-                        "For chnage slug URL please contact administrator",
-                        style: TextStyle(fontSize: 12, color: Colors.red),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "For chnage slug URL please contact administrator",
+                          style: TextStyle(fontSize: 12, color: Colors.red),
+                        ),
+                      ),
+                      FormTextField(
+                        initialValue: widget.embeded,
+                        enable: true,
+                        line: 7,
+                        onChanged: (value) {
+                          setState(() {
+                            widget.embeded = value;
+                          });
+                        },
+                        labelText: "Embeded",
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Copy only Embeded Link From The Google Map",
+                          style: TextStyle(fontSize: 12, color: Colors.green),
+                        ),
                       ),
                       SizedBox(height: 10),
                       Container(
@@ -130,17 +157,30 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                       ),
                       !widget.guestBarcode!
                           ? Container()
-                          : Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Kelola Tamu Undangan",
-                                style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Colors.blueAccent),
+                          : GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GuestScreen(
+                                      guests: widget.guest,
+                                      slug: widget.slug!,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Kelola Tamu Undangan",
+                                  style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: Colors.blueAccent),
+                                ),
                               ),
                             ),
                       GestureDetector(
@@ -189,6 +229,7 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                               song: widget.song!,
                               slug: widget.slug!,
                               guestBarcode: widget.guestBarcode!,
+                              embeded: widget.embeded,
                               themeName: widget.thema,
                             )
                                 .then((value) {

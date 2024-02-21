@@ -18,8 +18,8 @@ class CountDownModel {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'Date': date,
-      'Visible': visible,
+      'Date': date ?? Timestamp.now(),
+      'Visible': visible ?? false,
     };
   }
 

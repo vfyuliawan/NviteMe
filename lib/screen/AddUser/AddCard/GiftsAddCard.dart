@@ -180,6 +180,7 @@ class _GiftsAddCardState extends State<GiftsAddCard> {
                   children: [
                     DropdownWidget(
                       list: listOfCard,
+                      percentage: 0.82,
                       initial: data.image ?? "ImageBca",
                       setValue: (String value) {
                         setState(() {
@@ -188,7 +189,7 @@ class _GiftsAddCardState extends State<GiftsAddCard> {
                           enableDropDown = true;
                         });
                       },
-                      icon: Icons.card_membership,
+                      icon: Icons.card_giftcard,
                     ),
                     FormTextField(
                       initialValue: data.name ?? "",

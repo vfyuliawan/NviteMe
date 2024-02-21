@@ -7,13 +7,15 @@ class DropdownWidget extends StatefulWidget {
   final String? initial;
   final Function(String value) setValue;
   final IconData icon;
+  final double? percentage;
 
   const DropdownWidget(
       {Key? key,
       required this.list,
       this.initial,
       required this.setValue,
-      required this.icon})
+      required this.icon,
+      this.percentage = 0.87})
       : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
       decoration: BoxDecoration(color: Colors.white),
       width: MediaQuery.of(context).size.width,
       child: DropdownMenu<String>(
-        width: MediaQuery.of(context).size.width * 0.87,
+        width: MediaQuery.of(context).size.width * widget.percentage!,
         label: Text(
           widget.initial!,
           style: TextStyle(

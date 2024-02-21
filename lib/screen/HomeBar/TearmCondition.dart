@@ -84,7 +84,12 @@ class _TearmConditionState extends State<TearmCondition> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => const LoginScreen(),
+                                      builder: (_) => WillPopScope(
+                                        onWillPop: () async {
+                                          return false;
+                                        },
+                                        child: LoginScreen(),
+                                      ),
                                     ),
                                   );
                                 },

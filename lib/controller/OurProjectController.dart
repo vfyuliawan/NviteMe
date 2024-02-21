@@ -5,9 +5,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:nvite_me/model/CountDownModel.dart';
 import 'package:nvite_me/model/CoverModel.dart';
 import 'package:nvite_me/model/GiftsModel.dart';
+import 'package:nvite_me/model/GuestModel.dart';
 import 'package:nvite_me/model/HeroModel.dart';
 import 'package:nvite_me/model/HomeModel.dart';
 import 'package:nvite_me/model/InfoAcaraModel.dart';
@@ -28,6 +30,7 @@ class OurProjectController {
         return querySnapshot.docs.map((documentSnapshot) {
           Map<String, dynamic> data =
               documentSnapshot.data() as Map<String, dynamic>;
+          print(UserIdModel.fromJson(data).guest);
           return UserIdModel.fromJson(data);
         }).toList();
       });
@@ -62,6 +65,7 @@ class OurProjectController {
     String? themeName,
     required String slug,
     required String song,
+    required String embeded,
     required bool guestBarcode,
   }) async {
     try {
@@ -76,7 +80,8 @@ class OurProjectController {
           'ThemeName': themeName!,
           'Slug': slug,
           "ThemeSong": song,
-          "GuestBarcode": guestBarcode
+          "GuestBarcode": guestBarcode,
+          "Embeded": embeded
         });
         return true;
       } else {
@@ -529,6 +534,57 @@ class OurProjectController {
       print(e.toString());
       print('Error: $e');
       print('Stack Trace: $stackTrace');
+      return false;
+    }
+  }
+
+  Future<bool> addGuest({
+    List<Contact>? params,
+    GuestModel? guest,
+    required String slug,
+  }) async {
+    try {
+      QuerySnapshot userQuery = await FirebaseFirestore.instance
+          .collection("UserId")
+          .where("Slug", isEqualTo: slug)
+          .get();
+
+      if (userQuery.docs.isNotEmpty) {
+        final String? guestId = guest?.guest?.isNotEmpty == true
+            ? guest!.guest!.last.guestId
+            : null;
+
+        if (guestId != null) {
+          final contactToGuest = params!.asMap().entries.map((entry) {
+            final index = entry.key;
+            final e = entry.value;
+            return GuestModelKeyValue(
+              attendance: false,
+              share: false,
+              guestId: (int.parse(guestId) + index + 1).toString(),
+              name: e.fullName,
+              phone: e.phoneNumbers?.first ?? "",
+            );
+          }).toList();
+
+          DocumentReference documentReference = userQuery.docs.first.reference;
+          await documentReference.update({
+            'Guest': FieldValue.arrayUnion(
+                contactToGuest.map((guest) => guest.toJson()).toList()),
+          });
+          return true;
+        } else {
+          print('GuestId is null');
+          return false;
+        }
+      } else {
+        print(slug);
+        return false;
+      }
+    } on FirebaseException catch (e, stackTrace) {
+      Utility.logger.e(e.toString());
+      Utility.logger.e('Error: $e');
+      Utility.logger.e('Stack Trace: $stackTrace');
       return false;
     }
   }
