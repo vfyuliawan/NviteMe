@@ -214,38 +214,53 @@ class _UserListState extends State<UserList> {
                                         bottomRight: Radius.circular(30),
                                       ),
                                     ),
-                                    child: Column(
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Row(
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: Constans.secondaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          child: Image.asset(
+                                            "assets/icons/database.png",
+                                            fit: BoxFit.contain,
+                                            width: 17,
+                                            height: 20,
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              Icons.monitor_heart_rounded,
-                                              size: 30,
-                                              color: Colors.white,
-                                            ),
                                             Text(
                                               "Your Limit",
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 18,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
+                                            Text(
+                                              "20",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w200,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            )
                                           ],
-                                        ),
-                                        Text(
-                                          "20",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
                                         ),
                                       ],
                                     ),
@@ -256,6 +271,7 @@ class _UserListState extends State<UserList> {
                                   Container(
                                     height: 120,
                                     width: 170,
+                                    alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       color: Constans.secondaryColor,
                                       borderRadius: BorderRadius.only(
@@ -265,38 +281,53 @@ class _UserListState extends State<UserList> {
                                         bottomRight: Radius.circular(0),
                                       ),
                                     ),
-                                    child: Column(
+                                    child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Row(
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: Constans.secondaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          child: Image.asset(
+                                            "assets/icons/atm-card.png",
+                                            fit: BoxFit.contain,
+                                            width: 17,
+                                            height: 20,
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              Icons.monetization_on_outlined,
-                                              size: 30,
-                                              color: Colors.white,
-                                            ),
                                             Text(
-                                              "TopUp",
+                                              "Paypal",
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 18,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
+                                            Text(
+                                              "USD 8.123,00",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w200,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            )
                                           ],
-                                        ),
-                                        Text(
-                                          "USD. 8.122",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
                                         ),
                                       ],
                                     ),

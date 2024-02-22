@@ -61,6 +61,7 @@ class _ListContactState extends State<ListContact> {
                         type: AlertType.success,
                         title: "Update Guest Berhasil",
                         style: AlertStyle(
+                          backgroundColor: Constans.alertColor,
                           titleStyle: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -69,6 +70,7 @@ class _ListContactState extends State<ListContact> {
                         desc: "Kirim undangan ke tamu anda via whatsapp.",
                         buttons: [
                           DialogButton(
+                            color: Constans.secondaryColor,
                             child: Text(
                               "Oke",
                               style:

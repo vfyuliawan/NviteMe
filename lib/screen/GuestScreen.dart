@@ -2,6 +2,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, sized_box_for_whitespace, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
@@ -10,6 +12,7 @@ import 'package:nvite_me/model/UserIdModel.dart';
 import 'package:nvite_me/screen/ListContact.dart';
 import 'package:nvite_me/service/WhatsAppService.dart';
 import 'package:nvite_me/utils/utils.dart';
+import 'package:nvite_me/widgets/DropDownButton.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class GuestScreen extends StatefulWidget {
@@ -32,10 +35,34 @@ class _GuestScreenState extends State<GuestScreen> {
 
   final FlutterContactPicker _contactPicker = new FlutterContactPicker();
   List<Contact>? _contacts;
+  String _scanBarcode = 'Unknown';
+  final List<String> listDropDown = [
+    'All',
+    'Belum Checkin',
+    'Checkin',
+    'Shared',
+    'Not Shared',
+  ];
+  String? selectedValue;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> scanQR() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+    if (!mounted) return;
+    setState(() {
+      _scanBarcode = barcodeScanRes;
+    });
   }
 
   @override
@@ -53,10 +80,7 @@ class _GuestScreenState extends State<GuestScreen> {
                     backgroundColor:
                         !enableApply ? Colors.grey : Constans.secondaryColor),
                 onPressed: () async {
-                  Contact? contact = await _contactPicker.selectContact();
-                  setState(() {
-                    _contacts = contact == null ? null : [contact];
-                  });
+                  scanQR();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 5),
@@ -204,8 +228,8 @@ class _GuestScreenState extends State<GuestScreen> {
                                     : Container(),
                                 Container(
                                   margin: const EdgeInsets.only(top: 20),
-                                  height: widget.guests!.guest!.length < 3
-                                      ? MediaQuery.of(context).size.height
+                                  height: widget.guests!.guest!.length < 4
+                                      ? MediaQuery.of(context).size.height - 300
                                       : null,
                                   decoration: BoxDecoration(
                                       color: Constans.fourthColor,
@@ -227,17 +251,14 @@ class _GuestScreenState extends State<GuestScreen> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Container(
-                                                    padding: EdgeInsets.only(
-                                                        left: 8),
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Text(
-                                                      "List Tamu",
-                                                      style: TextStyle(
-                                                        fontSize: 18,
-                                                      ),
-                                                    )),
+                                                DropDownButton(
+                                                  listItem: listDropDown,
+                                                  setValue: (value) {
+                                                    setState(() {
+                                                      selectedValue = value;
+                                                    });
+                                                  },
+                                                ),
                                                 GestureDetector(
                                                   onTap: () => Navigator.push(
                                                     context,
@@ -250,12 +271,29 @@ class _GuestScreenState extends State<GuestScreen> {
                                                     ),
                                                   ),
                                                   child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 5,
+                                                    ),
                                                     height: 40,
-                                                    width: 40,
-                                                    child: Icon(
-                                                      Icons.add_call,
-                                                      size: 28,
-                                                      color: Colors.white,
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          "Import from Contact",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Icon(
+                                                          Icons.add_call,
+                                                          size: 18,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ],
                                                     ),
                                                     decoration: BoxDecoration(
                                                       color: Constans
@@ -267,6 +305,16 @@ class _GuestScreenState extends State<GuestScreen> {
                                                   ),
                                                 ),
                                               ],
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(left: 8),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              "List Tamu",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
                                             ),
                                           ),
                                           _listGuestBody(),
@@ -333,9 +381,21 @@ class _GuestScreenState extends State<GuestScreen> {
             child: Text("Tidak Ada Data"),
           );
         } else {
-          final dataGuest = snapshot.data!.guest!.guest;
+          final dataGuest = snapshot.data!.guest!.guest!.where((element) {
+            if (selectedValue == "Belum Checkin") {
+              return element.attendance == false;
+            } else if (selectedValue == "Checkin") {
+              return element.attendance == true;
+            } else if (selectedValue == "Shared") {
+              return element.share == true;
+            } else if (selectedValue == "Not Shared") {
+              return element.share == false;
+            } else {
+              return true;
+            }
+          });
           return Column(
-            children: dataGuest!
+            children: dataGuest
                 .map(
                   (
                     item,
@@ -400,45 +460,46 @@ class _GuestScreenState extends State<GuestScreen> {
                       ),
                       trailing: GestureDetector(
                         onTap: () async {
-                          await WhatsAppService()
-                              .openWhatsAppChat(
-                            Utility().removeSpaces(item.phone!),
-                            '${Constans.baseUrlDeploy}${widget.slug}',
-                            item.name!,
-                            item.guestId!,
-                          )
-                              .then((value) {
-                            if (value) {
-                              //edit share
-                              Alert(
-                                context: context,
-                                type: AlertType.success,
-                                title: "Akan Dialihkan ke whatsapp",
-                                style: AlertStyle(
-                                  titleStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  descStyle: TextStyle(fontSize: 16),
+                          Alert(
+                            context: context,
+                            type: AlertType.success,
+                            title: "Akan Dialihkan ke whatsapp",
+                            style: AlertStyle(
+                              backgroundColor: Constans.alertColor,
+                              titleStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              descStyle: TextStyle(fontSize: 16),
+                            ),
+                            desc: "Kirim undangan ke tamu anda via whatsapp.",
+                            buttons: [
+                              DialogButton(
+                                color: Constans.secondaryColor,
+                                child: Text(
+                                  "Lanjut",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 ),
-                                desc:
-                                    "Kirim undangan ke tamu anda via whatsapp.",
-                                buttons: [
-                                  DialogButton(
-                                    child: Text(
-                                      "Oke",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      // Navigator.pop(context);
-                                    },
-                                    width: 120,
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  await WhatsAppService()
+                                      .openWhatsAppChat(
+                                    Utility().removeSpaces(item.phone!),
+                                    '${Constans.baseUrlDeploy}${widget.slug}',
+                                    item.name!,
+                                    item.guestId!,
                                   )
-                                ],
-                              ).show();
-                            }
-                          });
+                                      .then((value) {
+                                    if (value) {
+                                      OurProjectController().updateSharing(
+                                          widget.slug, item, widget.guests!);
+                                    }
+                                  });
+                                },
+                                width: 120,
+                              )
+                            ],
+                          ).show();
                         },
                         child: Icon(
                           Icons.share,
@@ -515,7 +576,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "Total Guest",
                           style: TextStyle(
                               color: Constans.thirdColor,
-                              fontSize: 20,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               fontFamily: "Roboto"),
                         ),
@@ -523,7 +584,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "200",
                           style: TextStyle(
                             color: Constans.thirdColor,
-                            fontSize: 20,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: "Roboto",
                           ),
@@ -590,7 +651,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "Guest Present",
                           style: TextStyle(
                               color: Constans.thirdColor,
-                              fontSize: 20,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               fontFamily: "Roboto"),
                         ),
@@ -598,7 +659,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "20",
                           style: TextStyle(
                             color: Constans.thirdColor,
-                            fontSize: 20,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: "Roboto",
                           ),
@@ -659,7 +720,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "Not Came",
                           style: TextStyle(
                               color: Constans.thirdColor,
-                              fontSize: 20,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               fontFamily: "Roboto"),
                         ),
@@ -667,7 +728,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "20",
                           style: TextStyle(
                             color: Constans.thirdColor,
-                            fontSize: 20,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: "Roboto",
                           ),
@@ -723,7 +784,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "Difference",
                           style: TextStyle(
                               color: Constans.thirdColor,
-                              fontSize: 20,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               fontFamily: "Roboto"),
                         ),
@@ -731,7 +792,7 @@ class _GuestScreenState extends State<GuestScreen> {
                           "20",
                           style: TextStyle(
                             color: Constans.thirdColor,
-                            fontSize: 20,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: "Roboto",
                           ),

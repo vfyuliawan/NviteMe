@@ -588,4 +588,69 @@ class OurProjectController {
       return false;
     }
   }
+
+  Future<bool> updateSharing(
+      String slug, GuestModelKeyValue params, GuestModel currentDate) async {
+    try {
+      QuerySnapshot userQuery = await FirebaseFirestore.instance
+          .collection("UserId")
+          .where("Slug", isEqualTo: slug)
+          .get();
+
+      if (userQuery.docs.isNotEmpty) {
+        List<dynamic> existingGuestArray = userQuery.docs.first['Guest'];
+        existingGuestArray
+            .removeWhere((guest) => guest['GuestId'] == params.guestId);
+        existingGuestArray.add({
+          'GuestId': params.guestId,
+          'Share': true,
+          'Attend': params.attendance,
+          'Name': params.name,
+          'Phone': params.phone,
+        });
+
+        DocumentReference documentReference = userQuery.docs.first.reference;
+        await documentReference.update({
+          'Guest': existingGuestArray,
+        });
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      Utility.logger.e(e);
+      return false;
+    }
+  }
+
+  void updateAttend(
+      String slug, GuestModelKeyValue params, GuestModel currentDate) async {
+    try {
+      QuerySnapshot userQuery = await FirebaseFirestore.instance
+          .collection("UserId")
+          .where("Slug", isEqualTo: slug)
+          .get();
+
+      if (userQuery.docs.isNotEmpty) {
+        List<dynamic> existingGuestArray = userQuery.docs.first['Guest'];
+        existingGuestArray
+            .removeWhere((guest) => guest['GuestId'] == params.guestId);
+        existingGuestArray.add({
+          'GuestId': params.guestId,
+          'Share': true,
+          'Attend': params.attendance,
+          'Name': params.name,
+          'Phone': params.phone,
+        });
+
+        DocumentReference documentReference = userQuery.docs.first.reference;
+        await documentReference.update({
+          'Guest': existingGuestArray,
+        });
+      }
+    } catch (e) {
+      Utility.logger.e(e);
+    }
+  }
 }

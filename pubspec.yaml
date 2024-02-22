@@ -54,7 +54,8 @@ dependencies:
   date_time_format: ^2.0.1
   contacts_service: ^0.6.3
   flutter_native_contact_picker: ^0.0.6
-  
+  flutter_barcode_scanner: ^2.0.0
+  dropdown_button2: ^2.3.9  
 
 
 flutter_native_splash:

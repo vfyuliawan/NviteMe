@@ -9,6 +9,8 @@ class Constans {
   static var sixth = const Color(0xffe3b480);
   static var seventh = const Color(0xff265073);
   static var textColor = const Color(0xff3C3633);
+  static var alertColor = Color.fromARGB(255, 252, 239, 214);
+
   static var baseUrlDev = 'localhost:3000/?a=';
   static var baseUrlDeploy =
       'https://your-wedding-day-git-main-vfyuliawans-projects.vercel.app/?a=';

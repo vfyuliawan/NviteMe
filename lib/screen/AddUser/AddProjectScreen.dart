@@ -445,7 +445,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Add Your Project",
+                                    "Create Your Project",
                                     style: TextStyle(
                                       fontFamily: "Pacifico",
                                       fontSize: 18,
