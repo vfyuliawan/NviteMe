@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:nvite_me/utils/utils.dart';
 
 class MultipleImageComponent extends StatefulWidget {
   final String? label;
@@ -185,33 +185,15 @@ class _MultipleImageComponentState extends State<MultipleImageComponent> {
                                         widget.images![index], widget.slug)
                                     .then((value) {
                                   if (value) {
-                                    Alert(
+                                    Utility().themeAlert(
                                       context: context,
-                                      type: AlertType.success,
                                       title: "Delete Image Berhasil",
-                                      style: AlertStyle(
-                                        titleStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        descStyle: TextStyle(fontSize: 16),
-                                      ),
-                                      desc:
+                                      subtitle:
                                           "Klik Perview untuk melihat perubahan.",
-                                      buttons: [
-                                        DialogButton(
-                                          child: Text(
-                                            "Oke",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          width: 120,
-                                        )
-                                      ],
-                                    ).show();
+                                      callback: () async {
+                                        Navigator.pop(context);
+                                      },
+                                    );
                                   }
                                 });
                               },

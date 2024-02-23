@@ -2,8 +2,10 @@
 // ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/DropDownWidget.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/SwitchComponent.dart';
@@ -71,52 +73,57 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                 ? Column(
                     children: [
                       SwitchComponent(
-                          value: widget.guestBarcode!,
-                          onChange: (value) {
-                            setState(() {
-                              widget.guestBarcode = !widget.guestBarcode!;
-                              widget.onChange(
-                                widget.slug,
-                                widget.song,
-                                widget.thema,
-                                widget.guestBarcode,
-                                widget.embeded,
-                              );
-                            });
-                          },
-                          label: "Manage Guest"),
+                        value: widget.guestBarcode!,
+                        onChange: (value) {
+                          setState(() {
+                            widget.guestBarcode = !widget.guestBarcode!;
+                            widget.onChange(
+                              widget.slug,
+                              widget.song,
+                              widget.thema,
+                              widget.guestBarcode,
+                              widget.embeded,
+                            );
+                          });
+                        },
+                        label: "Aktifkan Checkin Tamu",
+                      ),
                       !widget.guestBarcode!
-                          ? Container(
+                          ? GestureDetector(
+                              onTap: () {
+                                if (!widget.guestBarcode!) {
+                                  Clipboard.setData(ClipboardData(
+                                      text: Constans.baseUrlDeploy +
+                                          widget.slug! +
+                                          '&to=Your_Guest'));
+                                }
+                              },
                               child: FormTextField(
-                                enable: false,
-                                line: 2,
-                                fillColor: Colors.black12,
+                                fillColor: widget.guestBarcode!
+                                    ? Colors.black12
+                                    : Colors.black12,
+                                suffix: widget.guestBarcode!
+                                    ? null
+                                    : Icon(Icons.copy),
+                                enable: widget.guestBarcode! ? false : false,
                                 initialValue: Constans.baseUrlDeploy +
                                     widget.slug! +
                                     '&to=Your_Guest',
                                 onChanged: (value) {},
+                                line: 2,
                                 labelText: "Your Link",
                               ),
                             )
-                          : Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Kelola Tamu Undangan",
-                                style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Colors.blueAccent),
-                              )),
+                          : Container(),
                       !widget.guestBarcode!
                           ? Container(
                               alignment: Alignment.bottomLeft,
                               child: Text(
                                 "Replace your_guest with your guest name",
                                 style: TextStyle(
-                                  color: Colors.red,
+                                  color: !widget.guestBarcode!
+                                      ? Colors.red
+                                      : Colors.grey,
                                 ),
                               ))
                           : Container(),
@@ -160,11 +167,27 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                         },
                         labelText: "Embeded",
                       ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Copy only Embeded Link From The Google Map",
-                          style: TextStyle(fontSize: 12, color: Colors.green),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      GestureDetector(
+                        onTap: () async => Utility()
+                            .openWebBrowser("https://www.embed-map.com"),
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.info,
+                                color: Colors.blue,
+                              ),
+                              Text(
+                                "Click here to get Embeded map",
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.blue),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 10),

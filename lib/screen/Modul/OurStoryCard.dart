@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/OurStoryModel.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/DateTimeComponent.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/ImageComponent.dart';
 import 'package:nvite_me/widgets/SwitchComponent.dart';
 import 'package:nvite_me/constans.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class OurStoryCard extends StatefulWidget {
   final String slug;
@@ -133,30 +133,14 @@ class _OurStoryCardState extends State<OurStoryCard> {
                   .editOurStory(slug: widget.slug, params: widget.ourStory)
                   .then((value) {
                 if (value) {
-                  Alert(
+                  Utility().themeAlert(
                     context: context,
-                    type: AlertType.success,
                     title: "Update Story Berhasil",
-                    style: AlertStyle(
-                      titleStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      descStyle: TextStyle(fontSize: 16),
-                    ),
-                    desc: "Klik Perview untuk melihat perubahan.",
-                    buttons: [
-                      DialogButton(
-                        child: Text(
-                          "Oke",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        width: 120,
-                      )
-                    ],
-                  ).show();
+                    subtitle: "Klik Perview untuk melihat perubahan.",
+                    callback: () async {
+                      Navigator.pop(context);
+                    },
+                  );
                 }
               });
             },

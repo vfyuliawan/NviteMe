@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/screen/RootPage.dart';
 import 'package:nvite_me/utils/utils.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class AuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,30 +45,15 @@ class AuthController {
         );
       }
     } catch (e) {
-      Alert(
+      Utility().themeAlert(
         context: context,
-        type: AlertType.error,
-        title: "Periksa Kembali Email dan Password",
-        style: const AlertStyle(
-          titleStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-          descStyle: TextStyle(fontSize: 16),
-        ),
-        desc: "",
-        buttons: [
-          DialogButton(
-            child: const Text(
-              "Oke",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            width: 120,
-          )
-        ],
-      ).show();
+        isError: true,
+        title: "Gagal Login",
+        subtitle: "Periksa Kembali Email dan Password",
+        callback: () async {
+          Navigator.pop(context);
+        },
+      );
       completer.complete(false);
       Utility.logger.e("message: $e");
     }

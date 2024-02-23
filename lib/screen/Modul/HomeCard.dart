@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, library_private_types_in_public_api, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/ImageComponent.dart';
 import 'package:nvite_me/widgets/SwitchComponent.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/HomeModel.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class HomeTextFieldCard extends StatefulWidget {
   final String slug;
@@ -142,32 +142,15 @@ class _HomeTextFieldCardState extends State<HomeTextFieldCard> {
                                 )
                                     .then((value) {
                                   if (value) {
-                                    Alert(
+                                    Utility().themeAlert(
                                       context: context,
-                                      type: AlertType.success,
                                       title: "Update Home Berhasil",
-                                      style: AlertStyle(
-                                        titleStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        descStyle: TextStyle(fontSize: 16),
-                                      ),
-                                      desc:
+                                      subtitle:
                                           "Klik Perview untuk melihat perubahan.",
-                                      buttons: [
-                                        DialogButton(
-                                          child: Text(
-                                            "Oke",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20),
-                                          ),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          width: 120,
-                                        )
-                                      ],
-                                    ).show();
+                                      callback: () async {
+                                        Navigator.pop(context);
+                                      },
+                                    );
                                   }
                                 });
                               },

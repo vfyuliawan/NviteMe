@@ -10,7 +10,7 @@ import 'package:nvite_me/model/UserIdModel.dart';
 import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/screen/AddUser/AddProjectScreen.dart';
 import 'package:nvite_me/screen/DetailUserScreen.dart';
-import 'package:nvite_me/utils/utils.dart';
+import 'package:nvite_me/widgets/NoDataFound.dart';
 
 class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
@@ -21,484 +21,482 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> {
   late bool isOpenDashboard;
-  late String uid;
+  late String uid = "";
+  late String searchInput = "";
+  late UserLoginModel _userLoginModel = UserLoginModel(uid: "");
+
   @override
   void initState() {
     super.initState();
     isOpenDashboard = true;
-    uid = "";
+    initializeUser();
+  }
+
+  Future<void> initializeUser() async {
+    UserLoginModel userUid = await AuthController().getUserInfo();
+    setState(() {
+      _userLoginModel = userUid;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<UserLoginModel>(
-      future: AuthController().getUserInfo(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          uid = snapshot.data!.uid!;
-          return _listWidget(uid);
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
+    // return FutureBuilder<UserLoginModel>(
+    //   future: AuthController().getUserInfo(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.done) {
+    //       uid = snapshot.data!.uid!;
+    //       return _listWidget(uid);
+    //     } else {
+    //       return CircularProgressIndicator();
+    //     }
+    //   },
+    // );
+    return _listWidget(_userLoginModel.uid!);
   }
 
   Widget _listWidget(String uid) {
+    print(uid);
     return Scaffold(
-      body: StreamBuilder(
-        stream: OurProjectController().getAlldata(uid),
+        body: Stack(
+      children: [
+        Positioned(
+          top: 0,
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: Constans.secondaryColor,
+            ),
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "Project   ",
+                  style: TextStyle(
+                    fontFamily: 'Pacifico',
+                    fontSize: 28,
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: 80,
+          child: Container(
+            height: isOpenDashboard ? 400 : 150,
+            decoration: BoxDecoration(
+                color: Constans.thirdColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                )),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "    Find Your Project",
+                  style: TextStyle(
+                    fontFamily: "Roboto",
+                    fontWeight: FontWeight.bold,
+                    color: Constans.textColor,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        width: 300,
+                        child: TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              searchInput = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            fillColor: Constans.thirdColor,
+                            filled: true,
+                            labelText: "Search",
+                            prefixIcon: Icon(
+                              Icons.search_outlined,
+                              size: 40,
+                            ),
+                            labelStyle:
+                                TextStyle(fontSize: 20, color: Colors.black38),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1, color: Constans.thirdColor),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddUserScreen(),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add_box_rounded,
+                        color: Constans.secondaryColor,
+                        size: 65,
+                      ),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isOpenDashboard = !isOpenDashboard;
+                    });
+                  },
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 13,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "View Dashboard",
+                            style: TextStyle(
+                              fontFamily: "Roboto",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Constans.textColor,
+                            ),
+                          ),
+                          isOpenDashboard
+                              ? Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 40,
+                                  color: Constans.textColor,
+                                )
+                              : Icon(
+                                  Icons.arrow_left,
+                                  size: 40,
+                                  color: Constans.textColor,
+                                )
+                        ],
+                      )),
+                ),
+                isOpenDashboard
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 120,
+                            width: 170,
+                            decoration: BoxDecoration(
+                              color: Constans.secondaryColor,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(0),
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(0),
+                                bottomRight: Radius.circular(30),
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Constans.secondaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: Image.asset(
+                                    "assets/icons/database.png",
+                                    fit: BoxFit.contain,
+                                    width: 17,
+                                    height: 20,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Your Limit",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      "20",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w200,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            height: 120,
+                            width: 170,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Constans.secondaryColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(0),
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Constans.secondaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: Image.asset(
+                                    "assets/icons/atm-card.png",
+                                    fit: BoxFit.contain,
+                                    width: 17,
+                                    height: 20,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Paypal",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      "USD 8.123,00",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w200,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    : Container()
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: isOpenDashboard ? 310 : 210,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+                color: Constans.fourthColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                )),
+            width: MediaQuery.of(context).size.width,
+            height: isOpenDashboard ? 550 : 640,
+            child: Stack(
+              children: [
+                _listProject(),
+                Positioned(top: 0, right: -200, child: BackgroundWidget()),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ));
+  }
+
+  Widget _listProject() {
+    return StreamBuilder(
+        stream: OurProjectController().getAlldata(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              child: Center(child: CircularProgressIndicator()),
+            return Center(
+              child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            Utility.logger.e(snapshot.error);
             return Center(
-              child: Container(
-                child: Text(
-                  "error ${snapshot.error}",
-                ),
-              ),
+              child: Text(snapshot.error.toString()),
             );
           } else if (snapshot.data!.isEmpty) {
-            return noDataUserFound();
+            return NoDataFoundWidget();
           } else {
-            return Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Constans.secondaryColor,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "List of Your Project (${snapshot.data!.length})",
+                    style: TextStyle(
+                        fontFamily: "Roboto",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w100),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
                       children: [
-                        Text(
-                          "Project   ",
-                          style: TextStyle(
-                            fontFamily: 'Pacifico',
-                            fontSize: 28,
-                            color: Colors.white,
-                            decoration: TextDecoration.none,
-                          ),
+                        Column(
+                          children: snapshot.data!
+                                  .where((element) =>
+                                      element.slug!.contains(searchInput))
+                                  .isEmpty
+                              ? [NoDataFoundWidget()]
+                              : snapshot.data!
+                                  .where((element) =>
+                                      element.slug!.contains(searchInput))
+                                  .map((item) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailUserScreen(
+                                                  detailUser: item),
+                                        ),
+                                      );
+                                    },
+                                    child: Card(
+                                      margin: EdgeInsets.only(top: 15),
+                                      color: Colors.white,
+                                      child: ListTile(
+                                        trailing: Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                          color: Constans.secondaryColor,
+                                        ),
+                                        leading: Container(
+                                            child: Image.asset(
+                                          "assets/images/theme/${item.themeName}.png",
+                                          fit: BoxFit.fill,
+                                          height: 90,
+                                          width: 80,
+                                        )),
+                                        title: Text(
+                                          'Nama ${item.slug!}',
+                                          style: TextStyle(
+                                              fontFamily: 'Pacifico',
+                                              color: Constans.secondaryColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        subtitle: Container(
+                                          alignment: Alignment.centerLeft,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Tema : ${item.themeName!}',
+                                                style: TextStyle(
+                                                  fontFamily: 'Pacifico',
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    padding: EdgeInsets.all(8),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Text(
+                                                      "Active",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(8),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.redAccent,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: Text(
+                                                      "14 - Aug - 2025",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                        ),
+                        SizedBox(
+                          height: 100,
                         )
                       ],
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 80,
-                  child: Container(
-                    height: isOpenDashboard ? 400 : 150,
-                    decoration: BoxDecoration(
-                        color: Constans.thirdColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25),
-                        )),
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "    Find Your Project",
-                          style: TextStyle(
-                            fontFamily: "Roboto",
-                            fontWeight: FontWeight.bold,
-                            color: Constans.textColor,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                width: 300,
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    fillColor: Constans.thirdColor,
-                                    filled: true,
-                                    labelText: "Search",
-                                    prefixIcon: Icon(
-                                      Icons.search_outlined,
-                                      size: 40,
-                                    ),
-                                    labelStyle: TextStyle(
-                                        fontSize: 20, color: Colors.black38),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 1, color: Constans.thirdColor),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AddUserScreen(),
-                                  ),
-                                );
-                              },
-                              child: Icon(
-                                Icons.add_box_rounded,
-                                color: Constans.secondaryColor,
-                                size: 65,
-                              ),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isOpenDashboard = !isOpenDashboard;
-                            });
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 13,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "View Dashboard",
-                                    style: TextStyle(
-                                      fontFamily: "Roboto",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Constans.textColor,
-                                    ),
-                                  ),
-                                  isOpenDashboard
-                                      ? Icon(
-                                          Icons.arrow_drop_down,
-                                          size: 40,
-                                          color: Constans.textColor,
-                                        )
-                                      : Icon(
-                                          Icons.arrow_left,
-                                          size: 40,
-                                          color: Constans.textColor,
-                                        )
-                                ],
-                              )),
-                        ),
-                        isOpenDashboard
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 120,
-                                    width: 170,
-                                    decoration: BoxDecoration(
-                                      color: Constans.secondaryColor,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(0),
-                                        topLeft: Radius.circular(30),
-                                        bottomLeft: Radius.circular(0),
-                                        bottomRight: Radius.circular(30),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: Constans.secondaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                          ),
-                                          child: Image.asset(
-                                            "assets/icons/database.png",
-                                            fit: BoxFit.contain,
-                                            width: 17,
-                                            height: 20,
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Your Limit",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              "20",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w200,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 20,
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Container(
-                                    height: 120,
-                                    width: 170,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Constans.secondaryColor,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(0),
-                                        topRight: Radius.circular(30),
-                                        bottomLeft: Radius.circular(30),
-                                        bottomRight: Radius.circular(0),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: Constans.secondaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                          ),
-                                          child: Image.asset(
-                                            "assets/icons/atm-card.png",
-                                            fit: BoxFit.contain,
-                                            width: 17,
-                                            height: 20,
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Paypal",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              "USD 8.123,00",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w200,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 20,
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              )
-                            : Container()
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: isOpenDashboard ? 310 : 210,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Constans.fourthColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25),
-                        )),
-                    width: MediaQuery.of(context).size.width,
-                    height: isOpenDashboard ? 550 : 640,
-                    child: Stack(
-                      children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                "List of Your Project (${snapshot.data!.length})",
-                                style: TextStyle(
-                                    fontFamily: "Roboto",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w100),
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Column(
-                                  children: [
-                                    Column(
-                                      children: snapshot.data!.map((item) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailUserScreen(
-                                                        detailUser: item),
-                                              ),
-                                            );
-                                          },
-                                          child: Card(
-                                            margin: EdgeInsets.only(top: 15),
-                                            color: Colors.white,
-                                            child: ListTile(
-                                              trailing: Icon(
-                                                Icons
-                                                    .arrow_forward_ios_outlined,
-                                                color: Constans.secondaryColor,
-                                              ),
-                                              leading: Container(
-                                                  child: Image.asset(
-                                                "assets/images/theme/${item.themeName}.png",
-                                                fit: BoxFit.fill,
-                                                height: 90,
-                                                width: 80,
-                                              )),
-                                              title: Text(
-                                                'Nama ${item.slug!}',
-                                                style: TextStyle(
-                                                    fontFamily: 'Pacifico',
-                                                    color:
-                                                        Constans.secondaryColor,
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              subtitle: Container(
-                                                alignment: Alignment.centerLeft,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Tema : ${item.themeName!}',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Pacifico',
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Container(
-                                                          padding:
-                                                              EdgeInsets.all(8),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.green,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                          ),
-                                                          child: Text(
-                                                            "Active",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Container(
-                                                          padding:
-                                                              EdgeInsets.all(8),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors
-                                                                .redAccent,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                          ),
-                                                          child: Text(
-                                                            "14 - Aug - 2025",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                            top: 0, right: -200, child: BackgroundWidget()),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           }
-        },
-      ),
-    );
+        });
   }
 
   Widget noDataUserFound() {
@@ -776,69 +774,6 @@ class _UserListState extends State<UserList> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class SearchWidget extends StatelessWidget {
-  const SearchWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 100),
-      child: Container(
-        alignment: Alignment.centerLeft,
-        height: 90,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "    Find Your Project",
-              style: TextStyle(
-                fontFamily: "Roboto",
-                fontWeight: FontWeight.bold,
-                color: Constans.textColor,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: 10),
-                Expanded(
-                  flex: 1,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      fillColor: Constans.thirdColor,
-                      filled: true,
-                      labelText: "Search",
-                      prefixIcon: Icon(
-                        Icons.search_outlined,
-                        size: 40,
-                      ),
-                      labelStyle:
-                          TextStyle(fontSize: 20, color: Colors.black38),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: 1, color: Constans.thirdColor),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Icon(
-                  Icons.add_box_rounded,
-                  color: Constans.secondaryColor,
-                  size: 65,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

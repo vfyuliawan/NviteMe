@@ -24,7 +24,7 @@ import 'package:nvite_me/screen/AddUser/AddCard/InfoAcaraAddCard.dart';
 import 'package:nvite_me/screen/AddUser/AddCard/MeleFemaleAddCard.dart';
 import 'package:nvite_me/screen/AddUser/AddCard/OurStoryAddCard.dart';
 import 'package:nvite_me/screen/AddUser/AddCard/ThemeAddCard.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:nvite_me/utils/utils.dart';
 
 class AddUserScreen extends StatefulWidget {
   const AddUserScreen({Key? key}) : super(key: key);
@@ -293,59 +293,27 @@ class _AddUserScreenState extends State<AddUserScreen> {
                         setState(() {
                           loading = false;
                         });
-                        Alert(
+                        Utility().themeAlert(
                           context: context,
-                          type: AlertType.success,
                           title: "Berhasil menambahkan Project",
-                          style: AlertStyle(
-                            titleStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                            descStyle: TextStyle(fontSize: 16),
-                          ),
-                          desc: "Klik Perview untuk melihat perubahan.",
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "Oke",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                              width: 120,
-                            )
-                          ],
-                        ).show();
+                          subtitle: "Klik Perview untuk melihat perubahan.",
+                          callback: () async {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        );
                       }
                     });
                   } else {
-                    Alert(
+                    Utility().themeAlert(
                       context: context,
-                      type: AlertType.error,
+                      isError: true,
                       title: "Gagal",
-                      style: AlertStyle(
-                        titleStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        descStyle: TextStyle(fontSize: 16),
-                      ),
-                      desc: "Pastikan Semua Form Telah Terisi.",
-                      buttons: [
-                        DialogButton(
-                          child: Text(
-                            "Oke",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          width: 120,
-                        )
-                      ],
-                    ).show();
+                      subtitle: "Pastikan Semua Form Telah Terisi.",
+                      callback: () async {
+                        Navigator.pop(context);
+                      },
+                    );
                   }
                 },
                 child: Container(
@@ -531,10 +499,12 @@ class _AddUserScreenState extends State<AddUserScreen> {
           slug: userId.slug ?? "",
           data: userId.home ??
               HomeModel(
-                icon: "assets/icons/homework.png",
-                tittle: "Home",
-                isOpen: true,
-              ),
+                  icon: "assets/icons/homework.png",
+                  tittle: "Home",
+                  isOpen: true,
+                  homeTittle: "We Found Love",
+                  homeQuotes:
+                      "“We have a couple of rules in our relationship. The first rule is that I make her feel like she’s getting everything. The second rule is that I actually do let her have her way in everything. And, so far, it’s working.” —Justin Timberlake"),
           onCoverChanged: (HomeModel newHome) {
             setState(() {
               userId.home = newHome;

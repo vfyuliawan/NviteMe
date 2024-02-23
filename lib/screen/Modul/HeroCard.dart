@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/HeroModel.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/DateTimeComponent.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/ImageComponent.dart';
 import 'package:nvite_me/widgets/SwitchComponent.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class HeroCard extends StatefulWidget {
   final String slug;
@@ -166,35 +166,15 @@ class _HeroCardState extends State<HeroCard> {
                                       )
                                           .then((value) {
                                         if (value) {
-                                          Alert(
+                                          Utility().themeAlert(
                                             context: context,
-                                            type: AlertType.success,
                                             title: "Update Hero Berhasil",
-                                            style: AlertStyle(
-                                              titleStyle: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              descStyle:
-                                                  TextStyle(fontSize: 16),
-                                            ),
-                                            desc:
+                                            subtitle:
                                                 "Klik Perview untuk melihat perubahan.",
-                                            buttons: [
-                                              DialogButton(
-                                                child: Text(
-                                                  "Oke",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20),
-                                                ),
-                                                onPressed: () {
-                                                  // _refresh();
-                                                  Navigator.pop(context);
-                                                },
-                                                width: 120,
-                                              )
-                                            ],
-                                          ).show();
+                                            callback: () async {
+                                              Navigator.pop(context);
+                                            },
+                                          );
                                         }
                                       });
                                     },

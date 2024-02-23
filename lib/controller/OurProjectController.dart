@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
+import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/model/CountDownModel.dart';
 import 'package:nvite_me/model/CoverModel.dart';
 import 'package:nvite_me/model/GiftsModel.dart';
@@ -16,15 +17,17 @@ import 'package:nvite_me/model/InfoAcaraModel.dart';
 import 'package:nvite_me/model/MaleFemaleModel.dart';
 import 'package:nvite_me/model/OurStoryModel.dart';
 import 'package:nvite_me/model/UserIdModel.dart';
+import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/utils/utils.dart';
 import 'package:path/path.dart';
 
 class OurProjectController {
-  Stream<List<UserIdModel>> getAlldata(String uid) {
+  Stream<List<UserIdModel>> getAlldata() async* {
+    UserLoginModel userId = await AuthController().getUserInfo();
     try {
-      return FirebaseFirestore.instance
+      yield* FirebaseFirestore.instance
           .collection("UserId")
-          .where("uid", isEqualTo: uid)
+          .where("uid", isEqualTo: userId.uid)
           .snapshots()
           .map((querySnapshot) {
         return querySnapshot.docs.map((documentSnapshot) {
@@ -36,7 +39,7 @@ class OurProjectController {
       });
     } catch (e) {
       print(e.toString());
-      return Stream.value([]);
+      yield* Stream.value([]);
     }
   }
 
@@ -624,8 +627,8 @@ class OurProjectController {
     }
   }
 
-  void updateAttend(
-      String slug, GuestModelKeyValue params, GuestModel currentDate) async {
+  Future<Map<String, dynamic>> scanBarcodeUpdateAttend(
+      String slug, String scanBarcode, GuestModel listGuest) async {
     try {
       QuerySnapshot userQuery = await FirebaseFirestore.instance
           .collection("UserId")
@@ -633,24 +636,31 @@ class OurProjectController {
           .get();
 
       if (userQuery.docs.isNotEmpty) {
+        GuestModelKeyValue currentGuest = listGuest.guest!
+            .where((element) => element.guestId == scanBarcode)
+            .first;
         List<dynamic> existingGuestArray = userQuery.docs.first['Guest'];
         existingGuestArray
-            .removeWhere((guest) => guest['GuestId'] == params.guestId);
+            .removeWhere((guest) => guest['GuestId'] == currentGuest.guestId);
         existingGuestArray.add({
-          'GuestId': params.guestId,
-          'Share': true,
-          'Attend': params.attendance,
-          'Name': params.name,
-          'Phone': params.phone,
+          'GuestId': currentGuest.guestId,
+          'Share': currentGuest.share,
+          'Attend': true,
+          'Name': currentGuest.name,
+          'Phone': currentGuest.phone,
         });
 
         DocumentReference documentReference = userQuery.docs.first.reference;
         await documentReference.update({
           'Guest': existingGuestArray,
         });
+        return {"update": true, "user": currentGuest.name};
+      } else {
+        return {"update": false, "user": ""};
       }
     } catch (e) {
       Utility.logger.e(e);
+      return {"update": false, "user": ""};
     }
   }
 }

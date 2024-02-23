@@ -3,8 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/GuestModel.dart';
@@ -92,6 +91,91 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                           style: TextStyle(fontSize: 12, color: Colors.red),
                         ),
                       ),
+                      SizedBox(height: 10),
+                      SwitchComponent(
+                        onChange: (value) {
+                          setState(() {
+                            widget.guestBarcode = !widget.guestBarcode!;
+                          });
+                        },
+                        value: widget.guestBarcode!,
+                        label: 'Aktifkan Checkin Tamu',
+                      ),
+                      !widget.guestBarcode!
+                          ? Container()
+                          : GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GuestScreen(
+                                      guests: widget.guest,
+                                      slug: widget.slug!,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.menu_book_sharp,
+                                      color: Colors.blue,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "Kelola Buku Tamu Digital",
+                                      style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w100,
+                                          decorationColor: Colors.blueAccent),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (!widget.guestBarcode!) {
+                            Clipboard.setData(ClipboardData(
+                                text: Constans.baseUrlDeploy +
+                                    widget.slug! +
+                                    '&to=Your_Guest'));
+                          }
+                        },
+                        child: FormTextField(
+                          fillColor: widget.guestBarcode!
+                              ? Colors.black12
+                              : Colors.black12,
+                          suffix:
+                              widget.guestBarcode! ? null : Icon(Icons.copy),
+                          enable: widget.guestBarcode! ? false : false,
+                          initialValue: Constans.baseUrlDeploy +
+                              widget.slug! +
+                              '&to=Your_Guest',
+                          onChanged: (value) {},
+                          line: 2,
+                          labelText: "Your Link",
+                        ),
+                      ),
+                      !widget.guestBarcode!
+                          ? Container(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                "Replace your_guest with your guest name",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ))
+                          : Container(),
+                      SizedBox(height: 10),
                       FormTextField(
                         initialValue: widget.embeded,
                         enable: true,
@@ -103,11 +187,28 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                         },
                         labelText: "Embeded",
                       ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Copy only Embeded Link From The Google Map",
-                          style: TextStyle(fontSize: 12, color: Colors.green),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      GestureDetector(
+                        onTap: () async => Utility()
+                            .openWebBrowser("https://www.embed-map.com"),
+                        child: Container(
+                          height: 20,
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.info,
+                                color: Colors.blue,
+                              ),
+                              Text(
+                                "Click here to get Embeded map",
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.blue),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 10),
@@ -146,78 +247,6 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                         },
                       ),
                       SizedBox(height: 10),
-                      SwitchComponent(
-                        onChange: (value) {
-                          setState(() {
-                            widget.guestBarcode = !widget.guestBarcode!;
-                          });
-                        },
-                        value: widget.guestBarcode!,
-                        label: 'Kelola Tamu',
-                      ),
-                      !widget.guestBarcode!
-                          ? Container()
-                          : GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => GuestScreen(
-                                      guests: widget.guest,
-                                      slug: widget.slug!,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Kelola Tamu Undangan",
-                                  style: TextStyle(
-                                      color: Colors.blueAccent,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: Colors.blueAccent),
-                                ),
-                              ),
-                            ),
-                      GestureDetector(
-                        onTap: () {
-                          if (!widget.guestBarcode!) {
-                            Clipboard.setData(ClipboardData(
-                                text: Constans.baseUrlDeploy +
-                                    widget.slug! +
-                                    '&to=Your_Guest'));
-                          }
-                        },
-                        child: FormTextField(
-                          fillColor: widget.guestBarcode!
-                              ? Colors.black12
-                              : Colors.black12,
-                          suffix:
-                              widget.guestBarcode! ? null : Icon(Icons.copy),
-                          enable: widget.guestBarcode! ? false : false,
-                          initialValue: Constans.baseUrlDeploy +
-                              widget.slug! +
-                              '&to=Your_Guest',
-                          onChanged: (value) {},
-                          line: 2,
-                          labelText: "Your Link",
-                        ),
-                      ),
-                      !widget.guestBarcode!
-                          ? Container(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                "Replace your_guest with your guest name",
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                              ))
-                          : Container(),
-                      SizedBox(height: 10),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 0),
                         child: TextButton(
@@ -234,31 +263,15 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                             )
                                 .then((value) {
                               if (value) {
-                                Alert(
+                                Utility().themeAlert(
                                   context: context,
-                                  type: AlertType.success,
                                   title: "Update Tema Berhasil",
-                                  style: AlertStyle(
-                                    titleStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    descStyle: TextStyle(fontSize: 16),
-                                  ),
-                                  desc: "Klik Perview untuk melihat perubahan.",
-                                  buttons: [
-                                    DialogButton(
-                                      child: Text(
-                                        "Oke",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      width: 120,
-                                    )
-                                  ],
-                                ).show();
+                                  subtitle:
+                                      "Klik Perview untuk melihat perubahan.",
+                                  callback: () async {
+                                    Navigator.pop(context);
+                                  },
+                                );
                               }
                             });
                             ;

@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/GiftsModel.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/DropDownWidget.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/SwitchComponent.dart';
 import 'package:nvite_me/constans.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class GiftsCard extends StatefulWidget {
   final String slug;
@@ -133,30 +133,14 @@ class _GiftsCardState extends State<GiftsCard> {
                   .editGifts(slug: widget.slug, params: widget.gifts)
                   .then((value) {
                 if (value) {
-                  Alert(
+                  Utility().themeAlert(
                     context: context,
-                    type: AlertType.success,
                     title: "Update Story Berhasil",
-                    style: AlertStyle(
-                      titleStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      descStyle: TextStyle(fontSize: 16),
-                    ),
-                    desc: "Klik Perview untuk melihat perubahan.",
-                    buttons: [
-                      DialogButton(
-                        child: Text(
-                          "Oke",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        width: 120,
-                      )
-                    ],
-                  ).show();
+                    subtitle: "Klik Perview untuk melihat perubahan.",
+                    callback: () async {
+                      Navigator.pop(context);
+                    },
+                  );
                 }
               });
             },

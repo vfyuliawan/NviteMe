@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/InfoAcaraModel.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/DateTimeComponent.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/ImageComponent.dart';
 import 'package:nvite_me/constans.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class InfoAcaraCard extends StatefulWidget {
   final String slug;
@@ -121,29 +121,15 @@ class _InfoAcaraCardState extends State<InfoAcaraCard> {
                             )
                                 .then((value) {
                               if (value) {
-                                Alert(
+                                Utility().themeAlert(
                                   context: context,
-                                  type: AlertType.success,
-                                  title: "Update Info Acara Berhasil",
-                                  style: AlertStyle(
-                                    titleStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    descStyle: TextStyle(fontSize: 16),
-                                  ),
-                                  desc: "Klik Perview untuk melihat perubahan.",
-                                  buttons: [
-                                    DialogButton(
-                                      child: Text(
-                                        "Oke",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                      onPressed: () => Navigator.pop(context),
-                                      width: 120,
-                                    )
-                                  ],
-                                ).show();
+                                  title: "Update Info Berhasil",
+                                  subtitle:
+                                      "Klik Perview untuk melihat perubahan.",
+                                  callback: () async {
+                                    Navigator.pop(context);
+                                  },
+                                );
                               }
                             });
                           },

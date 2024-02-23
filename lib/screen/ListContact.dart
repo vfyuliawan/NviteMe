@@ -8,7 +8,7 @@ import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/GuestModel.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:nvite_me/utils/utils.dart';
 
 class ListContact extends StatefulWidget {
   final String slug;
@@ -56,34 +56,14 @@ class _ListContactState extends State<ListContact> {
                   )
                       .then((value) {
                     if (value) {
-                      Alert(
+                      Utility().themeAlert(
                         context: context,
-                        type: AlertType.success,
                         title: "Update Guest Berhasil",
-                        style: AlertStyle(
-                          backgroundColor: Constans.alertColor,
-                          titleStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          descStyle: TextStyle(fontSize: 16),
-                        ),
-                        desc: "Kirim undangan ke tamu anda via whatsapp.",
-                        buttons: [
-                          DialogButton(
-                            color: Constans.secondaryColor,
-                            child: Text(
-                              "Oke",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            width: 120,
-                          )
-                        ],
-                      ).show();
+                        subtitle: "Kirim undangan ke tamu anda via whatsapp.",
+                        callback: () {
+                          Navigator.pop(context);
+                        },
+                      );
                     }
                   });
                 },
@@ -189,7 +169,7 @@ class _ListContactState extends State<ListContact> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "Add Contact",
+                                          "Import from Contact",
                                           style: TextStyle(
                                             fontSize: 25,
                                             fontFamily: 'Pacifico',

@@ -13,6 +13,7 @@ import 'package:nvite_me/screen/ListContact.dart';
 import 'package:nvite_me/service/WhatsAppService.dart';
 import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/DropDownButton.dart';
+import 'package:nvite_me/widgets/NoDataFound.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class GuestScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _GuestScreenState extends State<GuestScreen> {
   late bool enableApply = true;
   late bool isOpenBalance = true;
 
-  final FlutterContactPicker _contactPicker = new FlutterContactPicker();
+  // final FlutterContactPicker _contactPicker = new FlutterContactPicker();
   List<Contact>? _contacts;
   String _scanBarcode = 'Unknown';
   final List<String> listDropDown = [
@@ -59,9 +60,32 @@ class _GuestScreenState extends State<GuestScreen> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-    if (!mounted) return;
-    setState(() {
-      _scanBarcode = barcodeScanRes;
+    // if (!mounted) return;
+    OurProjectController()
+        .scanBarcodeUpdateAttend(
+      widget.slug,
+      barcodeScanRes.split("nviteMe")[1],
+      widget.guests!,
+    )
+        .then((value) {
+      if (value["update"]) {
+        Utility().themeAlert(
+            context: context,
+            title: "${value["user"]} Berhasil Checkin",
+            subtitle: "Dipersilakan Masuk",
+            callback: () {
+              Navigator.pop(context);
+            });
+      } else {
+        Utility().themeAlert(
+            context: context,
+            isError: true,
+            title: "Tamu Tidak Ditemukan",
+            subtitle: "Priksa Kembali E-Ticket",
+            callback: () {
+              Navigator.pop(context);
+            });
+      }
     });
   }
 
@@ -273,7 +297,7 @@ class _GuestScreenState extends State<GuestScreen> {
                                                   child: Container(
                                                     padding:
                                                         EdgeInsets.symmetric(
-                                                      horizontal: 5,
+                                                      horizontal: 10,
                                                     ),
                                                     height: 40,
                                                     child: Row(
@@ -394,141 +418,130 @@ class _GuestScreenState extends State<GuestScreen> {
               return true;
             }
           });
-          return Column(
-            children: dataGuest
-                .map(
-                  (
-                    item,
-                  ) =>
-                      Card(
-                    color: Constans.fourthColor,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(8),
-                      title: Text(
-                        item.name!,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          color: Constans.textColor,
-                        ),
-                      ),
-                      subtitle: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item.phone!,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Constans.textColor,
+          return dataGuest.isEmpty
+              ? NoDataFoundWidget()
+              : Column(
+                  children: dataGuest
+                      .map(
+                        (
+                          item,
+                        ) =>
+                            Card(
+                          color: Constans.fourthColor,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(8),
+                            title: Text(
+                              item.name!,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Constans.textColor,
+                              ),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              Card(
+                            subtitle: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.phone!,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Constans.textColor,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Card(
+                                      color: item.attendance!
+                                          ? Colors.green
+                                          : Colors.red,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text(
+                                          item.attendance!
+                                              ? "Sudah Checkin"
+                                              : "Blum Checkin",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Card(
+                                      color: item.share
+                                          ? Colors.green
+                                          : Colors.red,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text(
+                                          item.share ? "Shared" : "NotShare",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            trailing: GestureDetector(
+                              onTap: () async {
+                                Utility().themeAlert(
+                                  context: context,
+                                  title: "Akan Dialihkan ke whatsapp",
+                                  subtitle:
+                                      "Kirim undangan ke tamu anda via whatsapp",
+                                  callback: () async {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    await WhatsAppService()
+                                        .openWhatsAppChat(
+                                      Utility().removeSpaces(item.phone!),
+                                      '${Constans.baseUrlDeploy}${widget.slug}',
+                                      item.name!,
+                                      item.guestId!,
+                                    )
+                                        .then((value) {
+                                      if (value) {
+                                        OurProjectController().updateSharing(
+                                            widget.slug, item, widget.guests!);
+                                      }
+                                    });
+                                  },
+                                );
+                              },
+                              child: Image.asset(
+                                "assets/icons/whatsapp.png",
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                            leading: Container(
+                              alignment: Alignment.center,
+                              height: 60,
+                              width: 60,
+                              child: Text(
+                                "C",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                ),
+                              ),
+                              decoration: BoxDecoration(
                                 color: item.attendance!
                                     ? Colors.green
                                     : Colors.red,
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(
-                                    item.attendance!
-                                        ? "Sudah Checkin"
-                                        : "Blum Checkin",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                borderRadius: BorderRadius.circular(
+                                  30,
                                 ),
                               ),
-                              Card(
-                                color: item.share ? Colors.green : Colors.red,
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text(
-                                    item.share ? "Shared" : "NotShare",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      trailing: GestureDetector(
-                        onTap: () async {
-                          Alert(
-                            context: context,
-                            type: AlertType.success,
-                            title: "Akan Dialihkan ke whatsapp",
-                            style: AlertStyle(
-                              backgroundColor: Constans.alertColor,
-                              titleStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              descStyle: TextStyle(fontSize: 16),
                             ),
-                            desc: "Kirim undangan ke tamu anda via whatsapp.",
-                            buttons: [
-                              DialogButton(
-                                color: Constans.secondaryColor,
-                                child: Text(
-                                  "Lanjut",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                ),
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                  await WhatsAppService()
-                                      .openWhatsAppChat(
-                                    Utility().removeSpaces(item.phone!),
-                                    '${Constans.baseUrlDeploy}${widget.slug}',
-                                    item.name!,
-                                    item.guestId!,
-                                  )
-                                      .then((value) {
-                                    if (value) {
-                                      OurProjectController().updateSharing(
-                                          widget.slug, item, widget.guests!);
-                                    }
-                                  });
-                                },
-                                width: 120,
-                              )
-                            ],
-                          ).show();
-                        },
-                        child: Icon(
-                          Icons.share,
-                          color: Constans.textColor,
-                          size: 30,
-                        ),
-                      ),
-                      leading: Container(
-                        alignment: Alignment.center,
-                        height: 60,
-                        width: 60,
-                        child: Text(
-                          "C",
-                          style: TextStyle(
-                            fontSize: 30,
                           ),
                         ),
-                        decoration: BoxDecoration(
-                          color: item.attendance! ? Colors.green : Colors.red,
-                          borderRadius: BorderRadius.circular(
-                            30,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                .toList(),
-          );
+                      )
+                      .toList(),
+                );
         }
       },
     );

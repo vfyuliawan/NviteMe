@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/screen/LoginScreen.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:nvite_me/utils/utils.dart';
 
 class TearmCondition extends StatefulWidget {
   const TearmCondition({Key? key}) : super(key: key);
@@ -62,41 +62,24 @@ class _TearmConditionState extends State<TearmCondition> {
                           setState(() {
                             loading = false;
                           });
-                          Alert(
+                          Utility().themeAlert(
                             context: context,
-                            type: AlertType.success,
                             title: "Berhasil Logout",
-                            style: AlertStyle(
-                              titleStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              descStyle: TextStyle(fontSize: 16),
-                            ),
-                            desc: "Sampai Jumpa Kembali",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Oke",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
+                            subtitle: "Sampai Jumpa Kembali.",
+                            callback: () async {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => WillPopScope(
+                                    onWillPop: () async {
+                                      return false;
+                                    },
+                                    child: LoginScreen(),
+                                  ),
                                 ),
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => WillPopScope(
-                                        onWillPop: () async {
-                                          return false;
-                                        },
-                                        child: LoginScreen(),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                width: 120,
-                              )
-                            ],
-                          ).show();
+                              );
+                            },
+                          );
                         });
                       },
                       child: Container(

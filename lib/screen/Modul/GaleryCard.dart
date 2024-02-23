@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/GaleryModel.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/MultipleImageWIdget.dart';
 import 'package:nvite_me/widgets/SwitchComponent.dart';
 import 'package:nvite_me/constans.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 class GaleryCard extends StatefulWidget {
   final String slug;
@@ -110,30 +110,14 @@ class _GaleryCardState extends State<GaleryCard> {
                 .uploadImageGalery(value, widget.slug)
                 .then((value) {
               if (value) {
-                Alert(
+                Utility().themeAlert(
                   context: context,
-                  type: AlertType.success,
-                  title: "Upload Image Berhasil",
-                  style: AlertStyle(
-                    titleStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    descStyle: TextStyle(fontSize: 16),
-                  ),
-                  desc: "Klik Perview untuk melihat perubahan.",
-                  buttons: [
-                    DialogButton(
-                      child: Text(
-                        "Oke",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      width: 120,
-                    )
-                  ],
-                ).show();
+                  title: "Update Image Berhasil",
+                  subtitle: "Klik Perview untuk melihat perubahan.",
+                  callback: () async {
+                    Navigator.pop(context);
+                  },
+                );
               }
             });
           },

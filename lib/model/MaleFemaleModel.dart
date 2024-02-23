@@ -22,7 +22,7 @@ class MaleFemaleModel {
 
   MaleFemaleModel({
     this.isOpen = true,
-    this.tittle = "Male-Female",
+    this.tittle = "Braid Information",
     this.icon = "assets/icons/male-femla.png",
     this.female,
     this.visible = true,
