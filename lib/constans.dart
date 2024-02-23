@@ -27,11 +27,17 @@ class Constans {
     "LuxuryGreen",
     "LuxuryPink",
     "GreenFloral",
-    // "GreenLuxury",
+    "DarkGreenFloral",
+    // "BlackPasta"
+    // "BlackPasta"
+    // "BlackPasta"
     // "BlackPasta"
   ];
   static List<String> listThemeSong = [
     "Payung-Teduh-Akad",
     "Komang-Raim-Laode",
+    "Pamungkas-To-The-Bone",
+    "Merry-Your-Daughter",
+    "Thousand-Years",
   ];
 }
