@@ -226,7 +226,7 @@ class _ThemeSlugCardState extends State<ThemeSlugCard> {
                       ),
                       SizedBox(height: 10),
                       DropdownWidget(
-                        icon: Icons.area_chart,
+                        icon: Icons.tablet_android,
                         list: Constans.listTheme,
                         initial: widget.thema,
                         setValue: (String value) {

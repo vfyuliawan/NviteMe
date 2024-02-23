@@ -35,7 +35,7 @@ class MaleFemaleModel {
         visible: json["Visible"],
         male: Male.fromJson(json["Male"]),
         isOpen: json['isOpen'] ?? false,
-        tittle: json['title'] ?? "Male-Female",
+        tittle: json['title'] ?? "Braid Information",
         icon: json['icon'] ?? "assets/icons/male-femla.png",
       );
 
