@@ -4,6 +4,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/screen/HomeBar/TearmCondition.dart';
+import 'package:nvite_me/screen/HomeBar/ThemeScreen.dart';
 import 'package:nvite_me/screen/HomeBar/UserList.dart';
 
 class RootPage extends StatefulWidget {
@@ -17,11 +18,13 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   int _bottomNavIndex = 0;
   List<Widget> pages = [
     UserList(),
+    ThemeScreen(),
     TearmCondition(),
   ];
 
   List<IconData> iconList = [
-    Icons.app_settings_alt,
+    Icons.tablet_android,
+    Icons.palette_outlined,
     Icons.info,
   ];
 

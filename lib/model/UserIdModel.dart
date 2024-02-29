@@ -36,6 +36,7 @@ class UserIdModel {
   GuestModel? guest;
   String? slug;
   String? themeName;
+  String? alamat;
   String? themeSong;
   String? uid;
   bool? guestBarcode;
@@ -57,6 +58,7 @@ class UserIdModel {
     this.slug,
     this.themeName,
     this.themeSong,
+    this.alamat,
     this.uid,
     this.guestBarcode,
     this.embeded,
@@ -98,6 +100,7 @@ class UserIdModel {
       uid: json["uid"],
       themeName: json["ThemeName"] ?? "RedEssence",
       themeSong: json["ThemeSong"],
+      alamat: json["Alamat"] ?? "",
       embeded: json["Embeded"],
       guestBarcode: json["GuestBarcode"] ?? false,
     );
@@ -119,6 +122,7 @@ class UserIdModel {
         "Footer": footer?.toJson(),
         "Slug": slug,
         "ThemeName": themeName,
+        "Alamat": alamat,
         "ThemeSong": themeSong,
         "GuestBarcode": guestBarcode,
         "Embeded": embeded,

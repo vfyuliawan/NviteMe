@@ -28,7 +28,9 @@ class _GaleryCardState extends State<GaleryCard> {
 
     return loading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: LinearProgressIndicator(
+              color: Constans.secondaryColor,
+            ),
           )
         : Card(
             color: Colors.white,
@@ -105,8 +107,11 @@ class _GaleryCardState extends State<GaleryCard> {
           slug: widget.slug,
           label: "Galery",
           images: data.image,
-          pickedImage: (value) {
-            OurProjectController()
+          pickedImage: (value) async {
+            setState(() {
+              loading = true;
+            });
+            await OurProjectController()
                 .uploadImageGalery(value, widget.slug)
                 .then((value) {
               if (value) {
@@ -118,10 +123,35 @@ class _GaleryCardState extends State<GaleryCard> {
                     Navigator.pop(context);
                   },
                 );
+                setState(() {
+                  loading = false;
+                });
               }
             });
           },
           imagesFile: data.imageFile,
+          onDeleteImage: (String imgIndex, String slug) {
+            setState(() {
+              loading = true;
+            });
+            OurProjectController()
+                .deleteGaleryImage(imgIndex, slug)
+                .then((value) {
+              if (value) {
+                Utility().themeAlert(
+                  context: context,
+                  title: "Delete Image Berhasil",
+                  subtitle: "Klik Perview untuk melihat perubahan.",
+                  callback: () async {
+                    Navigator.pop(context);
+                  },
+                );
+                setState(() {
+                  loading = false;
+                });
+              }
+            });
+          },
         ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 20),

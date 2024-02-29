@@ -46,7 +46,9 @@ class _HeroCardState extends State<HeroCard> {
       color: Colors.white,
       child: isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: LinearProgressIndicator(
+                color: Constans.secondaryColor,
+              ),
             )
           : Container(
               child: Column(
@@ -152,8 +154,11 @@ class _HeroCardState extends State<HeroCard> {
                                     style: TextButton.styleFrom(
                                         backgroundColor:
                                             Constans.secondaryColor),
-                                    onPressed: () {
-                                      OurProjectController()
+                                    onPressed: () async {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      await OurProjectController()
                                           .editHero(
                                         slug: widget.slug,
                                         params: HeroModel(
@@ -175,6 +180,9 @@ class _HeroCardState extends State<HeroCard> {
                                               Navigator.pop(context);
                                             },
                                           );
+                                          setState(() {
+                                            isLoading = false;
+                                          });
                                         }
                                       });
                                     },

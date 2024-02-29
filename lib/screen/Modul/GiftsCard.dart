@@ -28,7 +28,9 @@ class _GiftsCardState extends State<GiftsCard> {
 
     return loading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: LinearProgressIndicator(
+              color: Constans.secondaryColor,
+            ),
           )
         : Card(
             color: Colors.white,
@@ -128,8 +130,11 @@ class _GiftsCardState extends State<GiftsCard> {
           child: TextButton(
             style:
                 TextButton.styleFrom(backgroundColor: Constans.secondaryColor),
-            onPressed: () {
-              OurProjectController()
+            onPressed: () async {
+              setState(() {
+                loading = true;
+              });
+              await OurProjectController()
                   .editGifts(slug: widget.slug, params: widget.gifts)
                   .then((value) {
                 if (value) {
@@ -141,6 +146,9 @@ class _GiftsCardState extends State<GiftsCard> {
                       Navigator.pop(context);
                     },
                   );
+                  setState(() {
+                    loading = false;
+                  });
                 }
               });
             },

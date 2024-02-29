@@ -23,6 +23,7 @@ class InfoAcaraCard extends StatefulWidget {
 
 class _InfoAcaraCardState extends State<InfoAcaraCard> {
   // late InfoAcaraModel dataMap;
+  late bool isLoading = false;
   @override
   // void initState() {
   //   dataMap = InfoAcaraModel(
@@ -36,133 +37,144 @@ class _InfoAcaraCardState extends State<InfoAcaraCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      child: Container(
-        child: Column(
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 5,
-                vertical: 5,
-              ),
-              leading: Container(
-                padding:
-                    EdgeInsets.only(right: 12, left: 12, top: 10, bottom: 10),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border(
-                    right: BorderSide(
-                      width: 1,
-                      color: Colors.black,
+    return isLoading
+        ? LinearProgressIndicator(
+            color: Constans.secondaryColor,
+          )
+        : Card(
+            color: Colors.white,
+            child: Container(
+              child: Column(
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
                     ),
-                  ),
-                ),
-                child: Image.asset(
-                    widget.data!.icon ?? "assets/icons/cover-letter.png"),
-              ),
-              title: Text(
-                widget.data!.tittle ?? "",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              trailing: widget.data!.isOpen ?? false
-                  ? InkWell(
-                      onTap: () {
-                        setState(() {
-                          widget.data!.isOpen = !widget.data!.isOpen!;
-                        });
-                      },
-                      child: Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.black,
-                        size: 30,
-                      ),
-                    )
-                  : InkWell(
-                      onTap: () {
-                        setState(() {
-                          widget.data!.isOpen = !widget.data!.isOpen!;
-                        });
-                      },
-                      child: Icon(
-                        Icons.keyboard_arrow_left,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                    ),
-            ),
-            widget.data!.isOpen ?? false
-                ? Column(
-                    children: [
-                      Column(
-                          children: widget.data!.infoAcara!
-                              .asMap()
-                              .entries
-                              .map((itemData) {
-                        return Container(
-                          child: _formInfoWidget(
-                              context, itemData.value, itemData.key),
-                        );
-                      }).toList()),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Constans.secondaryColor),
-                          onPressed: () {
-                            OurProjectController()
-                                .editInfoAcara(
-                              slug: widget.slug,
-                              params: widget.data!.infoAcara,
-                              index: 0,
-                            )
-                                .then((value) {
-                              if (value) {
-                                Utility().themeAlert(
-                                  context: context,
-                                  title: "Update Info Berhasil",
-                                  subtitle:
-                                      "Klik Perview untuk melihat perubahan.",
-                                  callback: () async {
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              }
-                            });
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add_to_home_screen_outlined,
-                                    color: Colors.white),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  'Apply',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
+                    leading: Container(
+                      padding: EdgeInsets.only(
+                          right: 12, left: 12, top: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border(
+                          right: BorderSide(
+                            width: 1,
+                            color: Colors.black,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      )
-                    ],
-                  )
-                : Container()
-          ],
-        ),
-      ),
-    );
+                      child: Image.asset(
+                          widget.data!.icon ?? "assets/icons/cover-letter.png"),
+                    ),
+                    title: Text(
+                      widget.data!.tittle ?? "",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: widget.data!.isOpen ?? false
+                        ? InkWell(
+                            onTap: () {
+                              setState(() {
+                                widget.data!.isOpen = !widget.data!.isOpen!;
+                              });
+                            },
+                            child: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                          )
+                        : InkWell(
+                            onTap: () {
+                              setState(() {
+                                widget.data!.isOpen = !widget.data!.isOpen!;
+                              });
+                            },
+                            child: Icon(
+                              Icons.keyboard_arrow_left,
+                              size: 30,
+                              color: Colors.black,
+                            ),
+                          ),
+                  ),
+                  widget.data!.isOpen ?? false
+                      ? Column(
+                          children: [
+                            Column(
+                                children: widget.data!.infoAcara!
+                                    .asMap()
+                                    .entries
+                                    .map((itemData) {
+                              return Container(
+                                child: _formInfoWidget(
+                                    context, itemData.value, itemData.key),
+                              );
+                            }).toList()),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 16),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Constans.secondaryColor),
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  OurProjectController()
+                                      .editInfoAcara(
+                                    slug: widget.slug,
+                                    params: widget.data!.infoAcara,
+                                    index: 0,
+                                  )
+                                      .then((value) {
+                                    if (value) {
+                                      Utility().themeAlert(
+                                        context: context,
+                                        title: "Update Info Berhasil",
+                                        subtitle:
+                                            "Klik Perview untuk melihat perubahan.",
+                                        callback: () async {
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 30),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.add_to_home_screen_outlined,
+                                          color: Colors.white),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        'Apply',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            )
+                          ],
+                        )
+                      : Container()
+                ],
+              ),
+            ),
+          );
   }
 
   Widget _formInfoWidget(

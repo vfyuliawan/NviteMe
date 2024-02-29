@@ -67,6 +67,7 @@ class OurProjectController {
   Future<bool> editTheme({
     String? themeName,
     required String slug,
+    required String alamat,
     required String song,
     required String embeded,
     required bool guestBarcode,
@@ -82,6 +83,7 @@ class OurProjectController {
         await documentReference.update({
           'ThemeName': themeName!,
           'Slug': slug,
+          'Alamat': alamat,
           "ThemeSong": song,
           "GuestBarcode": guestBarcode,
           "Embeded": embeded

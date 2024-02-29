@@ -29,6 +29,7 @@ class Constans {
     "GreenFloral",
     "DarkGreenFloral",
     "BlueFloral",
+    "BluePastel",
     // "BlackPasta"
     // "BlackPasta"
     // "BlackPasta"

@@ -5,8 +5,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nvite_me/controller/OurProjectController.dart';
-import 'package:nvite_me/utils/utils.dart';
 
 class MultipleImageComponent extends StatefulWidget {
   final String? label;
@@ -14,6 +12,7 @@ class MultipleImageComponent extends StatefulWidget {
   final List<String>? images;
   final ValueChanged<File> pickedImage;
   final String slug;
+  final Function(String imgIndex, String slug) onDeleteImage;
 
   const MultipleImageComponent({
     Key? key,
@@ -22,6 +21,7 @@ class MultipleImageComponent extends StatefulWidget {
     this.images,
     required this.pickedImage,
     required this.slug,
+    required this.onDeleteImage,
   }) : super(key: key);
 
   @override
@@ -179,23 +179,8 @@ class _MultipleImageComponentState extends State<MultipleImageComponent> {
                             right: 0,
                             child: GestureDetector(
                               onTap: () {
-                                print('Close button tapped for image: ');
-                                OurProjectController()
-                                    .deleteGaleryImage(
-                                        widget.images![index], widget.slug)
-                                    .then((value) {
-                                  if (value) {
-                                    Utility().themeAlert(
-                                      context: context,
-                                      title: "Delete Image Berhasil",
-                                      subtitle:
-                                          "Klik Perview untuk melihat perubahan.",
-                                      callback: () async {
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  }
-                                });
+                                widget.onDeleteImage(
+                                    widget.images![index], widget.slug);
                               },
                               child: Container(
                                 height: 30,

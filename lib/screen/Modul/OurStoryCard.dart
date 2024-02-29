@@ -31,7 +31,9 @@ class _OurStoryCardState extends State<OurStoryCard> {
 
     return loading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: LinearProgressIndicator(
+              color: Constans.secondaryColor,
+            ),
           )
         : Card(
             color: Colors.white,
@@ -128,8 +130,11 @@ class _OurStoryCardState extends State<OurStoryCard> {
           child: TextButton(
             style:
                 TextButton.styleFrom(backgroundColor: Constans.secondaryColor),
-            onPressed: () {
-              OurProjectController()
+            onPressed: () async {
+              setState(() {
+                loading = true;
+              });
+              await OurProjectController()
                   .editOurStory(slug: widget.slug, params: widget.ourStory)
                   .then((value) {
                 if (value) {
@@ -141,6 +146,9 @@ class _OurStoryCardState extends State<OurStoryCard> {
                       Navigator.pop(context);
                     },
                   );
+                  setState(() {
+                    loading = false;
+                  });
                 }
               });
             },

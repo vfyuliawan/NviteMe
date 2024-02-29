@@ -25,6 +25,7 @@ class DetailUserScreen extends StatefulWidget {
 }
 
 class _DetailUserScreenState extends State<DetailUserScreen> {
+  bool loading = false;
   TextEditingController slugController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -47,177 +48,193 @@ class _DetailUserScreenState extends State<DetailUserScreen> {
                 );
               } else {
                 UserIdModel dataSnapShoot = snapshot.data!;
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Column(
-                        children: [
-                          // WidgetCountUser(),
-                          Stack(
-                            children: [
-                              Container(
-                                height: 300,
-                                decoration: BoxDecoration(
-                                  color: Constans.secondaryColor,
-                                ),
-                                width: MediaQuery.of(context).size.width,
-                                child: Container(
-                                  margin: const EdgeInsets.only(top: 35),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => Navigator.pop(context),
-                                        // ignore: sized_box_for_whitespace
-                                        child: Container(
-                                          height: 40,
-                                          width: 40,
-                                          child: const Icon(
-                                            Icons.arrow_back_ios,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      const Text(
-                                        "Project Detail",
-                                        style: TextStyle(
-                                          fontFamily: 'Pacifico',
-                                          fontSize: 25,
-                                          color: Colors.white,
-                                          decoration: TextDecoration.none,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 300,
-                                margin: const EdgeInsets.only(top: 80),
-                                decoration: BoxDecoration(
-                                    color: Constans.thirdColor,
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(25),
-                                      topRight: Radius.circular(25),
-                                    )),
-                                width: MediaQuery.of(context).size.width,
-                                child: Stack(
-                                  fit: StackFit.loose,
-                                  alignment: Alignment.center,
+                return loading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Column(
+                              children: [
+                                // WidgetCountUser(),
+                                Stack(
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        widget.detailUser.themeName!.isNotEmpty
-                                            ? Image.asset(
-                                                'assets/images/theme/${widget.detailUser.themeName}.png',
-                                                width: 250,
-                                                height: 200,
-                                              )
-                                            : Image.network(
-                                                'https://placehold.co/250x250/black/white'),
-                                        Text(
-                                          "You Using Theme ${widget.detailUser.themeName}",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontFamily: 'Pacifico',
-                                              decoration: TextDecoration.none,
-                                              fontWeight: FontWeight.bold,
-                                              color: Constans.secondaryColor),
-                                        )
-                                      ],
-                                    ),
-                                    Positioned(
-                                      right: 0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => WebView(
-                                                      slug: widget
-                                                          .detailUser.slug!,
-                                                    )),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: 100,
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              color: Constans.secondaryColor,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(10),
-                                                      bottomLeft:
-                                                          Radius.circular(10))),
-                                          child: const Row(children: [
-                                            Icon(
-                                              Icons.remove_red_eye,
-                                              color: Colors.white,
+                                    Container(
+                                      height: 300,
+                                      decoration: BoxDecoration(
+                                        color: Constans.secondaryColor,
+                                      ),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 35),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () =>
+                                                  Navigator.pop(context),
+                                              // ignore: sized_box_for_whitespace
+                                              child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                child: const Icon(
+                                                  Icons.arrow_back_ios,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Text(
-                                              "Perview",
+                                            const Text(
+                                              "Project Detail",
                                               style: TextStyle(
+                                                fontFamily: 'Pacifico',
+                                                fontSize: 25,
                                                 color: Colors.white,
-                                                fontSize: 12,
-                                                fontFamily: 'Roboto',
                                                 decoration: TextDecoration.none,
                                               ),
                                             ),
-                                          ]),
+                                          ],
                                         ),
                                       ),
-                                    )
+                                    ),
+                                    Container(
+                                      height: 300,
+                                      margin: const EdgeInsets.only(top: 80),
+                                      decoration: BoxDecoration(
+                                          color: Constans.thirdColor,
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(25),
+                                            topRight: Radius.circular(25),
+                                          )),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Stack(
+                                        fit: StackFit.loose,
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              widget.detailUser.themeName!
+                                                      .isNotEmpty
+                                                  ? Image.asset(
+                                                      'assets/images/theme/${widget.detailUser.themeName}.png',
+                                                      width: 250,
+                                                      height: 200,
+                                                    )
+                                                  : Image.network(
+                                                      'https://placehold.co/250x250/black/white'),
+                                              Text(
+                                                "You Using Theme ${widget.detailUser.themeName}",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontFamily: 'Pacifico',
+                                                    decoration:
+                                                        TextDecoration.none,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Constans
+                                                        .secondaryColor),
+                                              )
+                                            ],
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          WebView(
+                                                            slug: widget
+                                                                .detailUser
+                                                                .slug!,
+                                                          )),
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 100,
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        Constans.secondaryColor,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10))),
+                                                child: const Row(children: [
+                                                  Icon(
+                                                    Icons.remove_red_eye,
+                                                    color: Colors.white,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Text(
+                                                    "Perview",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontFamily: 'Roboto',
+                                                      decoration:
+                                                          TextDecoration.none,
+                                                    ),
+                                                  ),
+                                                ]),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 310),
+                                      height:
+                                          MediaQuery.of(context).size.height -
+                                              310,
+                                      decoration: BoxDecoration(
+                                          color: Constans.fourthColor,
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(25),
+                                            topRight: Radius.circular(25),
+                                          )),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              _formBody(dataSnapShoot),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(
+                                          top: 90, right: 20),
+                                      alignment: Alignment.centerRight,
+                                    ),
                                   ],
                                 ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 310),
-                                height:
-                                    MediaQuery.of(context).size.height - 310,
-                                decoration: BoxDecoration(
-                                    color: Constans.fourthColor,
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(25),
-                                      topRight: Radius.circular(25),
-                                    )),
-                                width: MediaQuery.of(context).size.width,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        _formBody(dataSnapShoot),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(top: 90, right: 20),
-                                alignment: Alignment.centerRight,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
               }
             }));
   }
@@ -226,6 +243,7 @@ class _DetailUserScreenState extends State<DetailUserScreen> {
     return Column(
       children: [
         ThemeSlugCard(
+          alamat: dataSnapShoot.alamat!,
           embeded: dataSnapShoot.embeded!,
           slug: dataSnapShoot.slug,
           thema: dataSnapShoot.themeName,

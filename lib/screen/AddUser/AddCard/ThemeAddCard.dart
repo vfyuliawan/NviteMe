@@ -17,8 +17,9 @@ class ThemeAddCard extends StatefulWidget {
   late String? song;
   late bool? guestBarcode;
   late String embeded;
+  late String alamat;
   final Function(String? slug, String? themeSong, String? themeName,
-      bool? guestBarcode, String embeded) onChange;
+      bool? guestBarcode, String embeded, String alamat) onChange;
 
   ThemeAddCard({
     Key? key,
@@ -27,6 +28,7 @@ class ThemeAddCard extends StatefulWidget {
     this.song,
     this.guestBarcode,
     required this.embeded,
+    required this.alamat,
     required this.onChange,
   }) : super(key: key);
 
@@ -83,6 +85,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                               widget.thema,
                               widget.guestBarcode,
                               widget.embeded,
+                              widget.alamat,
                             );
                           });
                         },
@@ -138,6 +141,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                               widget.thema,
                               widget.guestBarcode,
                               widget.embeded,
+                              widget.alamat,
                             );
                           });
                         },
@@ -151,6 +155,27 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                         ),
                       ),
                       FormTextField(
+                        initialValue: widget.alamat,
+                        line: 2,
+                        onChanged: (value) {
+                          setState(() {
+                            widget.alamat = value;
+                            widget.onChange(
+                              widget.slug,
+                              widget.song,
+                              widget.thema,
+                              widget.guestBarcode,
+                              widget.embeded,
+                              widget.alamat,
+                            );
+                          });
+                        },
+                        labelText: "Alamat Rumah",
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      FormTextField(
                         initialValue: widget.embeded,
                         line: 5,
                         onChanged: (value) {
@@ -162,10 +187,11 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                               widget.thema,
                               widget.guestBarcode,
                               widget.embeded,
+                              widget.alamat,
                             );
                           });
                         },
-                        labelText: "Embeded",
+                        labelText: "Embeded Map Lokasi Acara",
                       ),
                       SizedBox(
                         height: 4,
@@ -217,6 +243,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                               widget.thema,
                               widget.guestBarcode,
                               widget.embeded,
+                              widget.alamat,
                             );
                           });
                         },
@@ -235,6 +262,7 @@ class _ThemeAddCardState extends State<ThemeAddCard> {
                               widget.thema,
                               widget.guestBarcode,
                               widget.embeded,
+                              widget.alamat,
                             );
                           });
                         },

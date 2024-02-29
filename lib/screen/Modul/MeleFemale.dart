@@ -29,7 +29,9 @@ class _MelFemaleCardState extends State<MelFemaleCard> {
 
     return loading
         ? Center(
-            child: CircularProgressIndicator(),
+            child: LinearProgressIndicator(
+              color: Constans.secondaryColor,
+            ),
           )
         : Card(
             color: Colors.white,
@@ -122,8 +124,11 @@ class _MelFemaleCardState extends State<MelFemaleCard> {
           child: TextButton(
             style:
                 TextButton.styleFrom(backgroundColor: Constans.secondaryColor),
-            onPressed: () {
-              OurProjectController()
+            onPressed: () async {
+              setState(() {
+                loading = true;
+              });
+              await OurProjectController()
                   .editMaleFemale(slug: widget.slug, params: widget.maleFemale)
                   .then((value) {
                 if (value) {
@@ -135,6 +140,9 @@ class _MelFemaleCardState extends State<MelFemaleCard> {
                       Navigator.pop(context);
                     },
                   );
+                  setState(() {
+                    loading = false;
+                  });
                 }
               });
             },

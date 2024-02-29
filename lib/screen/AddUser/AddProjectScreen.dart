@@ -56,6 +56,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
     if (userId.themeName == null || userId.themeName!.isEmpty) {
       validate.add(true);
     }
+    if (userId.alamat == null || userId.alamat!.isEmpty) {
+      validate.add(true);
+    }
     if (validate.isEmpty) {
       return true;
     } else {
@@ -467,16 +470,18 @@ class _AddUserScreenState extends State<AddUserScreen> {
           guestBarcode: userId.guestBarcode ?? false,
           embeded: userId.embeded ?? "",
           onChange: (String? slug, String? themeSong, String? themeName,
-              bool? guestBarcode, String embeded) {
+              bool? guestBarcode, String embeded, String alamat) {
             setState(() {
               userId.slug = slug;
               userId.themeName = themeName;
               userId.themeSong = themeSong;
               userId.guestBarcode = guestBarcode;
               userId.embeded = embeded;
+              userId.alamat = alamat;
             });
             cekallValidation();
           },
+          alamat: userId.alamat ?? '',
         ),
         CoverAddCard(
           slug: userId.slug ?? "",
