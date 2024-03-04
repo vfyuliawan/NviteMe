@@ -62,6 +62,7 @@ class _ListContactState extends State<ListContact> {
                         subtitle: "Kirim undangan ke tamu anda via whatsapp.",
                         callback: () {
                           Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                       );
                     }
