@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/screen/RootPage.dart';
 import 'package:nvite_me/utils/utils.dart';
@@ -29,7 +30,7 @@ class AuthController {
     Completer<bool> completer = Completer<bool>();
 
     try {
-      final login = await _auth.signInWithEmailAndPassword(
+      UserCredential login = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -40,7 +41,7 @@ class AuthController {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => const RootPage(),
+            builder: (_) => RootPage(userInfo: login.user),
           ),
         );
       }
@@ -64,6 +65,7 @@ class AuthController {
     Completer<bool> completer = Completer<bool>();
     try {
       await _auth.signOut();
+      await GoogleSignIn().signOut();
       completer.complete(true);
     } catch (e) {
       completer.complete(false);
@@ -86,6 +88,31 @@ class AuthController {
       return UserLoginModel(uid: user.uid);
     } else {
       return UserLoginModel(uid: "");
+    }
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await GoogleSignIn().signIn();
+
+      if (googleSignInAccount == null) {
+        // The user canceled the sign-in process
+        return null;
+      }
+
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print("Error signing in with Google: $e");
+      return null;
     }
   }
 }

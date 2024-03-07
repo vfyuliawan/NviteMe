@@ -13,6 +13,7 @@ class FormTextField extends StatefulWidget {
   final Widget? suffix;
   final Color? fillColor;
   final bool? obscureText;
+  final double? height;
 
   const FormTextField({
     Key? key,
@@ -25,6 +26,7 @@ class FormTextField extends StatefulWidget {
     this.suffix,
     this.fillColor,
     this.obscureText,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class _FormTextFieldState extends State<FormTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: widget.height,
       margin: EdgeInsets.only(top: widget.topSpace ?? 12),
       child: TextField(
         controller: _controller,

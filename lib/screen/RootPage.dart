@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/screen/HomeBar/TearmCondition.dart';
@@ -8,7 +9,8 @@ import 'package:nvite_me/screen/HomeBar/ThemeScreen.dart';
 import 'package:nvite_me/screen/HomeBar/UserList.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({Key? key}) : super(key: key);
+  final User? userInfo;
+  const RootPage({Key? key, this.userInfo}) : super(key: key);
 
   @override
   State<RootPage> createState() => _RootPageState();
@@ -16,11 +18,6 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
   int _bottomNavIndex = 0;
-  List<Widget> pages = [
-    UserList(),
-    ThemeScreen(),
-    TearmCondition(),
-  ];
 
   List<IconData> iconList = [
     Icons.tablet_android,
@@ -35,10 +32,16 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
 
   late AnimationController _animationController;
   late Animation<double> _notchAndCornersAnimation;
+  List<Widget> pages = [];
 
   @override
   void initState() {
     super.initState();
+    pages = [
+      UserList(userInfo: widget.userInfo),
+      ThemeScreen(),
+      TearmCondition(),
+    ];
 
     _animationController = AnimationController(
       vsync: this,

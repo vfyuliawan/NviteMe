@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
 import 'package:nvite_me/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,5 +19,23 @@ class WhatsAppService {
       Utility.logger.e('gagal launch $url');
       return false;
     }
+  }
+
+  Future<bool> activationByWA(String slug) async {
+    String message =
+        "Request Activasi Wedding Application Website by Invite-ME with slug id = $slug";
+    String url = "https://wa.me/+6281283589073/?text=$message";
+    if (await canLaunch(url)) {
+      await launch(url);
+      return true;
+    } else {
+      Utility.logger.e('gagal launch $url');
+      return false;
+    }
+  }
+
+  Future<void> popWithParam(BuildContext context, dynamic param) async {
+    await Future.delayed(Duration.zero);
+    Navigator.pop(context, param);
   }
 }

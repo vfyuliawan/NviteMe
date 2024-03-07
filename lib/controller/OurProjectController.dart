@@ -3,10 +3,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
-import 'package:nvite_me/controller/AuthController.dart';
+// import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/model/CountDownModel.dart';
 import 'package:nvite_me/model/CoverModel.dart';
 import 'package:nvite_me/model/GiftsModel.dart';
@@ -17,29 +19,65 @@ import 'package:nvite_me/model/InfoAcaraModel.dart';
 import 'package:nvite_me/model/MaleFemaleModel.dart';
 import 'package:nvite_me/model/OurStoryModel.dart';
 import 'package:nvite_me/model/UserIdModel.dart';
-import 'package:nvite_me/model/UserLoginModel.dart';
+import 'package:nvite_me/screen/HomeBar/UserList.dart';
+import 'package:nvite_me/screen/LoginScreen.dart';
+// import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/utils/utils.dart';
 import 'package:path/path.dart';
 
 class OurProjectController {
-  Stream<List<UserIdModel>> getAlldata() async* {
-    UserLoginModel userId = await AuthController().getUserInfo();
-    try {
-      yield* FirebaseFirestore.instance
-          .collection("UserId")
-          .where("uid", isEqualTo: userId.uid)
-          .snapshots()
-          .map((querySnapshot) {
-        return querySnapshot.docs.map((documentSnapshot) {
-          Map<String, dynamic> data =
-              documentSnapshot.data() as Map<String, dynamic>;
-          print(UserIdModel.fromJson(data).guest);
-          return UserIdModel.fromJson(data);
-        }).toList();
-      });
-    } catch (e) {
-      print(e.toString());
-      yield* Stream.value([]);
+  Stream<List<UserIdModel>> getAlldata(
+      BuildContext context, User? userInfo, IsActiveEnum activeEnum) async* {
+    if (userInfo != null) {
+      // UserLoginModel userId = await AuthController().getUserInfo();
+      if (activeEnum == IsActiveEnum.yourProject) {
+        try {
+          yield* FirebaseFirestore.instance
+              .collection("UserId")
+              .where("uid", isEqualTo: userInfo.uid)
+              .snapshots()
+              .map((querySnapshot) {
+            return querySnapshot.docs.map((documentSnapshot) {
+              Map<String, dynamic> data =
+                  documentSnapshot.data() as Map<String, dynamic>;
+              print(UserIdModel.fromJson(data).guest);
+              return UserIdModel.fromJson(data);
+            }).toList();
+          });
+        } catch (e) {
+          print(e.toString());
+          yield* Stream.value([]);
+        }
+      } else {
+        try {
+          yield* FirebaseFirestore.instance
+              .collection("UserId")
+              .snapshots()
+              .map((querySnapshot) {
+            return querySnapshot.docs.map((documentSnapshot) {
+              Map<String, dynamic> data =
+                  documentSnapshot.data() as Map<String, dynamic>;
+              print(UserIdModel.fromJson(data).guest);
+              return UserIdModel.fromJson(data);
+            }).toList();
+          });
+        } catch (e) {
+          print(e.toString());
+          yield* Stream.value([]);
+        }
+      }
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: LoginScreen(),
+          ),
+        ),
+      );
     }
   }
 

@@ -161,7 +161,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       theme,
                       style: TextStyle(
                           color: Constans.secondaryColor,
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Pacifico'),
                     )

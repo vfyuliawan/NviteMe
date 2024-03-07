@@ -56,6 +56,8 @@ dependencies:
   flutter_native_contact_picker: ^0.0.6
   flutter_barcode_scanner: ^2.0.0
   dropdown_button2: ^2.3.9  
+  google_sign_in: ^6.2.1
+
 
 
 flutter_native_splash:

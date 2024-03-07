@@ -39,6 +39,7 @@ class UserIdModel {
   String? alamat;
   String? themeSong;
   String? uid;
+  bool? isActive;
   bool? guestBarcode;
   String? embeded;
 
@@ -54,6 +55,7 @@ class UserIdModel {
     this.galery,
     this.gifts,
     CountDownModel? countDown,
+    this.isActive,
     GuestModel? guest,
     this.slug,
     this.themeName,
@@ -64,6 +66,7 @@ class UserIdModel {
     this.embeded,
   })  : message = message ?? MessageModel(),
         footer = footer ?? FooterModel(),
+        // isActive = false,
         guest = guest ??
             GuestModel(guest: [
               GuestModelKeyValue(
@@ -103,6 +106,7 @@ class UserIdModel {
       alamat: json["Alamat"] ?? "",
       embeded: json["Embeded"],
       guestBarcode: json["GuestBarcode"] ?? false,
+      isActive: json["isActive"] ?? false,
     );
   }
 
@@ -126,6 +130,7 @@ class UserIdModel {
         "ThemeSong": themeSong,
         "GuestBarcode": guestBarcode,
         "Embeded": embeded,
-        "uid": uid
+        "uid": uid,
+        "isActive": isActive
       };
 }

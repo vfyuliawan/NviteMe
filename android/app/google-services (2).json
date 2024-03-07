@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "771470132661",
+    "project_id": "your-weding-app",
+    "storage_bucket": "your-weding-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771470132661:android:124c0afe5ef2030ae505fc",
+        "android_client_info": {
+          "package_name": "com.example.nvite_me"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALioaZCQLsgH_LOuG18ICrmamqHOLSPOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

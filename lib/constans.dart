@@ -31,7 +31,8 @@ class Constans {
     "BlueFloral",
     "BluePastel",
     "BlueAnimatedFloral",
-    "CoklatAnimatedFloral"
+    "CoklatAnimatedFloral",
+    "JavaStyle1"
     // "BlackPasta"
     // "BlackPasta"
     // "BlackPasta"

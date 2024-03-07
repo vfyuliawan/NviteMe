@@ -59,11 +59,10 @@ class AddProjectController {
       userData.footer!.name = userData.cover!.titleCover;
       userData.footer!.qutes =
           "Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas kehadiran dan doa restunya, kami mengucapkan terima kasih";
+      userData.isActive = false;
       await FirebaseFirestore.instance
           .collection('UserId')
           .add(userData.toJson());
-      print(userData.infoAcara!.toJson().toString());
-
       return true;
     } catch (e) {
       print('Error uploading data: $e');

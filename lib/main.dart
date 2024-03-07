@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nvite_me/screen/OnboardingScreen.dart';
 
 void main() async {
@@ -10,7 +11,8 @@ void main() async {
   await Firebase.initializeApp();
   await Future.delayed(const Duration(seconds: 3));
   FlutterNativeSplash.remove();
-
+  GoogleSignIn();
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   runApp(const MyApp());
 }
 

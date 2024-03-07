@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, sized_box_for_whitespace
 
+import 'package:date_time_format/date_time_format.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:nvite_me/constans.dart';
@@ -8,12 +10,17 @@ import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/UserIdModel.dart';
 import 'package:nvite_me/model/UserLoginModel.dart';
+import 'package:nvite_me/screen/ActivationScreen.dart';
 import 'package:nvite_me/screen/AddUser/AddProjectScreen.dart';
 import 'package:nvite_me/screen/DetailUserScreen.dart';
 import 'package:nvite_me/widgets/NoDataFound.dart';
 
+enum IsActiveEnum { yourProject, otherProject }
+
 class UserList extends StatefulWidget {
-  const UserList({Key? key}) : super(key: key);
+  final User? userInfo;
+
+  const UserList({Key? key, this.userInfo}) : super(key: key);
 
   @override
   State<UserList> createState() => _UserListState();
@@ -24,6 +31,8 @@ class _UserListState extends State<UserList> {
   late String uid = "";
   late String searchInput = "";
   late UserLoginModel _userLoginModel = UserLoginModel(uid: "");
+  late int totalProject = 0;
+  late IsActiveEnum isActive = IsActiveEnum.yourProject;
 
   @override
   void initState() {
@@ -41,22 +50,10 @@ class _UserListState extends State<UserList> {
 
   @override
   Widget build(BuildContext context) {
-    // return FutureBuilder<UserLoginModel>(
-    //   future: AuthController().getUserInfo(),
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       uid = snapshot.data!.uid!;
-    //       return _listWidget(uid);
-    //     } else {
-    //       return CircularProgressIndicator();
-    //     }
-    //   },
-    // );
     return _listWidget(_userLoginModel.uid!);
   }
 
   Widget _listWidget(String uid) {
-    print(uid);
     return Scaffold(
         body: Stack(
       children: [
@@ -158,43 +155,46 @@ class _UserListState extends State<UserList> {
                     ),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isOpenDashboard = !isOpenDashboard;
-                    });
-                  },
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 13,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "View Dashboard",
-                            style: TextStyle(
-                              fontFamily: "Roboto",
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Constans.textColor,
+                widget.userInfo!.displayName == "Vicky Fadilla"
+                    ? GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isOpenDashboard = !isOpenDashboard;
+                          });
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 13,
                             ),
-                          ),
-                          isOpenDashboard
-                              ? Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 40,
-                                  color: Constans.textColor,
-                                )
-                              : Icon(
-                                  Icons.arrow_left,
-                                  size: 40,
-                                  color: Constans.textColor,
-                                )
-                        ],
-                      )),
-                ),
-                isOpenDashboard
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "View Dashboard",
+                                  style: TextStyle(
+                                    fontFamily: "Roboto",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Constans.textColor,
+                                  ),
+                                ),
+                                isOpenDashboard
+                                    ? Icon(
+                                        Icons.arrow_drop_down,
+                                        size: 40,
+                                        color: Constans.textColor,
+                                      )
+                                    : Icon(
+                                        Icons.arrow_left,
+                                        size: 40,
+                                        color: Constans.textColor,
+                                      )
+                              ],
+                            )),
+                      )
+                    : Container(),
+                widget.userInfo!.displayName == "Vicky Fadilla" &&
+                        isOpenDashboard
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -234,7 +234,7 @@ class _UserListState extends State<UserList> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Your Limit",
+                                      "Your Project",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
@@ -327,7 +327,10 @@ class _UserListState extends State<UserList> {
           ),
         ),
         Positioned(
-          top: isOpenDashboard ? 310 : 210,
+          top:
+              widget.userInfo!.displayName == "Vicky Fadilla" && isOpenDashboard
+                  ? 310
+                  : 210,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
@@ -337,7 +340,10 @@ class _UserListState extends State<UserList> {
                   topRight: Radius.circular(25),
                 )),
             width: MediaQuery.of(context).size.width,
-            height: isOpenDashboard ? 550 : 640,
+            height: widget.userInfo!.displayName == "Vicky Fadilla" &&
+                    isOpenDashboard
+                ? 550
+                : 640,
             child: Stack(
               children: [
                 _listProject(),
@@ -352,7 +358,8 @@ class _UserListState extends State<UserList> {
 
   Widget _listProject() {
     return StreamBuilder(
-        stream: OurProjectController().getAlldata(),
+        stream: OurProjectController()
+            .getAlldata(context, widget.userInfo ?? null, isActive),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -372,12 +379,70 @@ class _UserListState extends State<UserList> {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "List of Your Project (${snapshot.data!.length})",
-                    style: TextStyle(
-                        fontFamily: "Roboto",
-                        fontSize: 18,
-                        fontWeight: FontWeight.w100),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "List of Your Project (${snapshot.data!.length})",
+                        style: TextStyle(
+                            fontFamily: "Roboto",
+                            fontSize: 15,
+                            fontWeight: FontWeight.w100),
+                      ),
+                      widget.userInfo!.displayName == "Vicky Fadilla"
+                          ? Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => setState(() {
+                                    isActive = IsActiveEnum.yourProject;
+                                  }),
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color:
+                                            isActive == IsActiveEnum.yourProject
+                                                ? Constans.secondaryColor
+                                                : Constans.thirdColor,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Text(
+                                      "Your Project",
+                                      style: TextStyle(
+                                          color: isActive ==
+                                                  IsActiveEnum.yourProject
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                GestureDetector(
+                                  onTap: () => setState(() {
+                                    isActive = IsActiveEnum.otherProject;
+                                  }),
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color: isActive ==
+                                                IsActiveEnum.otherProject
+                                            ? Constans.secondaryColor
+                                            : Constans.thirdColor,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Text(
+                                      "Other Project",
+                                      style: TextStyle(
+                                          color: isActive ==
+                                                  IsActiveEnum.otherProject
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                    ],
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.vertical,
@@ -395,14 +460,27 @@ class _UserListState extends State<UserList> {
                                   .map((item) {
                                   return GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              DetailUserScreen(
-                                                  detailUser: item),
-                                        ),
-                                      );
+                                      if (widget.userInfo!.displayName ==
+                                              "Vicky Fadilla" ||
+                                          item.isActive!) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailUserScreen(
+                                                    detailUser: item),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ActivationScreen(
+                                                    detailUser: item),
+                                          ),
+                                        );
+                                      }
                                     },
                                     child: Card(
                                       margin: EdgeInsets.only(top: 15),
@@ -443,35 +521,45 @@ class _UserListState extends State<UserList> {
                                               SizedBox(
                                                 height: 5,
                                               ),
-                                              Row(
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
                                                     padding: EdgeInsets.all(8),
                                                     decoration: BoxDecoration(
-                                                      color: Colors.green,
+                                                      color: item.isActive!
+                                                          ? Colors.green
+                                                          : Colors.redAccent,
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
                                                     ),
                                                     child: Text(
-                                                      "Active",
+                                                      item.isActive!
+                                                          ? "Active"
+                                                          : "Not-Active",
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),
                                                   ),
                                                   SizedBox(
-                                                    width: 10,
+                                                    height: 4,
                                                   ),
                                                   Container(
                                                     padding: EdgeInsets.all(8),
                                                     decoration: BoxDecoration(
-                                                      color: Colors.redAccent,
+                                                      color: Colors.brown,
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
                                                     ),
                                                     child: Text(
-                                                      "14 - Aug - 2025",
+                                                      DateTimeFormat.format(
+                                                          item.countDown!.date!
+                                                              .toDate(),
+                                                          format: DateTimeFormats
+                                                              .americanAbbr),
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),
@@ -660,7 +748,7 @@ class _UserListState extends State<UserList> {
                                       color: Colors.white,
                                     ),
                                     Text(
-                                      "Your Limit",
+                                      "Your Project",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,

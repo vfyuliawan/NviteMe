@@ -35,7 +35,7 @@ class _GuestScreenState extends State<GuestScreen> {
 
   // final FlutterContactPicker _contactPicker = new FlutterContactPicker();
   List<Contact>? _contacts;
-  String _scanBarcode = 'Unknown';
+  // String _scanBarcode = 'Unknown';
   final List<String> listDropDown = [
     'All',
     'Belum Checkin',

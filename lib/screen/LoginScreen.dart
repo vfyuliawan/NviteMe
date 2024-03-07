@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/AuthController.dart';
+import 'package:nvite_me/screen/RootPage.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -65,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   Positioned(
-                    top: 200,
+                    top: 150,
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
@@ -100,6 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 FormTextField(
+                                  height: 50,
                                   labelText: "Email",
                                   onChanged: (value) {
                                     setState(() {
@@ -110,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   enable: true,
                                 ),
                                 FormTextField(
+                                  height: 50,
                                   obscureText: hidePassword,
                                   initialValue: password,
                                   suffix: hidePassword
@@ -176,6 +180,48 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                 ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    UserCredential? userCredential =
+                                        await AuthController()
+                                            .signInWithGoogle();
+                                    if (userCredential != null) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      print(
+                                          "Google Sign-In Successful: ${userCredential.user?.displayName}");
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => WillPopScope(
+                                            onWillPop: () async {
+                                              return false;
+                                            },
+                                            child: RootPage(
+                                                userInfo: userCredential.user),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    });
+                                  },
+                                  child: Image.asset(
+                                    'assets/icons/google.png',
+                                    width: 50,
+                                    height: 50,
+                                  ),
+                                )
                               ],
                             ),
                           )
