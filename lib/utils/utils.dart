@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utility {
@@ -80,5 +81,26 @@ class Utility {
         )
       ],
     ).show();
+  }
+
+  Future<void> savePref(String key, String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  Future<void> savePrefModel(String key, String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+// Retrieve data from SharedPreferences
+  Future<String?> loadPref({required String key}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
+
+  void deletePreference({required String key}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(key);
   }
 }

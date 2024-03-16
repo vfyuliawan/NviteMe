@@ -57,6 +57,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   dropdown_button2: ^2.3.9  
   google_sign_in: ^6.2.1
+  shared_preferences: ^2.2.2
 
 
 

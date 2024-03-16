@@ -6,21 +6,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:nvite_me/constans.dart';
-import 'package:nvite_me/controller/AuthController.dart';
+// import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/controller/OurProjectController.dart';
 import 'package:nvite_me/model/UserIdModel.dart';
-import 'package:nvite_me/model/UserLoginModel.dart';
+// import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/screen/ActivationScreen.dart';
 import 'package:nvite_me/screen/AddUser/AddProjectScreen.dart';
 import 'package:nvite_me/screen/DetailUserScreen.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/NoDataFound.dart';
 
 enum IsActiveEnum { yourProject, otherProject }
 
 class UserList extends StatefulWidget {
-  final User? userInfo;
+  // final User? userInfo;
 
-  const UserList({Key? key, this.userInfo}) : super(key: key);
+  const UserList({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<UserList> createState() => _UserListState();
@@ -28,9 +31,9 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> {
   late bool isOpenDashboard;
-  late String uid = "";
+  late String? _uidLogin;
+  late String? _displayName;
   late String searchInput = "";
-  late UserLoginModel _userLoginModel = UserLoginModel(uid: "");
   late int totalProject = 0;
   late IsActiveEnum isActive = IsActiveEnum.yourProject;
 
@@ -42,18 +45,23 @@ class _UserListState extends State<UserList> {
   }
 
   Future<void> initializeUser() async {
-    UserLoginModel userUid = await AuthController().getUserInfo();
+    String? uidLogin = await Utility().loadPref(key: Constans.uidLogin);
+    String? displayName = await Utility().loadPref(key: Constans.displayName);
+
+    print("udiLogin $uidLogin ,  $displayName");
     setState(() {
-      _userLoginModel = userUid;
+      _uidLogin = uidLogin ?? "";
+      _displayName = displayName ?? "";
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _listWidget(_userLoginModel.uid!);
+    return _listWidget(_uidLogin!);
   }
 
   Widget _listWidget(String uid) {
+    print(_uidLogin);
     return Scaffold(
         body: Stack(
       children: [
@@ -155,7 +163,7 @@ class _UserListState extends State<UserList> {
                     ),
                   ],
                 ),
-                widget.userInfo!.displayName == "Vicky Fadilla"
+                _displayName == "Vicky Fadilla"
                     ? GestureDetector(
                         onTap: () {
                           setState(() {
@@ -193,8 +201,7 @@ class _UserListState extends State<UserList> {
                             )),
                       )
                     : Container(),
-                widget.userInfo!.displayName == "Vicky Fadilla" &&
-                        isOpenDashboard
+                _displayName == "Vicky Fadilla" && isOpenDashboard
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -327,10 +334,7 @@ class _UserListState extends State<UserList> {
           ),
         ),
         Positioned(
-          top:
-              widget.userInfo!.displayName == "Vicky Fadilla" && isOpenDashboard
-                  ? 310
-                  : 210,
+          top: _displayName == "Vicky Fadilla" && isOpenDashboard ? 310 : 210,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
@@ -340,10 +344,8 @@ class _UserListState extends State<UserList> {
                   topRight: Radius.circular(25),
                 )),
             width: MediaQuery.of(context).size.width,
-            height: widget.userInfo!.displayName == "Vicky Fadilla" &&
-                    isOpenDashboard
-                ? 550
-                : 640,
+            height:
+                _displayName == "Vicky Fadilla" && isOpenDashboard ? 550 : 640,
             child: Stack(
               children: [
                 _listProject(),
@@ -358,8 +360,7 @@ class _UserListState extends State<UserList> {
 
   Widget _listProject() {
     return StreamBuilder(
-        stream: OurProjectController()
-            .getAlldata(context, widget.userInfo ?? null, isActive),
+        stream: OurProjectController().getAlldata(context, _uidLogin, isActive),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -383,13 +384,13 @@ class _UserListState extends State<UserList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "List of Your Project (${snapshot.data!.length})",
+                        "List Project (${snapshot.data!.length})",
                         style: TextStyle(
                             fontFamily: "Roboto",
                             fontSize: 15,
                             fontWeight: FontWeight.w100),
                       ),
-                      widget.userInfo!.displayName == "Vicky Fadilla"
+                      _displayName == "Vicky Fadilla"
                           ? Row(
                               children: [
                                 GestureDetector(
@@ -460,26 +461,70 @@ class _UserListState extends State<UserList> {
                                   .map((item) {
                                   return GestureDetector(
                                     onTap: () {
-                                      if (widget.userInfo!.displayName ==
-                                              "Vicky Fadilla" ||
-                                          item.isActive!) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                DetailUserScreen(
-                                                    detailUser: item),
-                                          ),
-                                        );
+                                      if (_displayName == "Vicky Fadilla") {
+                                        if (item.isActive! == 3) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailUserScreen(
+                                                      detailUser: item),
+                                            ),
+                                          );
+                                        } else if (item.isActive! == 2) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ActivationScreen(
+                                                      detailUser: item,
+                                                      status: 2),
+                                            ),
+                                          );
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ActivationScreen(
+                                                detailUser: item,
+                                                status: 1,
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       } else {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ActivationScreen(
-                                                    detailUser: item),
-                                          ),
-                                        );
+                                        if (item.isActive! == 3) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailUserScreen(
+                                                      detailUser: item),
+                                            ),
+                                          );
+                                        } else if (item.isActive! == 2) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ActivationScreen(
+                                                      detailUser: item,
+                                                      status: 4),
+                                            ),
+                                          );
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ActivationScreen(
+                                                detailUser: item,
+                                                status: 5,
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       }
                                     },
                                     child: Card(
@@ -528,17 +573,22 @@ class _UserListState extends State<UserList> {
                                                   Container(
                                                     padding: EdgeInsets.all(8),
                                                     decoration: BoxDecoration(
-                                                      color: item.isActive!
+                                                      color: item.isActive == 3
                                                           ? Colors.green
-                                                          : Colors.redAccent,
+                                                          : item.isActive == 2
+                                                              ? Colors.blue
+                                                              : Colors
+                                                                  .redAccent,
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
                                                     ),
                                                     child: Text(
-                                                      item.isActive!
+                                                      item.isActive == 3
                                                           ? "Active"
-                                                          : "Not-Active",
+                                                          : item.isActive == 2
+                                                              ? "Waiting Approve"
+                                                              : "Not-Active",
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),

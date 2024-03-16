@@ -27,14 +27,14 @@ import 'package:path/path.dart';
 
 class OurProjectController {
   Stream<List<UserIdModel>> getAlldata(
-      BuildContext context, User? userInfo, IsActiveEnum activeEnum) async* {
-    if (userInfo != null) {
+      BuildContext context, String? uid, IsActiveEnum activeEnum) async* {
+    if (uid != null) {
       // UserLoginModel userId = await AuthController().getUserInfo();
       if (activeEnum == IsActiveEnum.yourProject) {
         try {
           yield* FirebaseFirestore.instance
               .collection("UserId")
-              .where("uid", isEqualTo: userInfo.uid)
+              .where("uid", isEqualTo: uid)
               .snapshots()
               .map((querySnapshot) {
             return querySnapshot.docs.map((documentSnapshot) {
@@ -701,6 +701,34 @@ class OurProjectController {
     } catch (e) {
       Utility.logger.e(e);
       return {"update": false, "user": ""};
+    }
+  }
+
+  Future<bool> editActivation({
+    int? status,
+    required String slug,
+  }) async {
+    try {
+      QuerySnapshot userQuery = await FirebaseFirestore.instance
+          .collection("UserId")
+          .where("Slug", isEqualTo: slug)
+          .get();
+
+      if (userQuery.docs.isNotEmpty) {
+        DocumentReference documentReference = userQuery.docs.first.reference;
+        await documentReference.update({
+          'isActive': status!,
+        });
+        return true;
+      } else {
+        print(slug);
+        return false;
+      }
+    } on FirebaseException catch (e, stackTrace) {
+      print(e.toString());
+      print('Error: $e');
+      print('Stack Trace: $stackTrace');
+      return false;
     }
   }
 }

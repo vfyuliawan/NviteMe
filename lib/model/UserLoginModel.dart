@@ -1,8 +1,7 @@
 class UserLoginModel {
   String? uid;
-  UserLoginModel({
-    this.uid,
-  });
+  String? displayName;
+  UserLoginModel({this.uid, this.displayName});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

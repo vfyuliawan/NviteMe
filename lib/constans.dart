@@ -44,4 +44,7 @@ class Constans {
     "Merry-Your-Daughter",
     "Thousand-Years",
   ];
+
+  static var uidLogin = "uidLogin";
+  static var displayName = "displayName";
 }

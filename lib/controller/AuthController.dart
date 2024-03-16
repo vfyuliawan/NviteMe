@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/model/UserLoginModel.dart';
 import 'package:nvite_me/screen/RootPage.dart';
 import 'package:nvite_me/utils/utils.dart';
@@ -28,20 +29,26 @@ class AuthController {
   Future<bool> signIn(
       BuildContext context, String email, String password) async {
     Completer<bool> completer = Completer<bool>();
-
     try {
       UserCredential login = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      Utility.logger.i("Success $login");
+      await Utility().savePref(Constans.displayName, login.user!.uid);
+      await Utility().savePref(Constans.uidLogin, login.user!.uid);
+      Utility.logger.i("Success ${login.user}");
       completer.complete(true);
 
       if (login.user != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => RootPage(userInfo: login.user),
+            builder: (_) => WillPopScope(
+              onWillPop: () async {
+                return false;
+              },
+              child: RootPage(),
+            ),
           ),
         );
       }
@@ -63,9 +70,12 @@ class AuthController {
 
   Future<bool> signOut() async {
     Completer<bool> completer = Completer<bool>();
+
     try {
       await _auth.signOut();
       await GoogleSignIn().signOut();
+      Utility().deletePreference(key: Constans.uidLogin);
+      Utility().deletePreference(key: Constans.displayName);
       completer.complete(true);
     } catch (e) {
       completer.complete(false);
@@ -77,7 +87,6 @@ class AuthController {
 
   Future<UserLoginModel> getUserInfo() async {
     User? user = FirebaseAuth.instance.currentUser;
-
     if (user != null) {
       Utility.logger.i("User ID: ${user.uid}");
       Utility.logger.i("Email: ${user.email}");
@@ -88,6 +97,24 @@ class AuthController {
       return UserLoginModel(uid: user.uid);
     } else {
       return UserLoginModel(uid: "");
+    }
+  }
+
+  Future<User?> getUserInfoLogin() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        Utility.logger.i("User ID: ${user.uid}");
+        Utility.logger.i("Email: ${user.email}");
+        Utility.logger.i("Display Name: ${user.displayName}");
+        Utility.logger.i("Photo URL: ${user.photoURL}");
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Utility.logger.e("Error retrieving user information: $e");
+      return null;
     }
   }
 

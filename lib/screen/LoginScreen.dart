@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/AuthController.dart';
 import 'package:nvite_me/screen/RootPage.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -192,6 +193,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         await AuthController()
                                             .signInWithGoogle();
                                     if (userCredential != null) {
+                                      await Utility().savePref(
+                                          Constans.uidLogin,
+                                          userCredential.user!.uid);
+                                      await Utility().savePref(
+                                          Constans.displayName,
+                                          userCredential.user!.displayName!);
                                       setState(() {
                                         isLoading = false;
                                       });
@@ -204,8 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             onWillPop: () async {
                                               return false;
                                             },
-                                            child: RootPage(
-                                                userInfo: userCredential.user),
+                                            child: RootPage(),
                                           ),
                                         ),
                                       );

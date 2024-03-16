@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers
 
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/controller/AuthController.dart';
@@ -27,21 +28,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Padding(
             padding: EdgeInsets.only(right: 20, top: 20),
             child: InkWell(
-              onTap: () {
-                AuthController().cekAuthenticationSignIn().then((value) {
-                  print(value);
-                  if (!value) {
+              onTap: () async {
+                AuthController().getUserInfoLogin().then((value) {
+                  if (value != null) {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const LoginScreen(),
+                        builder: (_) => RootPage(),
                       ),
                     );
                   } else {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const RootPage(),
+                        builder: (_) => const LoginScreen(),
                       ),
                     );
                   }
@@ -104,20 +104,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             curve: Curves.bounceIn);
                       }
                     } else {
-                      AuthController().cekAuthenticationSignIn().then((value) {
-                        print(value);
-                        if (!value) {
+                      AuthController().getUserInfoLogin().then((value) {
+                        if (value != null) {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const LoginScreen(),
+                              builder: (_) => RootPage(),
                             ),
                           );
                         } else {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const RootPage(),
+                              builder: (_) => const LoginScreen(),
                             ),
                           );
                         }

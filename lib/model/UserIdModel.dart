@@ -39,7 +39,7 @@ class UserIdModel {
   String? alamat;
   String? themeSong;
   String? uid;
-  bool? isActive;
+  int? isActive;
   bool? guestBarcode;
   String? embeded;
 
@@ -106,7 +106,7 @@ class UserIdModel {
       alamat: json["Alamat"] ?? "",
       embeded: json["Embeded"],
       guestBarcode: json["GuestBarcode"] ?? false,
-      isActive: json["isActive"] ?? false,
+      isActive: json["isActive"] ?? 0,
     );
   }
 
