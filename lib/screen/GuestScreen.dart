@@ -417,6 +417,7 @@ class _GuestScreenState extends State<GuestScreen> {
               return true;
             }
           });
+
           return dataGuest.isEmpty
               ? NoDataFoundWidget()
               : Column(
@@ -547,277 +548,306 @@ class _GuestScreenState extends State<GuestScreen> {
   }
 
   Widget balanceDashboard() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return StreamBuilder<UserIdModel>(
+      stream: OurProjectController().getData(widget.slug),
+      builder: (BuildContext context, AsyncSnapshot<UserIdModel> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text("Error Tidak Ditemukan"),
+          );
+        } else if (snapshot.data == null) {
+          return Center(
+            child: Text("Tidak Ada Data"),
+          );
+        } else {
+          final totalGuest = snapshot.data!.guest!.guest!.length;
+          final notCheckIn = snapshot.data!.guest!.guest!
+              .where((element) => element.attendance == false)
+              .length;
+          final checkIn = snapshot.data!.guest!.guest!
+              .where((element) => element.attendance == true)
+              .length;
+          final shared = snapshot.data!.guest!.guest!
+              .where((element) => element.share == true)
+              .length;
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    height: 55,
-                    width: 55,
-                    margin: EdgeInsets.only(left: 8),
-                    child: Image.asset(
-                      "assets/icons/present.png",
-                      fit: BoxFit.cover,
-                      width: 20,
-                      height: 20,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        30,
-                      ),
-                      color: Constans.thirdColor,
-                    ),
-                  ),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Total Guest",
-                          style: TextStyle(
-                              color: Constans.thirdColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto"),
-                        ),
-                        Text(
-                          "200",
-                          style: TextStyle(
+                        Container(
+                          height: 55,
+                          width: 55,
+                          margin: EdgeInsets.only(left: 8),
+                          child: Image.asset(
+                            "assets/icons/present.png",
+                            fit: BoxFit.cover,
+                            width: 20,
+                            height: 20,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              30,
+                            ),
                             color: Constans.thirdColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
                           ),
                         ),
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 5,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Total Guest",
+                                style: TextStyle(
+                                    color: Constans.thirdColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto"),
+                              ),
+                              Text(
+                                totalGuest.toString(),
+                                style: TextStyle(
+                                  color: Constans.thirdColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
                       ],
                     ),
-                  ))
+                    width: 180,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(0),
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                      color: Constans.secondaryColor,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    width: 180,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                      color: Constans.seventh,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 55,
+                          width: 55,
+                          child: Image.asset("assets/icons/allUser.png",
+                              fit: BoxFit.cover),
+                          margin: EdgeInsets.only(left: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              30,
+                            ),
+                            color: Constans.thirdColor,
+                          ),
+                        ),
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 5,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Guest Present",
+                                style: TextStyle(
+                                    color: Constans.thirdColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto"),
+                              ),
+                              Text(
+                                checkIn.toString(),
+                                style: TextStyle(
+                                  color: Constans.thirdColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              width: 180,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(0),
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-                color: Constans.secondaryColor,
+              SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 180,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(0),
-                  topRight: Radius.circular(30),
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-                color: Constans.seventh,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    height: 55,
-                    width: 55,
-                    child: Image.asset("assets/icons/allUser.png",
-                        fit: BoxFit.cover),
-                    margin: EdgeInsets.only(left: 8),
+                    width: 180,
+                    height: 100,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        30,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(0),
                       ),
-                      color: Constans.thirdColor,
+                      color: Constans.seventh,
                     ),
-                  ),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Guest Present",
-                          style: TextStyle(
-                              color: Constans.thirdColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto"),
-                        ),
-                        Text(
-                          "20",
-                          style: TextStyle(
+                        Container(
+                          height: 55,
+                          width: 55,
+                          margin: EdgeInsets.only(left: 8),
+                          child: Image.asset("assets/icons/notCome.png",
+                              fit: BoxFit.cover),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              30,
+                            ),
                             color: Constans.thirdColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
                           ),
                         ),
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 5,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Not Checkin",
+                                style: TextStyle(
+                                    color: Constans.thirdColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto"),
+                              ),
+                              Text(
+                                notCheckIn.toString(),
+                                style: TextStyle(
+                                  color: Constans.thirdColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
                       ],
                     ),
-                  ))
-                ],
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 180,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(0),
-                ),
-                color: Constans.seventh,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Container(
-                    height: 55,
-                    width: 55,
-                    margin: EdgeInsets.only(left: 8),
-                    child: Image.asset("assets/icons/notCome.png",
-                        fit: BoxFit.cover),
+                    width: 180,
+                    height: 100,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        30,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(30),
                       ),
-                      color: Constans.thirdColor,
+                      color: Constans.secondaryColor,
                     ),
-                  ),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Not Came",
-                          style: TextStyle(
-                              color: Constans.thirdColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto"),
-                        ),
-                        Text(
-                          "20",
-                          style: TextStyle(
+                        Container(
+                          height: 55,
+                          width: 55,
+                          margin: EdgeInsets.only(left: 8),
+                          child: Image.asset("assets/icons/difference.png",
+                              fit: BoxFit.cover),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              30,
+                            ),
                             color: Constans.thirdColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
                           ),
                         ),
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 5,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Shared",
+                                style: TextStyle(
+                                    color: Constans.thirdColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Roboto"),
+                              ),
+                              Text(
+                                shared.toString(),
+                                style: TextStyle(
+                                  color: Constans.thirdColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Roboto",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
                       ],
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              width: 180,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(30),
-                ),
-                color: Constans.secondaryColor,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 55,
-                    width: 55,
-                    margin: EdgeInsets.only(left: 8),
-                    child: Image.asset("assets/icons/difference.png",
-                        fit: BoxFit.cover),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        30,
-                      ),
-                      color: Constans.thirdColor,
                     ),
                   ),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 5,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Difference",
-                          style: TextStyle(
-                              color: Constans.thirdColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Roboto"),
-                        ),
-                        Text(
-                          "20",
-                          style: TextStyle(
-                            color: Constans.thirdColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Roboto",
-                          ),
-                        ),
-                      ],
-                    ),
-                  ))
                 ],
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          );
+        }
+      },
     );
   }
 }
