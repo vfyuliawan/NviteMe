@@ -3,10 +3,15 @@ import 'package:nvite_me/RefactorApp/domain/model/response/login/model_response_
 import 'package:nvite_me/RefactorApp/domain/repository/login/login_repository.dart';
 
 class LoginService {
-  Future<ModelResponseLoginInterface?> loginService(
+  Future<ModelResponseLoginInterface?> login(
       ModelRequestLoginInterface param) async {
     Future<ModelResponseLoginInterface?> result =
         LoginRepository().loginRepository(param);
     return result;
+  }
+
+  Future<bool?> cekLogin() async {
+    Future<bool?> res = LoginRepository().cekLogin();
+    return res;
   }
 }

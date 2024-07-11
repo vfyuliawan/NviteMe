@@ -1,11 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
+
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
-import 'package:nvite_me/RefactorApp/core/ErrorHandler.dart';
+import 'package:http/http.dart' as http;
 import 'package:platform/platform.dart';
+
+import 'package:nvite_me/RefactorApp/core/ErrorHandler.dart';
+import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/utils/utils.dart';
 
 class APIService {
   static int timeOut = 60000;
@@ -17,8 +22,11 @@ class APIService {
     return platform.isIOS ? iosVersion : androidVersion;
   }
 
-  static Future<Map<String, String>> header() async {
-    const String token = "fasdfasdfasdfasdfasdf";
+  static Future<Map<String, String>> header(bool? isAuthHeader) async {
+    // const String token =
+    //     "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnYWxhbmciLCJpYXQiOjE3MjAxNjIyNDcsImV4cCI6MTcyMDE5ODI0N30.JnWyYcktn0IPZvu-dbxSxIdqt8qc2zPP0xdVCzMBS6c";
+    final String token =
+        await Utility().loadPref(key: Constans.bearerToken) ?? "";
     final String appVersionData = appVersion(LocalPlatform());
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -51,7 +59,7 @@ class APIService {
       'language': 'IDN',
       'latitude': '0.0',
       'longitude': '0.0',
-      'Authorization': token,
+      'Authorization': isAuthHeader == false ? "" : token,
     };
   }
 
@@ -135,7 +143,7 @@ class APIService {
   }
 
   static Future<http.Response> post(FetchInterface props) async {
-    final headers = await header();
+    final headers = await header(props.isAuthHeader);
     final request = http.Request('POST', Uri.parse(baseUrl + props.path))
       ..headers.addAll(headers)
       ..body = json.encode(props.reqBody);
@@ -143,18 +151,15 @@ class APIService {
         props.errorMessage, props.dismissable);
   }
 
-  Future<http.Response> get(FetchInterfaceGet props) async {
-    final headers = await header();
+  static Future<http.Response> get(FetchInterfaceGet props) async {
+    final headers = await header(props.isAuthHeader);
     final request = http.Request('GET', Uri.parse(baseUrl + props.path))
-      ..headers.addAll(headers)
-      ..bodyFields =
-          props.params?.map((key, value) => MapEntry(key, value.toString())) ??
-              {};
+      ..headers.addAll(headers);
     return requestData(request, props.isError ?? false, null, null);
   }
 
-  Future<http.Response> put(FetchInterface props) async {
-    final headers = await header();
+  static Future<http.Response> put(FetchInterface props) async {
+    final headers = await header(props.isAuthHeader);
     final request = http.Request('PUT', Uri.parse(baseUrl + props.path))
       ..headers.addAll(headers)
       ..body = json.encode(props.reqBody);
@@ -163,7 +168,7 @@ class APIService {
   }
 
   Future<http.Response> patch(FetchInterface props) async {
-    final headers = await header();
+    final headers = await header(props.isAuthHeader);
     final request = http.Request('PATCH', Uri.parse(baseUrl + props.path))
       ..headers.addAll(headers)
       ..body = json.encode(props.reqBody);
@@ -172,7 +177,7 @@ class APIService {
   }
 
   Future<http.Response> deleted(FetchInterface props) async {
-    final headers = await header();
+    final headers = await header(props.isAuthHeader);
     final request = http.Request('DELETE', Uri.parse(baseUrl + props.path))
       ..headers.addAll(headers)
       ..body = json.encode(props.reqBody);
@@ -183,6 +188,7 @@ class APIService {
 
 class FetchInterface {
   final String path;
+  final bool isAuthHeader;
   final bool? isErrorCreate;
   final bool? dismissable;
   final Map<String, dynamic> reqBody;
@@ -190,6 +196,7 @@ class FetchInterface {
 
   FetchInterface({
     required this.path,
+    required this.isAuthHeader,
     this.isErrorCreate,
     this.dismissable,
     required this.reqBody,
@@ -199,8 +206,14 @@ class FetchInterface {
 
 class FetchInterfaceGet {
   final String path;
+  final bool isAuthHeader;
   final Map<String, dynamic>? params;
   final bool? isError;
 
-  FetchInterfaceGet({required this.path, this.params, this.isError});
+  FetchInterfaceGet({
+    required this.path,
+    required this.isAuthHeader,
+    this.params,
+    this.isError,
+  });
 }

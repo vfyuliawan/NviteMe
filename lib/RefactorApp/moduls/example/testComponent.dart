@@ -9,6 +9,8 @@ class TestComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        height: MediaQuery.of(context).size.height + 100,
+        decoration: BoxDecoration(color: Colors.amber),
         child: Center(child: Text("Test Component 1")),
       ),
     );

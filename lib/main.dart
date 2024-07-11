@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/example/testComponent.dart';
 import 'package:nvite_me/RefactorApp/moduls/pre-login/onboarding/bloc/onboarding_bloc_bloc.dart';
 import 'package:nvite_me/RefactorApp/router/router.dart';
@@ -44,10 +47,21 @@ class MyAppRefactor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
-      BlocProvider(
-        create: (context) => OnboardingBloc(),
-      )
-    ], child: MaterialApp.router(routerConfig: AppRouter.router));
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => OnboardingBloc(),
+          ),
+          BlocProvider(
+            create: (context) => HomeBloc(),
+          ),
+          BlocProvider(
+            create: (context) => UserBloc(),
+          )
+        ],
+        child: MaterialApp.router(
+          routerConfig: AppRouter.router,
+          debugShowCheckedModeBanner: false,
+        ));
   }
 }

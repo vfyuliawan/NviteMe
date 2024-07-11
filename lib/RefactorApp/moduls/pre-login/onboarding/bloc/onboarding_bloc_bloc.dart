@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unused_import
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:nvite_me/RefactorApp/core/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:nvite_me/RefactorApp/domain/model/request/login/model_request_login.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/login/model_response_ceklogin.dart';
 import 'package:nvite_me/RefactorApp/domain/service/login/login_service.dart';
 
 part 'onboarding_bloc_event.dart';
@@ -27,16 +28,24 @@ class OnboardingBloc extends Bloc<OnboardingBlocEvent, OnboardingBlocState> {
         pageController.nextPage(
             duration: Duration(milliseconds: 500), curve: Curves.bounceInOut);
       } else {
-        event.context.replace("/detail");
+        LoginService().cekLogin().then((value) {
+          if (value == true) {
+            event.context.go("/home");
+          } else {
+            event.context.go("/login");
+          }
+        });
       }
     });
 
     on<SkipEvent>((event, emit) async {
-      // event.context.replace("/detail");
-      ModelRequestLoginInterface request =
-          ModelRequestLoginInterface("galang2", "password");
-      LoginService().loginService(request).then((value) {
-        print('Response code :${value?.result.username}');
+      LoginService().cekLogin().then((value) {
+        print(value);
+        if (value == true) {
+          event.context.go("/home");
+        } else {
+          event.context.go("/login");
+        }
       });
     });
   }

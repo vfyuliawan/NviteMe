@@ -8,7 +8,10 @@ class Constans {
   static var fivethColor = const Color(0xffd2c1b9);
   static var sixth = const Color(0xffe3b480);
   static var seventh = const Color(0xff265073);
+  static var eight = Color.fromARGB(255, 239, 239, 239);
+  static var nine = Color.fromARGB(255, 240, 240, 240);
   static var textColor = const Color(0xff3C3633);
+  static var textColor2 = Color.fromARGB(255, 88, 75, 70);
   static var alertColor = Color.fromARGB(255, 252, 239, 214);
 
   static var baseUrlDev = 'localhost:3000/?a=';
@@ -46,5 +49,6 @@ class Constans {
   ];
 
   static var uidLogin = "uidLogin";
+  static var bearerToken = "bearerToken";
   static var displayName = "displayName";
 }

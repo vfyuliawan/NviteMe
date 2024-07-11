@@ -1,0 +1,184 @@
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, non_constant_identifier_names, sort_child_properties_last, unused_local_variable
+
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/user/user_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/example/testComponent2.dart';
+import 'package:nvite_me/constans.dart';
+
+class ConcaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.moveTo(0, 0);
+    path.quadraticBezierTo(size.width / 2, 100, size.width, 0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key}) : super(key: key);
+  final List<IconData> iconList = [
+    Icons.tablet_android_rounded,
+    Icons.palette_rounded,
+    Icons.info_outline_rounded,
+  ];
+
+  final List<Widget> pages = [
+    UserScreen(),
+    TestComponent2(),
+    UserScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                if (state is HomeIsSuccess) {
+                  return IndexedStack(
+                    index: state.selectedIndex,
+                    children: pages,
+                  );
+                }
+                return Container();
+              },
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                int curentNavIndex = 1;
+                if (state is HomeIsSuccess) {
+                  curentNavIndex = state.selectedIndex;
+                }
+                return Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    height: 130,
+                    child: ClipPath(
+                      clipper: ConcaveClipper(),
+                      child: CustomNavBar(context, curentNavIndex),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  AnimatedBottomNavigationBar Navbar(int curentNavIndex, BuildContext context) {
+    return AnimatedBottomNavigationBar(
+      iconSize: 35,
+      elevation: 3,
+      backgroundColor: Colors.white, // Replace with Constans.secondaryColor
+      splashColor: Constans.textColor,
+      activeColor: Constans.seventh,
+      inactiveColor: Constans.seventh,
+      icons: iconList,
+      activeIndex: curentNavIndex,
+      gapLocation: GapLocation.none,
+      blurEffect: true,
+      notchAndCornersAnimation: AlwaysStoppedAnimation(0.0), // Adjust as needed
+      notchSmoothness: NotchSmoothness.smoothEdge,
+      onTap: (index) {
+        BlocProvider.of<HomeBloc>(context).add(BottomnavItemSelected(index));
+      },
+    );
+  }
+
+  Widget CustomNavBar(
+    BuildContext context,
+    int curentNavIndex,
+  ) {
+    List<Image> navImages = [
+      Image.asset(
+        "assets/icons/atm-card.png",
+        fit: BoxFit.contain,
+      ),
+      Image.asset(
+        "assets/icons/database.png",
+        fit: BoxFit.contain,
+      ),
+      Image.asset(
+        "assets/icons/user-2.png",
+        fit: BoxFit.contain,
+      ),
+    ];
+
+    List<Icon> navImagesIcon = [
+      Icon(
+        Icons.home_filled,
+        color: Colors.white,
+        size: 27,
+      ),
+      Icon(
+        Icons.dashboard,
+        color: Colors.white,
+        size: 27,
+      ),
+      Icon(
+        Icons.info_outlined,
+        color: Colors.white,
+        size: 27,
+      ),
+    ];
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Constans.seventh,
+        image: DecorationImage(
+            image: AssetImage(
+              "assets/icons/bg.png",
+            ), // Use different image for each index if needed
+            fit: BoxFit.cover,
+            opacity: 0.4),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: navImagesIcon.asMap().entries.map((entry) {
+          int index = entry.key;
+          Icon image = entry.value;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                BlocProvider.of<HomeBloc>(context)
+                    .add(BottomnavItemSelected(index));
+                print("Tapped on index: $index");
+              },
+              child: Container(
+                height: 50,
+                padding: EdgeInsets.symmetric(vertical: 8),
+                margin: EdgeInsets.only(left: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: index == curentNavIndex
+                      ? Constans.thirdColor
+                      : Colors.transparent,
+                ),
+                child: image,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}

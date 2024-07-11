@@ -87,53 +87,6 @@ class _RootPageState extends State<RootPage> with TickerProviderStateMixin {
           ),
         ),
       ),
-
-      // Container(
-      //   height: 140,
-      //   alignment: Alignment.bottomCenter,
-      //   decoration: BoxDecoration(color: Constans.secondaryColor),
-      //   child: Container(
-      //     alignment: Alignment.bottomCenter,
-      //     padding: EdgeInsets.all(7),
-      //     margin: EdgeInsets.symmetric(horizontal: 25, vertical: 0),
-      //     decoration: BoxDecoration(
-      //         color: Constans.secondaryColor,
-      //         borderRadius: BorderRadius.all(Radius.circular(24))),
-      //     child: AnimatedBottomNavigationBar(
-      //       iconSize: 25,
-      //       elevation: 0.0,
-      //       leftCornerRadius: 32,
-      //       rightCornerRadius: 32,
-      //       backgroundColor: Constans.secondaryColor,
-      //       splashColor: Colors.white,
-      //       activeColor: Colors.white,
-      //       inactiveColor: Colors.black.withOpacity(0.5),
-      //       icons: iconList,
-      //       activeIndex: _bottomNavIndex,
-      //       gapLocation: GapLocation.none,
-      //       blurEffect: true,
-      //       notchAndCornersAnimation: _notchAndCornersAnimation,
-      //       notchSmoothness: NotchSmoothness.smoothEdge,
-      //       onTap: (index) {
-      //         setState(() {
-      //           _bottomNavIndex = index;
-      //         });
-      //       },
-      //     ),
-      //   ),
-      // ),
-      // Positioned(
-      //   top: -15,
-      //   child: Container(
-      //     decoration: BoxDecoration(
-      //         color: Constans.fourthColor,
-      //         borderRadius: BorderRadius.only(
-      //             bottomRight: Radius.circular(0),
-      //             bottomLeft: Radius.circular(90))),
-      //     height: 60,
-      //     width: MediaQuery.of(context).size.width,
-      //   ),
-      // ),
     );
   }
 }

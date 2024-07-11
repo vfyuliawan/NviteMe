@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nvite_me/constans.dart';
 
 class ErrorHandler {
   Future<void> errorResponse({
@@ -12,9 +13,9 @@ class ErrorHandler {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.SNACKBAR,
+        gravity: ToastGravity.TOP,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Constans.sixth,
         textColor: Colors.white,
         fontSize: 16.0);
   }
