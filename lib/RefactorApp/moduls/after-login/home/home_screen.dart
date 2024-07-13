@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, non_constant_identifier_names, sort_child_properties_last, unused_local_variable
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, non_constant_identifier_names, sort_child_properties_last, unused_local_variable, prefer_const_literals_to_create_immutables
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +27,13 @@ class ConcaveClipper extends CustomClipper<Path> {
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
   final List<IconData> iconList = [
-    Icons.tablet_android_rounded,
+    // Icons.tablet_android_rounded,
     Icons.palette_rounded,
     Icons.info_outline_rounded,
   ];
 
   final List<Widget> pages = [
-    UserScreen(),
+    // UserScreen(),
     TestComponent2(),
     UserScreen(),
   ];
@@ -122,21 +122,41 @@ class HomeScreen extends StatelessWidget {
       ),
     ];
 
-    List<Icon> navImagesIcon = [
-      Icon(
-        Icons.home_filled,
-        color: Colors.white,
-        size: 27,
+    List<Widget> navImagesIcon = [
+      // Icon(
+      //   Icons.home_filled,
+      //   color: Colors.white,
+      //   size: 27,
+      // ),
+      Column(
+        children: [
+          Icon(
+            Icons.dashboard,
+            color: Colors.white,
+            size: 27,
+          ),
+          Text(
+            "Menu",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
+        ],
       ),
-      Icon(
-        Icons.dashboard,
-        color: Colors.white,
-        size: 27,
-      ),
-      Icon(
-        Icons.info_outlined,
-        color: Colors.white,
-        size: 27,
+      Column(
+        children: [
+          Icon(
+            Icons.info_outline_rounded,
+            color: Colors.white,
+            size: 27,
+          ),
+          Text(
+            "Info",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )
+        ],
       ),
     ];
     return Container(
@@ -155,7 +175,7 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: navImagesIcon.asMap().entries.map((entry) {
           int index = entry.key;
-          Icon image = entry.value;
+          Widget image = entry.value;
           return Expanded(
             child: GestureDetector(
               onTap: () {
@@ -164,7 +184,7 @@ class HomeScreen extends StatelessWidget {
                 print("Tapped on index: $index");
               },
               child: Container(
-                height: 50,
+                height: 63,
                 padding: EdgeInsets.symmetric(vertical: 8),
                 margin: EdgeInsets.only(left: 8),
                 decoration: BoxDecoration(

@@ -14,8 +14,9 @@ class UserRepository {
       ModelUserResponseInterface result =
           ModelUserResponseInterface.fromJson(jsonDecode(response.body));
       return result;
+    } else {
+      return null;
     }
-    return null;
   }
 
   Future<bool?> logoutUser() async {

@@ -37,7 +37,8 @@ class AppRouter {
                   BlocProvider(
                     create: (context) {
                       final userBloc = UserBloc();
-                      userBloc.add(GetUserDetail()); // Dispatch the event
+                      userBloc
+                          .add(GetUserDetail(context)); // Dispatch the event
                       return userBloc;
                     },
                   ),

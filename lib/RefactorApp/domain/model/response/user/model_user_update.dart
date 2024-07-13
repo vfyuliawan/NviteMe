@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 class ModelUserUpdateInterface {
@@ -6,12 +5,14 @@ class ModelUserUpdateInterface {
   String password;
   String alamat;
   String email;
+  String photo;
 
   ModelUserUpdateInterface({
     required this.name,
     required this.password,
     required this.alamat,
     required this.email,
+    required this.photo,
   });
 
   factory ModelUserUpdateInterface.fromRawJson(String str) =>
@@ -25,6 +26,7 @@ class ModelUserUpdateInterface {
         password: json["password"],
         alamat: json["alamat"],
         email: json["email"],
+        photo: json["photo"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,5 +34,6 @@ class ModelUserUpdateInterface {
         "password": password,
         "alamat": alamat,
         "email": email,
+        "photo": photo,
       };
 }

@@ -11,7 +11,10 @@ class ErrorHandler {
   }) async {
     final String msg = errorMessage ?? message;
     Fluttertoast.showToast(
-        msg: msg,
+        msg: msg == "No enum constant inviteme.restfull.entiity.Role." ||
+                msg == "Unauthorize"
+            ? "Expired Token"
+            : msg,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.TOP,
         timeInSecForIosWeb: 1,

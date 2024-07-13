@@ -1,7 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, non_constant_identifier_names
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nvite_me/RefactorApp/domain/model/general/props_key_value.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
@@ -19,12 +22,15 @@ class UserScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is UserIsFailed) {
             Utilities().showMessage(message: state.message);
+            if (state.message == Constans.unauthorize) {
+              context.go("/login");
+            }
           }
         },
         child: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             if (state is UserInitial) {
-              context.read<UserBloc>().add(GetUserDetail());
+              context.read<UserBloc>().add(GetUserDetail(context));
               return Center(
                 child: Text("init State"),
               );
@@ -58,7 +64,8 @@ class UserScreen extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(right: 10),
                             child: Text(
-                              "Welcome ${state.detailUser.name}",
+                              "Welcome  \n${state.detailUser.name}",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: "Pacifico",
                                 fontSize: 23,
@@ -71,7 +78,7 @@ class UserScreen extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: 90,
+                    top: 120,
                     right: 0,
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
@@ -89,16 +96,27 @@ class UserScreen extends StatelessWidget {
                             height: 150,
                             width: 150,
                             alignment: Alignment.center,
-                            child: Text(
-                              state.detailUser.username
-                                  .split("")[0]
-                                  .toUpperCase(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Pacifico",
-                                fontSize: 70,
-                              ),
-                            ),
+                            child: state.detailUser.photo == ""
+                                ? Text(
+                                    state.detailUser.username
+                                        .split("")[0]
+                                        .toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Pacifico",
+                                      fontSize: 70,
+                                    ),
+                                  )
+                                : ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.circular(150 / 2),
+                                    child: Image.memory(
+                                      base64Decode(state.detailUser.photo),
+                                      fit: BoxFit.cover,
+                                      width: 150,
+                                      height: 150,
+                                    ),
+                                  ),
                             decoration: BoxDecoration(
                                 color: Constans.textColor2,
                                 borderRadius: BorderRadius.circular(150 / 2)),
@@ -113,7 +131,7 @@ class UserScreen extends StatelessWidget {
                           UserActionButton(
                             iconData: Icons.edit_note_rounded,
                             ontap: () {
-                              context.read<UserBloc>().add(EditUser());
+                              context.read<UserBloc>().add(EditUser(context));
                             },
                             title: "Edited Data",
                           ),
@@ -200,24 +218,72 @@ class UserScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Container(
-                                  height: 150,
-                                  width: 150,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    state.detailUser.username
-                                        .split("")[0]
-                                        .toUpperCase(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: "Pacifico",
-                                      fontSize: 70,
-                                    ),
+                                GestureDetector(
+                                  onTap: () {
+                                    context.read<UserBloc>().add(OnPickImage());
+                                  },
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    alignment: Alignment.center,
+                                    // ignore: unnecessary_null_comparison
+                                    child: state.detailUser.photo == ""
+                                        ? Stack(
+                                            children: [
+                                              Center(
+                                                child: Text(
+                                                  state.detailUser.username
+                                                      .split("")[0]
+                                                      .toUpperCase(),
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: "Pacifico",
+                                                    fontSize: 70,
+                                                  ),
+                                                ),
+                                              ),
+                                              Center(
+                                                child: Opacity(
+                                                  opacity: 0.5,
+                                                  child: Icon(
+                                                    Icons.photo_camera,
+                                                    size: 100,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        150 / 2),
+                                                child: Image.memory(
+                                                  base64Decode(
+                                                      state.detailUser.photo),
+                                                  fit: BoxFit.cover,
+                                                  width: 150,
+                                                  height: 150,
+                                                ),
+                                              ),
+                                              Center(
+                                                child: Opacity(
+                                                  opacity: 0.7,
+                                                  child: Icon(
+                                                    Icons.photo_camera,
+                                                    size: 100,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                    decoration: BoxDecoration(
+                                        color: Constans.textColor2,
+                                        borderRadius:
+                                            BorderRadius.circular(150 / 2)),
                                   ),
-                                  decoration: BoxDecoration(
-                                      color: Constans.textColor2,
-                                      borderRadius:
-                                          BorderRadius.circular(150 / 2)),
                                 ),
                                 SizedBox(
                                   height: 20,
@@ -298,6 +364,18 @@ class UserScreen extends StatelessWidget {
                                   title: "Save Data",
                                 ),
                                 SizedBox(
+                                  height: 20,
+                                ),
+                                UserActionButton(
+                                  iconData: Icons.arrow_back_ios,
+                                  ontap: () {
+                                    context
+                                        .read<UserBloc>()
+                                        .add(GetUserDetail(context));
+                                  },
+                                  title: "Cencel",
+                                ),
+                                SizedBox(
                                   height: 150,
                                 ),
                               ],
@@ -310,7 +388,9 @@ class UserScreen extends StatelessWidget {
                 },
               );
             }
-            return Container();
+            return Container(
+              child: Center(child: Text("fasdfad")),
+            );
           },
         ),
       ),

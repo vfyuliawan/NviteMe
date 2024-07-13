@@ -39,12 +39,14 @@ class Result {
   String name;
   String alamat;
   String email;
+  String photo;
 
   Result({
     required this.username,
     required this.name,
     required this.alamat,
     required this.email,
+    required this.photo,
   });
 
   factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
@@ -56,6 +58,7 @@ class Result {
         name: json["name"] ?? "",
         alamat: json["alamat"] ?? "",
         email: json["email"] ?? "",
+        photo: json["photo"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,5 +66,6 @@ class Result {
         "name": name,
         "alamat": alamat,
         "email": email,
+        "photo": photo,
       };
 }

@@ -51,4 +51,5 @@ class Constans {
   static var uidLogin = "uidLogin";
   static var bearerToken = "bearerToken";
   static var displayName = "displayName";
+  static var unauthorize = "Unauthorize";
 }
