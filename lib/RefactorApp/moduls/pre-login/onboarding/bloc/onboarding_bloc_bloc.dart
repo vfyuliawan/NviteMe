@@ -30,9 +30,9 @@ class OnboardingBloc extends Bloc<OnboardingBlocEvent, OnboardingBlocState> {
       } else {
         LoginService().cekLogin().then((value) {
           if (value == true) {
-            event.context.go("/home");
+            event.context.replace("/home");
           } else {
-            event.context.go("/login");
+            event.context.replace("/login");
           }
         });
       }
@@ -42,9 +42,9 @@ class OnboardingBloc extends Bloc<OnboardingBlocEvent, OnboardingBlocState> {
       LoginService().cekLogin().then((value) {
         print(value);
         if (value == true) {
-          event.context.go("/home");
+          event.context.replace("/home");
         } else {
-          event.context.go("/login");
+          event.context.replace("/login");
         }
       });
     });

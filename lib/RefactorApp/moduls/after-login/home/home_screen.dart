@@ -4,8 +4,8 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/main_menu_screen.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/user_screen.dart';
-import 'package:nvite_me/RefactorApp/moduls/example/testComponent2.dart';
 import 'package:nvite_me/constans.dart';
 
 class ConcaveClipper extends CustomClipper<Path> {
@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
 
   final List<Widget> pages = [
     // UserScreen(),
-    TestComponent2(),
+    MainMenuScreen(),
     UserScreen(),
   ];
 

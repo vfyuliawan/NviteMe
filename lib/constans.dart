@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Constans {
-  static var primaryColor = const Color(0xff296e48);
-  static var secondaryColor = const Color(0xff3A8891);
-  static var thirdColor = const Color(0xffEBD9B4);
-  static var fourthColor = const Color(0xffFBF9F1);
-  static var fivethColor = const Color(0xffd2c1b9);
-  static var sixth = const Color(0xffe3b480);
-  static var seventh = const Color(0xff265073);
+  static var primaryColor = Color(0xff296e48);
+  static var secondaryColor = Color(0xff3A8891);
+  static var thirdColor = Color(0xffEBD9B4);
+  static var fourthColor = Color(0xffFBF9F1);
+  static var fivethColor = Color(0xffd2c1b9);
+  static var sixth = Color(0xffe3b480);
+  // static var seventh = Color(0xff265073);
+  static var seventh = Color(0xff3A8891);
   static var eight = Color.fromARGB(255, 239, 239, 239);
   static var nine = Color.fromARGB(255, 240, 240, 240);
   static var textColor = const Color(0xff3C3633);
