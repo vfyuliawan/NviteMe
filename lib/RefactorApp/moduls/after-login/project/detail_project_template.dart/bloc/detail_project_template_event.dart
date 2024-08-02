@@ -19,3 +19,9 @@ class OpenClosetheme extends DetailProjectTemplateEvent {
 
   OpenClosetheme({required this.isOpen});
 }
+
+class UpdateProjectTemplate extends DetailProjectTemplateEvent {
+  final ResultModelResponseDetailSample detail;
+
+  UpdateProjectTemplate({required this.detail});
+}

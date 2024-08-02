@@ -34,5 +34,10 @@ class DetailProjectTemplateBloc
         emit(currentState.copyWith(isOpen: event.isOpen));
       }
     });
+
+    on<UpdateProjectTemplate>((event, emit) {
+      final currentState = state as DetailProjectTempalteIsSuccess;
+      emit(currentState.copyWith(resultDetail: event.detail));
+    });
   }
 }

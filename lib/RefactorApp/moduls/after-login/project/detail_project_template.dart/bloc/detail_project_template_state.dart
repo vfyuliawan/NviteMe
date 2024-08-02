@@ -30,3 +30,11 @@ final class DetailProjectTempalteIsFailed extends DetailProjectTemplateState {
 }
 
 final class DetailProjectTempalteIsLoading extends DetailProjectTemplateState {}
+
+final class UpdateDetailProjectTemplate extends DetailProjectTemplateState {
+  final ResultModelResponseDetailSample resultDetail;
+
+  UpdateDetailProjectTemplate({
+    required this.resultDetail,
+  });
+}

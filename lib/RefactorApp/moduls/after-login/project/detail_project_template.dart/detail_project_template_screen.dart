@@ -36,7 +36,7 @@ class DetailProjectTemplateScreen extends StatelessWidget {
               children: [
                 AppbarDetail(context),
                 ThemeDetail(context, resultDetail),
-                BodyDetail(context, resultDetail, themeIsOpen),
+                BodyDetail(context, resultDetail, themeIsOpen, state),
               ],
             );
           } else if (state is DetailProjectTempalteIsLoading) {
@@ -151,8 +151,11 @@ class DetailProjectTemplateScreen extends StatelessWidget {
     );
   }
 
-  Positioned BodyDetail(BuildContext context,
-      ResultModelResponseDetailSample resultDetail, bool themeIsOpen) {
+  Positioned BodyDetail(
+      BuildContext context,
+      ResultModelResponseDetailSample resultDetail,
+      bool themeIsOpen,
+      DetailProjectTempalteIsSuccess state) {
     return Positioned(
       top: 335,
       right: 0,
@@ -215,7 +218,13 @@ class DetailProjectTemplateScreen extends StatelessWidget {
                         initialValue: resultDetail.theme.slug,
                         fillColor: Colors.black12,
                         enable: false,
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          final updateForm = state.resultDetail.copyWith(
+                              theme: resultDetail.theme.copyWith(slug: value));
+                          context
+                              .read<DetailProjectTemplateBloc>()
+                              .add(UpdateProjectTemplate(detail: updateForm));
+                        },
                         labelText: "Slug",
                         labelColor: Constans.secondaryColor,
                         borderColor: Constans.secondaryColor,
@@ -236,21 +245,32 @@ class DetailProjectTemplateScreen extends StatelessWidget {
                         labelSize: 14,
                         labelColor: Constans.secondaryColor,
                         borderColor: Constans.secondaryColor,
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          final updateForm = state.resultDetail.copyWith(
+                              theme:
+                                  resultDetail.theme.copyWith(alamat: value));
+                          context
+                              .read<DetailProjectTemplateBloc>()
+                              .add(UpdateProjectTemplate(detail: updateForm));
+                        },
                         labelText: "Alamat Rumah",
                       ),
                       SizedBox(
-                        height: 4,
-                      ),
-                      SizedBox(
-                        height: 10,
+                        height: 15,
                       ),
                       FormTextField(
                         initialValue: resultDetail.theme.embeded,
                         enable: true,
                         line: 7,
                         labelSize: 14,
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          final updateForm = state.resultDetail.copyWith(
+                              theme:
+                                  resultDetail.theme.copyWith(embeded: value));
+                          context
+                              .read<DetailProjectTemplateBloc>()
+                              .add(UpdateProjectTemplate(detail: updateForm));
+                        },
                         labelText: "Embeded",
                         labelColor: Constans.secondaryColor,
                         borderColor: Constans.secondaryColor,
@@ -301,9 +321,11 @@ class DetailProjectTemplateScreen extends StatelessWidget {
                         list: Constans.listTheme,
                         initial: resultDetail.theme.theme,
                         setValue: (String value) {
-                          // setState(() {
-                          //   widget.thema = value;
-                          // });
+                          final updateForm = state.resultDetail.copyWith(
+                              theme: resultDetail.theme.copyWith(theme: value));
+                          context
+                              .read<DetailProjectTemplateBloc>()
+                              .add(UpdateProjectTemplate(detail: updateForm));
                         },
                       ),
                       SizedBox(height: 15),
@@ -311,7 +333,9 @@ class DetailProjectTemplateScreen extends StatelessWidget {
                         icon: Icons.music_note,
                         list: Constans.listThemeSong,
                         initial: resultDetail.theme.music,
-                        setValue: (String value) {},
+                        setValue: (String value) {
+                          //
+                        },
                       ),
                       SizedBox(height: 10),
                       SizedBox(height: 15),
