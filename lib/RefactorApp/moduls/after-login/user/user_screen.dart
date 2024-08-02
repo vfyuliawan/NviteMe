@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, non_constant_identifier_names, sized_box_for_whitespace
 
 import 'dart:convert';
 
@@ -10,6 +10,7 @@ import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart
 import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
 import 'package:nvite_me/RefactorApp/widget/props_key_value_widget.dart';
 import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 
 class UserScreen extends StatelessWidget {
@@ -25,6 +26,54 @@ class UserScreen extends StatelessWidget {
             if (state.message == Constans.unauthorize) {
               context.go("/login");
             }
+          } else if (state is UserIsVersionUpdate) {
+            showDialog(
+              context: context,
+              barrierDismissible:
+                  false, // Prevents dialog from closing when tapping outside
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.white,
+                  title: Text(
+                    "Cautions",
+                    textAlign: TextAlign.center,
+                  ),
+                  content: Container(
+                    height: 210,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 160,
+                          child: Image.asset("assets/images/please.png",
+                              fit: BoxFit.cover),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            "Your Application Need To Be Update \n Please Update The Application"),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text("No"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text("Yes"),
+                      onPressed: () async {
+                        Utility().openWebBrowser(
+                            'https://apkpure.com/id/mobile-legends/com.mobile.legends');
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           }
         },
         child: BlocBuilder<UserBloc, UserState>(
@@ -145,6 +194,18 @@ class UserScreen extends StatelessWidget {
                             },
                             title: "Logout",
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            Constans.version,
+                            style: TextStyle(
+                              color: Constans.seventh,
+                              fontFamily: "Pacifico",
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
                         ],
                       ),
                     ),

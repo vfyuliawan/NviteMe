@@ -1,8 +1,13 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/bloc/detail_project_template_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/detail_project_template_screen.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/list_project/list_project_screen.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/example/testComponent.dart';
@@ -29,29 +34,25 @@ class AppRouter {
           GoRoute(
             path: 'home',
             builder: (BuildContext context, GoRouterState state) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) => HomeBloc(),
-                  ),
-                  BlocProvider(
+              return HomeScreen();
+            },
+            routes: [
+              GoRoute(
+                path: 'templateDetail/:id',
+                builder: (BuildContext context, GoRouterState state) {
+                  return BlocProvider(
                     create: (context) {
-                      final userBloc = UserBloc();
-                      userBloc
-                          .add(GetUserDetail(context)); // Dispatch the event
-                      return userBloc;
+                      final idParam = state.pathParameters['id']!;
+                      final detailBloc = DetailProjectTemplateBloc();
+                      detailBloc.add(
+                          GetProjectDetailSample(id: idParam, contex: context));
+                      return detailBloc;
                     },
-                  ),
-                ],
-                child: HomeScreen(),
-              );
-            },
-          ),
-          GoRoute(
-            path: 'test1',
-            builder: (BuildContext context, GoRouterState state) {
-              return const TestComponent();
-            },
+                    child: DetailProjectTemplateScreen(),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

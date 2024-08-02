@@ -1,10 +1,14 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, must_be_immutable, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, must_be_immutable, non_constant_identifier_names, sort_child_properties_last, unrelated_type_equality_checks
 
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
+import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
 import 'package:nvite_me/constans.dart';
 
 class MainMenuScreen extends StatelessWidget {
@@ -24,106 +28,133 @@ class MainMenuScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(color: Colors.grey.shade300),
-        child: SingleChildScrollView(
-          child: Column(children: [
+        child: Column(
+          children: [
             UserInfo(context),
-            ProjectTemplate(),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Wrap(
-                spacing: 20, // spacing between containers
-                runSpacing: 20, // spacing between rows
-                children: List.generate(menuImage.length, (index) {
-                  return Container(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: EdgeInsets.all(15),
-                    child: menuImage[index],
-                  );
-                }),
+            Expanded(
+              child: SingleChildScrollView(
+                child: BlocBuilder<MainMenuBloc, MainMenuState>(
+                  builder: (context, state) {
+                    if (state is GetProjectTemplateIsSuccess) {
+                      return Column(
+                        children: [
+                          ProjectTemplate(state.result, context),
+                          Menu(),
+                          YourProject(),
+                          SizedBox(
+                            height: 100,
+                          ),
+                        ],
+                      );
+                    } else if (state is MainMenuIsLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(
-                left: 10,
-              ),
-              padding: EdgeInsets.all(
-                20,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Your Project",
-                        style: TextStyle(
-                          color: Constans.seventh,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "See More >",
-                        style: TextStyle(
-                          color: const Color.fromARGB(255, 219, 125, 3),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(right: 10),
-                          height: 200,
-                          width: 260,
-                          child: Card(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(right: 10),
-                          height: 200,
-                          width: 260,
-                          child: Card(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(right: 10),
-                          height: 200,
-                          width: 260,
-                          child: Card(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 100,
-            )
-          ]),
+          ],
         ),
       ),
     );
   }
 
-  Widget ProjectTemplate() {
+  Container YourProject() {
+    return Container(
+      margin: EdgeInsets.only(
+        left: 10,
+      ),
+      padding: EdgeInsets.all(
+        20,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Your Project",
+                style: TextStyle(
+                  color: Constans.seventh,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                "See More >",
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 219, 125, 3),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  height: 200,
+                  width: 260,
+                  child: Card(
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  height: 200,
+                  width: 260,
+                  child: Card(
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  height: 200,
+                  width: 260,
+                  child: Card(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container Menu() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 30),
+      child: Wrap(
+        spacing: 20, // spacing between containers
+        runSpacing: 20, // spacing between rows
+        children: List.generate(menuImage.length, (index) {
+          return Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            padding: EdgeInsets.all(15),
+            child: menuImage[index],
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget ProjectTemplate(ResultProjectSample props, BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
         left: 10,
@@ -160,63 +191,75 @@ class MainMenuScreen extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  height: 200,
-                  width: 260,
-                  child: Card(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 90,
-                          child: Image.asset(
-                              "assets/images/theme/RedEssence.png",
-                              fit: BoxFit.cover),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Couple Name : Vicky Fadilla Yuliawan",
-                              style: TextStyle(
-                                  fontSize: 12, fontFamily: "Pcifico, "),
-                            ),
-                            Text(
-                              "Date : Senin 14-Agustus-2019",
-                              style: TextStyle(
-                                  fontSize: 12, fontFamily: "Pcifico"),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  height: 200,
-                  width: 260,
-                  child: Card(
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  height: 200,
-                  width: 260,
-                  child: Card(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+              children: props.projects.map((item) {
+                return CardTheme(item, item.title, context);
+              }).toList(),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget CardTheme(Project item, String name, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.go(
+          '/home/templateDetail/${item.id}',
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 25),
+        height: 200,
+        width: 260,
+        decoration: BoxDecoration(
+          color: Utilities().cekColor(item.theme.theme),
+          borderRadius: BorderRadius.circular(
+            40,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -30,
+              left: -30,
+              child: Container(
+                height: 160,
+                padding: EdgeInsets.only(right: 10),
+                child: Center(
+                  child: Container(
+                    width: 60,
+                    child: Text(
+                      textAlign: TextAlign.start,
+                      name,
+                      style: TextStyle(
+                          color: Utilities().cekColor(item.theme.theme),
+                          fontSize: 16,
+                          fontFamily: "Pacifico"),
+                    ),
+                  ),
+                ),
+                width: 160,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(80)),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                height: 140,
+                child: Image.asset(
+                    "assets/images/theme/${item.theme.theme}.png",
+                    fit: BoxFit.cover),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+          ],
+        ),
       ),
     );
   }

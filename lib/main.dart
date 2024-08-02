@@ -7,6 +7,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/bloc/detail_project_template_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/example/testComponent.dart';
 import 'package:nvite_me/RefactorApp/moduls/pre-login/onboarding/bloc/onboarding_bloc_bloc.dart';
@@ -57,6 +59,17 @@ class MyAppRefactor extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => UserBloc(),
+          ),
+          BlocProvider(
+            create: (context) {
+              final mainMenuBloc = MainMenuBloc();
+              mainMenuBloc.add(GetProjectSampele(context));
+              return mainMenuBloc;
+            },
+          ),
+          BlocProvider(
+            create: (context) => DetailProjectTemplateBloc(),
+            child: Container(),
           )
         ],
         child: MaterialApp.router(

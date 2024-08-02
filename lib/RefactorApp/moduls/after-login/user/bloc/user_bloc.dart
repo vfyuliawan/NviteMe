@@ -7,8 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/user/model_user_update.dart';
 import 'package:nvite_me/RefactorApp/domain/service/user/user_service.dart';
+import 'package:nvite_me/RefactorApp/domain/service/version/version_service.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/model/model_user_response.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/user/model/model_version.dart';
 import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
+import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/utils/utils.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
@@ -20,18 +24,36 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetUserDetail>((event, emit) async {
       emit(UserIsLoading());
       try {
-        await UserService().getUserDetail().then((value) {
+        await UserService().getUserDetail().then((value) async {
           if (value != null) {
-            emit(
-              UserIsSuccess(
-                detailUser: ModelUserResponse(
-                    username: value.result.username,
-                    name: value.result.name,
-                    email: value.result.email,
-                    alamat: value.result.alamat,
-                    photo: value.result.photo),
-              ),
-            );
+            final getVErsion = await VersionService().getVersionActive();
+            if (getVErsion!.result.currentVersion == Constans.version) {
+              emit(
+                UserIsSuccess(
+                  detailUser: ModelUserResponse(
+                      username: value.result.username,
+                      name: value.result.name,
+                      email: value.result.email,
+                      alamat: value.result.alamat,
+                      photo: value.result.photo),
+                ),
+              );
+            } else {
+              emit(UserIsVersionUpdate(
+                  version: ModelVersion(
+                      versionId: getVErsion.result.versionId,
+                      versionActive: getVErsion.result.currentVersion)));
+              emit(
+                UserIsSuccess(
+                  detailUser: ModelUserResponse(
+                      username: value.result.username,
+                      name: value.result.name,
+                      email: value.result.email,
+                      alamat: value.result.alamat,
+                      photo: value.result.photo),
+                ),
+              );
+            }
           } else {
             event.context.go("/login");
             Utilities().showMessage(message: value!.messageError);
@@ -49,6 +71,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           if (value = true) {
             event.context.go("/login");
             Utilities().showMessage(message: "Berhasil Logout");
+            Utility().deletePreference(key: Constans.bearerToken);
           } else {
             emit(UserIsFailed("Logout Gagal"));
           }

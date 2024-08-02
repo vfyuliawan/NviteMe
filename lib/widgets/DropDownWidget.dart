@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:nvite_me/constans.dart';
 
 class DropdownWidget extends StatefulWidget {
   final List<String>? list;
@@ -34,19 +35,25 @@ class _DropdownWidgetState extends State<DropdownWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Constans.secondaryColor,
+          )),
       width: MediaQuery.of(context).size.width,
       child: DropdownMenu<String>(
         width: MediaQuery.of(context).size.width * widget.percentage!,
         label: Text(
           widget.initial!,
-          style: TextStyle(
-            fontSize: 15,
-          ),
+          style: TextStyle(fontSize: 15, color: Constans.secondaryColor),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          border: InputBorder.none,
         ),
         leadingIcon: Icon(
           widget.icon,
-          color: Colors.black54,
+          color: Constans.secondaryColor,
         ),
         onSelected: (String? value) {
           setState(() {
@@ -55,7 +62,10 @@ class _DropdownWidgetState extends State<DropdownWidget> {
         },
         dropdownMenuEntries:
             widget.list!.map<DropdownMenuEntry<String>>((String value) {
-          return DropdownMenuEntry<String>(value: value, label: value);
+          return DropdownMenuEntry<String>(
+            value: value,
+            label: value,
+          );
         }).toList(),
       ),
     );

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, non_constant_identifier_names, sort_child_properties_last, unused_local_variable, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, non_constant_identifier_names, sort_child_properties_last, unused_local_variable, prefer_const_literals_to_create_immutables, avoid_print
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -160,7 +160,7 @@ class HomeScreen extends StatelessWidget {
       ),
     ];
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      // padding: EdgeInsets.symmetric(horizontal: 16),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Constans.seventh,
@@ -185,10 +185,18 @@ class HomeScreen extends StatelessWidget {
               },
               child: Container(
                 height: 63,
+                width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 8),
-                margin: EdgeInsets.only(left: 8),
+                // margin: EdgeInsets.only(left: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(
+                      index == 0 ? 0 : 20,
+                    ),
+                    topRight: Radius.circular(
+                      index == 0 ? 20 : 0,
+                    ),
+                  ),
                   color: index == curentNavIndex
                       ? Constans.thirdColor
                       : Colors.transparent,

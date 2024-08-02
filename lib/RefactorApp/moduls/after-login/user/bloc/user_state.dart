@@ -11,6 +11,12 @@ final class UserIsSuccess extends UserState {
   UserIsSuccess({required this.detailUser});
 }
 
+final class UserIsVersionUpdate extends UserState {
+  final ModelVersion version;
+
+  UserIsVersionUpdate({required this.version});
+}
+
 final class UserIsLoading extends UserState {}
 
 final class UserIsFailed extends UserState {

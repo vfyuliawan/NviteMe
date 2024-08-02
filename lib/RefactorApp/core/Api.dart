@@ -29,8 +29,7 @@ class APIService {
         await Utility().loadPref(key: Constans.bearerToken) ?? "";
     final String appVersionData = appVersion(LocalPlatform());
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    print('Running on ${androidInfo.model}');
+
     String deviceId, osVersion, model, brand;
 
     if (LocalPlatform().isIOS) {
@@ -40,6 +39,8 @@ class APIService {
       model = iosInfo.model;
       brand = 'Apple';
     } else {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
       deviceId = androidInfo.id;
       osVersion = androidInfo.version.release;
       model = androidInfo.model;
