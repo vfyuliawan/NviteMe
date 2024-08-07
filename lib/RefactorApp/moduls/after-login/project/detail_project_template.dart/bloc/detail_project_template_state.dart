@@ -7,18 +7,32 @@ final class DetailProjectTemplateInitial extends DetailProjectTemplateState {}
 
 final class DetailProjectTempalteIsSuccess extends DetailProjectTemplateState {
   final ResultModelResponseDetailSample resultDetail;
-  final bool isOpen;
+  final bool themeIsOpen;
+  final bool heroIsOpen;
+  final bool homeIsOpen;
+  final bool coverIsOpen;
 
   DetailProjectTempalteIsSuccess({
     required this.resultDetail,
-    this.isOpen = false,
+    this.themeIsOpen = false,
+    this.heroIsOpen = false,
+    this.homeIsOpen = false,
+    this.coverIsOpen = false,
   });
 
-  DetailProjectTempalteIsSuccess copyWith(
-      {ResultModelResponseDetailSample? resultDetail, bool? isOpen}) {
+  DetailProjectTempalteIsSuccess copyWith({
+    ResultModelResponseDetailSample? resultDetail,
+    bool? themeIsOpen,
+    bool? heroIsOpen,
+    bool? homeIsOpen,
+    bool? coverIsOpen,
+  }) {
     return DetailProjectTempalteIsSuccess(
       resultDetail: resultDetail ?? this.resultDetail,
-      isOpen: isOpen ?? this.isOpen,
+      themeIsOpen: themeIsOpen ?? this.themeIsOpen,
+      heroIsOpen: heroIsOpen ?? this.heroIsOpen,
+      homeIsOpen: homeIsOpen ?? this.homeIsOpen,
+      coverIsOpen: coverIsOpen ?? this.coverIsOpen,
     );
   }
 }

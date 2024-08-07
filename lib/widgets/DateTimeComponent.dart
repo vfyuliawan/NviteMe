@@ -2,6 +2,7 @@
 
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
+import 'package:nvite_me/constans.dart';
 
 class DateTimeComponent extends StatefulWidget {
   final DateTime? dateValue;
@@ -82,12 +83,12 @@ class _DateTimeComponentState extends State<DateTimeComponent> {
           fillColor: Colors.white,
           filled: true,
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Colors.black54),
+            borderSide: BorderSide(width: 1, color: Constans.secondaryColor),
             borderRadius: BorderRadius.circular(10.0),
           ),
-          labelStyle: TextStyle(fontSize: 20),
+          labelStyle: TextStyle(fontSize: 20, color: Constans.secondaryColor),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Colors.black54),
+            borderSide: BorderSide(width: 1, color: Constans.secondaryColor),
             borderRadius: BorderRadius.circular(10.0),
           ),
           labelText: 'Date and Time',

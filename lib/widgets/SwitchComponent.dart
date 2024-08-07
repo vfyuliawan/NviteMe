@@ -26,7 +26,10 @@ class _SwitchComponentState extends State<SwitchComponent> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(widget.label),
+          Text(
+            widget.label,
+            style: TextStyle(color: Constans.secondaryColor),
+          ),
           Switch(
             value: (widget.value),
             activeColor: Constans.secondaryColor,

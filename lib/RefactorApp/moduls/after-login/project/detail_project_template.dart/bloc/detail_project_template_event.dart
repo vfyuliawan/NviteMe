@@ -20,8 +20,32 @@ class OpenClosetheme extends DetailProjectTemplateEvent {
   OpenClosetheme({required this.isOpen});
 }
 
+class OpenCloseHero extends DetailProjectTemplateEvent {
+  final bool isOpen;
+
+  OpenCloseHero({required this.isOpen});
+}
+
+class OpenCloseHome extends DetailProjectTemplateEvent {
+  final bool isOpen;
+
+  OpenCloseHome({required this.isOpen});
+}
+
+class OpenCloseCover extends DetailProjectTemplateEvent {
+  final bool isOpen;
+
+  OpenCloseCover({required this.isOpen});
+}
+
 class UpdateProjectTemplate extends DetailProjectTemplateEvent {
   final ResultModelResponseDetailSample detail;
 
   UpdateProjectTemplate({required this.detail});
+}
+
+class SubmitUpdateProjectTemplate extends DetailProjectTemplateEvent {
+  final ResultModelResponseDetailSample detail;
+
+  SubmitUpdateProjectTemplate({required this.detail});
 }
