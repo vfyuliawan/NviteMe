@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -152,21 +153,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<OnPickImage>((event, emit) async {
-      try {
-        final currentState = state as UserIsEdited;
-        final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-        if (pickedFile != null) {
-          final bytes = await pickedFile.readAsBytes();
-          final base64Image = base64Encode(bytes);
-          emit(UserIsEdited(
-              currentState.detailUser.copyWith(photo: base64Image)));
-        } else {
-          Utilities().showMessage(message: "No Image Selected");
-          emit(UserIsEdited(currentState.detailUser));
+      final currentState = state as UserIsEdited;
+      await Utilities().pickedIMage().then((value) {
+        if (value != null) {
+          emit(UserIsEdited(currentState.detailUser.copyWith(photo: value)));
         }
-      } catch (e) {
-        Utilities().showMessage(message: e.toString());
-      }
+      });
     });
   }
 }
