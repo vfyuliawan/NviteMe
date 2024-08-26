@@ -82,6 +82,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<EditUser>((event, emit) async {
+      emit(UserIsLoading());
       try {
         await UserService().getUserDetail().then((value) {
           if (value != null) {

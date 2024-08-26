@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/main_menu_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/user_screen.dart';
 import 'package:nvite_me/constans.dart';
 
@@ -34,8 +35,22 @@ class HomeScreen extends StatelessWidget {
 
   final List<Widget> pages = [
     // UserScreen(),
-    MainMenuScreen(),
-    UserScreen(),
+    BlocProvider(
+      create: (context) {
+        final userBloc = UserBloc();
+        userBloc.add(GetUserDetail(context));
+        return userBloc;
+      },
+      child: MainMenuScreen(),
+    ),
+    BlocProvider(
+      create: (context) {
+        final userBloc = UserBloc();
+        userBloc.add(GetUserDetail(context));
+        return userBloc;
+      },
+      child: UserScreen(),
+    )
   ];
 
   @override

@@ -74,16 +74,13 @@ class UserScreen extends StatelessWidget {
                 );
               },
             );
+          } else if (state is UserInitial) {
+            context.read<UserBloc>().add(GetUserDetail(context));
           }
         },
         child: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
-            if (state is UserInitial) {
-              context.read<UserBloc>().add(GetUserDetail(context));
-              return Center(
-                child: Text("init State"),
-              );
-            } else if (state is UserIsSuccess) {
+            if (state is UserIsSuccess) {
               List<PropsKeyValue> userDetail = [
                 PropsKeyValue(key: "Name", value: state.detailUser.name),
                 PropsKeyValue(
