@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,6 +9,14 @@ import 'package:nvite_me/constans.dart';
 
 class Utilities {
   final ImagePicker _picker = ImagePicker();
+
+  Timer? _debounce;
+  void debounceSearch(Function callBack, {int milliseconds = 500}) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(Duration(milliseconds: milliseconds), () {
+      callBack();
+    });
+  }
 
   Future<bool?> showMessage({String? message}) {
     return Fluttertoast.showToast(
@@ -36,17 +45,16 @@ class Utilities {
     }
   }
 
-  Future<String?> pickedIMage() async {
+  Future<String?> pickedImage() async {
     try {
       final pickedFile = await _picker.pickImage(
           source: ImageSource.gallery, imageQuality: 70);
       if (pickedFile != null) {
-        final file = File(
-          pickedFile.path,
-        );
+        final file = File(pickedFile.path);
         final fileSizeInBytes = await file.length();
         final fileSizeInMB = fileSizeInBytes / (1024 * 1024);
         print(fileSizeInMB);
+        print(pickedFile.mimeType);
         print(fileSizeInBytes);
 
         if (fileSizeInMB > 2) {
@@ -56,7 +64,12 @@ class Utilities {
         } else {
           final bytes = await pickedFile.readAsBytes();
           final base64Image = base64Encode(bytes);
-          return base64Image;
+
+          // Determine MIME type, default to image/jpeg if unknown
+          final mimeType = pickedFile.mimeType ?? 'image/jpeg';
+          final base64WithPrefix = 'data:$mimeType;base64,$base64Image';
+
+          return base64WithPrefix;
         }
       } else {
         Utilities().showMessage(message: "No Image Selected");

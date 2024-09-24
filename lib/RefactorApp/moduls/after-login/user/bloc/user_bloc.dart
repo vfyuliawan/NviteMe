@@ -1,10 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/user/model_user_update.dart';
 import 'package:nvite_me/RefactorApp/domain/service/user/user_service.dart';
@@ -19,7 +16,7 @@ part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-  final ImagePicker _picker = ImagePicker();
+  // final ImagePicker _picker = ImagePicker();
 
   UserBloc() : super(UserInitial()) {
     on<GetUserDetail>((event, emit) async {
@@ -36,6 +33,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
                       name: value.result.name,
                       email: value.result.email,
                       alamat: value.result.alamat,
+                      role: value.result.role,
                       photo: value.result.photo),
                 ),
               );
@@ -154,7 +152,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<OnPickImage>((event, emit) async {
       final currentState = state as UserIsEdited;
-      await Utilities().pickedIMage().then((value) {
+      await Utilities().pickedImage().then((value) {
         if (value != null) {
           emit(UserIsEdited(currentState.detailUser.copyWith(photo: value)));
         }

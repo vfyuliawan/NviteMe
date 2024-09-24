@@ -12,11 +12,18 @@ class MainMenuBloc extends Bloc<MainMenuEvent, MainMenuState> {
   MainMenuBloc() : super(MainMenuInitial()) {
     on<GetProjectSampele>((event, emit) async {
       emit(MainMenuIsLoading());
-      ModelRequestProjectSample reqBody =
-          ModelRequestProjectSample(title: "Project", currentPage: 0, size: 10);
-      final res = await ProjectService().getProjectSampel(reqBody);
-      if (res != null) {
-        emit(GetProjectTemplateIsSuccess(result: res.result));
+      ModelRequestProjectSample reqBody = ModelRequestProjectSample(
+          title: "Template", currentPage: 0, size: 10);
+      final projectTemplate = await ProjectService().getProjectSampel(reqBody);
+
+      ModelRequestProjectSample params =
+          ModelRequestProjectSample(currentPage: 0, size: 7, title: "");
+      final myProject = await ProjectService().getMyProject(params);
+
+      if (projectTemplate != null && myProject != null) {
+        emit(GetProjectTemplateIsSuccess(
+            projectTemplate: projectTemplate.result,
+            myProject: myProject.result));
       }
     });
   }

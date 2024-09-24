@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, non_constant_identifier_names, sized_box_for_whitespace
 
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +12,7 @@ import 'package:nvite_me/RefactorApp/widget/props_key_value_widget.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/utils/utils.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
+import 'package:nvite_me/widgets/IImageBase64Component.dart';
 
 class UserScreen extends StatelessWidget {
   const UserScreen({Key? key}) : super(key: key);
@@ -133,77 +134,83 @@ class UserScreen extends StatelessWidget {
                         color: Constans.nine,
                         borderRadius: BorderRadius.circular(40),
                       ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            height: 150,
-                            width: 150,
-                            alignment: Alignment.center,
-                            child: state.detailUser.photo == ""
-                                ? Text(
-                                    state.detailUser.username
-                                        .split("")[0]
-                                        .toUpperCase(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: "Pacifico",
-                                      fontSize: 70,
-                                    ),
-                                  )
-                                : ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(150 / 2),
-                                    child: Image.memory(
-                                      base64Decode(state.detailUser.photo),
-                                      fit: BoxFit.cover,
-                                      width: 150,
-                                      height: 150,
-                                    ),
-                                  ),
-                            decoration: BoxDecoration(
-                                color: Constans.textColor2,
-                                borderRadius: BorderRadius.circular(150 / 2)),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          PropsKeyValueWidget(data: userDetail),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          UserActionButton(
-                            iconData: Icons.edit_note_rounded,
-                            ontap: () {
-                              context.read<UserBloc>().add(EditUser(context));
-                            },
-                            title: "Edited Data",
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          UserActionButton(
-                            iconData: Icons.logout_rounded,
-                            ontap: () {
-                              context.read<UserBloc>().add(LogoutUser(context));
-                            },
-                            title: "Logout",
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            Constans.version,
-                            style: TextStyle(
-                              color: Constans.seventh,
-                              fontFamily: "Pacifico",
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
                             ),
-                          )
-                        ],
+                            Container(
+                              height: 150,
+                              width: 150,
+                              alignment: Alignment.center,
+                              child: state.detailUser.photo == ""
+                                  ? Text(
+                                      state.detailUser.username
+                                          .split("")[0]
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "Pacifico",
+                                        fontSize: 70,
+                                      ),
+                                    )
+                                  : ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(150 / 2),
+                                      child: IImageBase64Component(
+                                          image: state.detailUser.photo,
+                                          fit: BoxFit.cover,
+                                          width: 150,
+                                          height: 150),
+                                    ),
+                              decoration: BoxDecoration(
+                                  color: Constans.textColor2,
+                                  borderRadius: BorderRadius.circular(150 / 2)),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            PropsKeyValueWidget(data: userDetail),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            UserActionButton(
+                              iconData: Icons.edit_note_rounded,
+                              ontap: () {
+                                context.read<UserBloc>().add(EditUser(context));
+                              },
+                              title: "Edited Data",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            UserActionButton(
+                              iconData: Icons.logout_rounded,
+                              ontap: () {
+                                context
+                                    .read<UserBloc>()
+                                    .add(LogoutUser(context));
+                              },
+                              title: "Logout",
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              Constans.version,
+                              style: TextStyle(
+                                color: Constans.seventh,
+                                fontFamily: "Pacifico",
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 250,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -314,17 +321,15 @@ class UserScreen extends StatelessWidget {
                                         : Stack(
                                             children: [
                                               ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        150 / 2),
-                                                child: Image.memory(
-                                                  base64Decode(
-                                                      state.detailUser.photo),
-                                                  fit: BoxFit.cover,
-                                                  width: 150,
-                                                  height: 150,
-                                                ),
-                                              ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          150 / 2),
+                                                  child: IImageBase64Component(
+                                                      image: state
+                                                          .detailUser.photo,
+                                                      fit: BoxFit.cover,
+                                                      width: 150,
+                                                      height: 150)),
                                               Center(
                                                 child: Opacity(
                                                   opacity: 0.7,

@@ -1,26 +1,33 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, must_be_immutable, non_constant_identifier_names, sort_child_properties_last, unrelated_type_equality_checks
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
-import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
 import 'package:nvite_me/constans.dart';
+import 'package:nvite_me/widgets/CardListProject.dart';
+import 'package:nvite_me/widgets/CardProjectTemplate.dart';
+import 'package:nvite_me/widgets/IImageBase64Component.dart';
 
 class MainMenuScreen extends StatelessWidget {
   MainMenuScreen({Key? key}) : super(key: key);
 
-  List<Image> menuImage = [
-    Image.asset("assets/icons/layout-2.png"),
-    Image.asset("assets/icons/Hero.png"),
-    Image.asset("assets/icons/user-2.png"),
-    Image.asset("assets/icons/user.png"),
-    Image.asset("assets/icons/stop.png"),
-    Image.asset("assets/icons/waiting.png"),
+  List<Map<String, dynamic>> menuAdmin = [
+    {"icon": Image.asset("assets/icons/layout-2.png"), "title": "CMS"},
+    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create"},
+    {"icon": Image.asset("assets/icons/user-2.png"), "title": "Contact"},
+    {"icon": Image.asset("assets/icons/user.png"), "title": "User"},
+    {"icon": Image.asset("assets/icons/stop.png"), "title": "RSVP"},
+    {"icon": Image.asset("assets/icons/waiting.png"), "title": "Message"},
+  ];
+
+  List<Map<String, dynamic>> menuUser = [
+    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create"},
+    {"icon": Image.asset("assets/icons/user-2.png"), "title": "Contact"},
+    {"icon": Image.asset("assets/icons/stop.png"), "title": "RSVP"},
+    {"icon": Image.asset("assets/icons/waiting.png"), "title": "Message"},
   ];
 
   @override
@@ -33,26 +40,50 @@ class MainMenuScreen extends StatelessWidget {
             UserInfo(context),
             Expanded(
               child: SingleChildScrollView(
-                child: BlocBuilder<MainMenuBloc, MainMenuState>(
-                  builder: (context, state) {
-                    if (state is GetProjectTemplateIsSuccess) {
-                      return Column(
-                        children: [
-                          ProjectTemplate(state.result, context),
-                          Menu(),
-                          YourProject(),
-                          SizedBox(
-                            height: 100,
-                          ),
-                        ],
-                      );
-                    } else if (state is MainMenuIsLoading) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return Container();
-                  },
+                child: Column(
+                  children: [
+                    BlocBuilder<MainMenuBloc, MainMenuState>(
+                      builder: (context, state) {
+                        if (state is GetProjectTemplateIsSuccess) {
+                          return Column(
+                            children: [
+                              ProjectTemplate(state.projectTemplate, context),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          );
+                        } else if (state is MainMenuIsLoading) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                    BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        if (state is UserIsSuccess) {
+                          if (state.detailUser.role == "ADMIN") {
+                            return MenuAdmin();
+                          } else {
+                            return MenuUser();
+                          }
+                        }
+                        return Container();
+                      },
+                    ),
+                    YourProject(context),
+                    SizedBox(
+                      height: 150,
+                    )
+                  ],
                 ),
               ),
             ),
@@ -62,7 +93,7 @@ class MainMenuScreen extends StatelessWidget {
     );
   }
 
-  Container YourProject() {
+  Container YourProject(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
         left: 10,
@@ -83,12 +114,17 @@ class MainMenuScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                "See More >",
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 219, 125, 3),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () {
+                  context.go("/home/listProject/${true}");
+                },
+                child: Text(
+                  "See More >",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 219, 125, 3),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -98,33 +134,36 @@ class MainMenuScreen extends StatelessWidget {
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  height: 200,
-                  width: 260,
-                  child: Card(
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  height: 200,
-                  width: 260,
-                  child: Card(
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  height: 200,
-                  width: 260,
-                  child: Card(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+            child: BlocBuilder<MainMenuBloc, MainMenuState>(
+              builder: (context, state) {
+                if (state is GetProjectTemplateIsSuccess) {
+                  final detailProject = state.myProject!.projects;
+                  if (detailProject.isNotEmpty) {
+                    return Row(
+                      children: detailProject.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        return Container(
+                          width: 190,
+                          height: 270, // Specify a fixed width for each item
+                          child: CardListProject(
+                            detailProject: detailProject,
+                            index: index,
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    return Image.asset(
+                      "assets/icons/atm-card.png",
+                      fit: BoxFit.contain,
+                    );
+                  }
+                } else {
+                  return Container(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
           ),
         ],
@@ -132,22 +171,74 @@ class MainMenuScreen extends StatelessWidget {
     );
   }
 
-  Container Menu() {
+  Container MenuAdmin() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
       child: Wrap(
-        spacing: 20, // spacing between containers
-        runSpacing: 20, // spacing between rows
-        children: List.generate(menuImage.length, (index) {
-          return Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            padding: EdgeInsets.all(15),
-            child: menuImage[index],
+        spacing: 20,
+        runSpacing: 20,
+        children: List.generate(menuAdmin.length, (index) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: EdgeInsets.all(15),
+                child: menuAdmin[index]["icon"],
+              ),
+              SizedBox(height: 4),
+              Text(
+                menuAdmin[index]["title"],
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Constans.secondaryColor,
+                ),
+              )
+            ],
+          );
+        }),
+      ),
+    );
+  }
+
+  Container MenuUser() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 30),
+      child: Wrap(
+        spacing: 20,
+        runSpacing: 20,
+        children: List.generate(menuUser.length, (index) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: EdgeInsets.all(15),
+                child: menuUser[index]["icon"],
+              ),
+              SizedBox(height: 4),
+              Text(
+                menuUser[index]["title"],
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Constans.secondaryColor,
+                ),
+              )
+            ],
           );
         }),
       ),
@@ -175,12 +266,17 @@ class MainMenuScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                "See More >",
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 219, 125, 3),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () {
+                  context.go("/home/listProject/${false}");
+                },
+                child: Text(
+                  "See More >",
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 219, 125, 3),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -192,74 +288,15 @@ class MainMenuScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: props.projects.map((item) {
-                return CardTheme(item, item.title, context);
+                return CardProjectTemplate(
+                  item: item,
+                  name: item.title,
+                  context: context,
+                );
               }).toList(),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget CardTheme(Project item, String name, BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.go(
-          '/home/templateDetail/${item.id}',
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.only(right: 25),
-        height: 200,
-        width: 260,
-        decoration: BoxDecoration(
-          color: Utilities().cekColor(item.theme.theme),
-          borderRadius: BorderRadius.circular(
-            40,
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: -30,
-              left: -30,
-              child: Container(
-                height: 160,
-                padding: EdgeInsets.only(right: 10),
-                child: Center(
-                  child: Container(
-                    width: 60,
-                    child: Text(
-                      textAlign: TextAlign.start,
-                      name,
-                      style: TextStyle(
-                          color: Utilities().cekColor(item.theme.theme),
-                          fontSize: 16,
-                          fontFamily: "Pacifico"),
-                    ),
-                  ),
-                ),
-                width: 160,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(80)),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                height: 140,
-                child: Image.asset(
-                    "assets/images/theme/${item.theme.theme}.png",
-                    fit: BoxFit.cover),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -295,7 +332,6 @@ class MainMenuScreen extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.83,
-                      height: 120,
                       margin: const EdgeInsets.only(
                           bottom: 30), // Adjust margin as needed
                       decoration: BoxDecoration(
@@ -399,13 +435,11 @@ class MainMenuScreen extends StatelessWidget {
                           )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(150 / 2),
-                            child: Image.memory(
-                              base64Decode(state.detailUser.photo),
-                              fit: BoxFit.cover,
-                              width: 150,
-                              height: 150,
-                            ),
-                          ),
+                            child: IImageBase64Component(
+                                image: state.detailUser.photo,
+                                fit: BoxFit.cover,
+                                width: 150,
+                                height: 150)),
                   ),
                 ),
               ],

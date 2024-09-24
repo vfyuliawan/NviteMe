@@ -3,16 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
+// import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
-import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/bloc/list_project_bloc.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/cubit/list_project_cubit.dart';
+// import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/bloc/detail_project_template_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/detail_project_template_screen.dart';
-import 'package:nvite_me/RefactorApp/moduls/after-login/project/list_project/list_project_screen.dart';
-import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
-import 'package:nvite_me/RefactorApp/moduls/example/testComponent.dart';
+// import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
+// import 'package:nvite_me/RefactorApp/moduls/example/testComponent.dart';
 import 'package:nvite_me/RefactorApp/moduls/pre-login/login/login_screen.dart';
 
+import '../moduls/after-login/list_project/list_project_screen.dart';
 import '../moduls/pre-login/onboarding/onboarding_screen.dart';
 
 class AppRouter {
@@ -52,6 +54,20 @@ class AppRouter {
                   );
                 },
               ),
+              GoRoute(
+                path: 'listProject/:isMyProject',
+                builder: (BuildContext context, GoRouterState state) {
+                  return BlocProvider(
+                    create: (context) {
+                      final isMyProject = state.pathParameters['isMyProject'];
+                      final listProjectBloc = ListProjectCubit();
+                      listProjectBloc.searchProject("");
+                      return listProjectBloc;
+                    },
+                    child: ListProjectScreen(),
+                  );
+                },
+              ),
             ],
           ),
         ],
@@ -65,7 +81,7 @@ class AppRouter {
           GoRoute(
             path: 'listProject',
             builder: (BuildContext context, GoRouterState state) {
-              return const ListProjectScreen();
+              return ListProjectScreen();
             },
           ),
         ],

@@ -7,6 +7,7 @@ class FormTextField extends StatefulWidget {
   final String? initialValue;
   final ValueChanged<String> onChanged;
   final String labelText;
+  final String? hintText;
   final int? line;
   final double? topSpace;
   final bool? enable;
@@ -25,6 +26,7 @@ class FormTextField extends StatefulWidget {
     required this.onChanged,
     required this.labelText,
     this.line,
+    this.hintText,
     this.topSpace,
     this.enable,
     this.suffix,
@@ -65,15 +67,17 @@ class _FormTextFieldState extends State<FormTextField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            widget.labelText,
-            style: TextStyle(
-                color: widget.labelColor ?? Colors.black,
-                fontSize: widget.labelSize ?? 18),
-          ),
-        ),
+        widget.labelText != ""
+            ? Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  widget.labelText,
+                  style: TextStyle(
+                      color: widget.labelColor ?? Colors.black,
+                      fontSize: widget.labelSize ?? 18),
+                ),
+              )
+            : Container(),
         Container(
           height: widget.height,
           margin: EdgeInsets.only(top: widget.topSpace ?? 12),
@@ -87,6 +91,8 @@ class _FormTextFieldState extends State<FormTextField> {
             obscureText: widget.obscureText ?? false,
             focusNode: _focusNode,
             decoration: InputDecoration(
+              hintText: widget.hintText ?? "",
+              hintStyle: TextStyle(color: Colors.black26, fontSize: 18),
               fillColor:
                   widget.enable == true ? Colors.white : Colors.grey.shade200,
               filled: true,

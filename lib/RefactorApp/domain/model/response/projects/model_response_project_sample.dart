@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class ModelResponseGetProject {
@@ -35,7 +36,7 @@ class ModelResponseGetProject {
 }
 
 class ResultProjectSample {
-  List<Project> projects;
+  List<ListProject> projects;
   Paging paging;
 
   ResultProjectSample({
@@ -50,8 +51,8 @@ class ResultProjectSample {
 
   factory ResultProjectSample.fromJson(Map<String, dynamic> json) =>
       ResultProjectSample(
-        projects: List<Project>.from(
-            json["projects"].map((x) => Project.fromJson(x))),
+        projects: List<ListProject>.from(
+            json["projects"].map((x) => ListProject.fromJson(x))),
         paging: Paging.fromJson(json["paging"]),
       );
 
@@ -59,6 +60,16 @@ class ResultProjectSample {
         "projects": List<dynamic>.from(projects.map((x) => x.toJson())),
         "paging": paging.toJson(),
       };
+
+  ResultProjectSample copyWith({
+    List<ListProject>? projects,
+    Paging? paging,
+  }) {
+    return ResultProjectSample(
+      projects: projects ?? this.projects,
+      paging: paging ?? this.paging,
+    );
+  }
 }
 
 class Paging {
@@ -89,32 +100,38 @@ class Paging {
       };
 }
 
-class Project {
+class ListProject {
   String id;
   String username;
   String title;
   DateTime date;
   Theme theme;
+  String heroImage;
+  String quotes;
 
-  Project({
+  ListProject({
     required this.id,
     required this.username,
     required this.title,
     required this.date,
     required this.theme,
+    required this.heroImage,
+    required this.quotes,
   });
 
-  factory Project.fromRawJson(String str) => Project.fromJson(json.decode(str));
+  factory ListProject.fromRawJson(String str) =>
+      ListProject.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Project.fromJson(Map<String, dynamic> json) => Project(
-        id: json["id"],
-        username: json["username"],
-        title: json["title"],
-        date: DateTime.parse(json["date"]),
-        theme: Theme.fromJson(json["theme"]),
-      );
+  factory ListProject.fromJson(Map<String, dynamic> json) => ListProject(
+      id: json["id"],
+      username: json["username"],
+      title: json["title"],
+      date: DateTime.parse(json["date"]),
+      theme: Theme.fromJson(json["theme"]),
+      heroImage: json["heroImage"],
+      quotes: json["quotes"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -122,6 +139,8 @@ class Project {
         "title": title,
         "date": date.toIso8601String(),
         "theme": theme.toJson(),
+        "heroImage": heroImage,
+        "quotes": quotes,
       };
 }
 

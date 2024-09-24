@@ -27,6 +27,23 @@ class ProjectRepository {
     }
   }
 
+  Future<ModelResponseGetProject?> getMyProjcets(
+      ModelRequestProjectSample props) async {
+    FetchInterfaceGet request = FetchInterfaceGet(
+      path:
+          "/api/v1/project/myProjects?currentPage=${props.currentPage}&size=${props.size}&title=${props.title}",
+      isAuthHeader: true,
+    );
+    http.Response response = await APIService.get(request);
+    if (response.statusCode == 200) {
+      ModelResponseGetProject result =
+          ModelResponseGetProject.fromJson(jsonDecode(response.body));
+      return result;
+    } else {
+      return null;
+    }
+  }
+
   Future<ModelResponseDetailSample?> getDetailProjectSample(String id) async {
     FetchInterfaceGet request = FetchInterfaceGet(
       path: "/api/v1/project/get?id=$id",

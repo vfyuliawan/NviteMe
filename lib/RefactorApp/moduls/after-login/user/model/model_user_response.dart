@@ -5,6 +5,7 @@ class ModelUserResponse {
   final String email;
   final String alamat;
   final String photo;
+  final String? role;
 
   ModelUserResponse({
     required this.username,
@@ -12,6 +13,7 @@ class ModelUserResponse {
     required this.email,
     required this.alamat,
     required this.photo,
+    this.role,
   });
 
   ModelUserResponse copyWith(

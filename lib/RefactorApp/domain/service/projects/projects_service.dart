@@ -12,6 +12,12 @@ class ProjectService {
     return result;
   }
 
+  Future<ModelResponseGetProject?> getMyProject(
+      ModelRequestProjectSample props) async {
+    final result = await ProjectRepository().getMyProjcets(props);
+    return result;
+  }
+
   Future<ModelResponseDetailSample?> getDetailProjectSample(String id) async {
     final result = await ProjectRepository().getDetailProjectSample(id);
     return result;

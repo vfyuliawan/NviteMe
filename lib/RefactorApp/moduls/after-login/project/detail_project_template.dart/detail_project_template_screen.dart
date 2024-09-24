@@ -84,6 +84,10 @@ class DetailProjectTemplateScreen extends StatelessWidget {
         height: 300,
         margin: const EdgeInsets.only(top: 80),
         decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(resultDetail.home.img),
+                fit: BoxFit.cover,
+                opacity: 0.4),
             color: Utilities().cekColor(resultDetail.theme.theme),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25),

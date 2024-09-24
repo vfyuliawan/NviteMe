@@ -14,7 +14,8 @@ import 'package:nvite_me/utils/utils.dart';
 
 class APIService {
   static int timeOut = 60000;
-  static String baseUrl = "http://localhost:8080";
+  static String baseUrl = "http://localhost:8000";
+  // static String baseUrl = "https://tight-kora-nviteme-3bdf504d.koyeb.app";
   static String iosVersion = "0.0.1";
   static String androidVersion = "0.0.1";
 
