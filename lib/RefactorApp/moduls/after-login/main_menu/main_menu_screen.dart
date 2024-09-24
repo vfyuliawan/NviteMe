@@ -10,6 +10,7 @@ import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/widgets/CardListProject.dart';
 import 'package:nvite_me/widgets/CardProjectTemplate.dart';
 import 'package:nvite_me/widgets/IImageBase64Component.dart';
+import 'package:nvite_me/widgets/NoDataFound.dart';
 
 class MainMenuScreen extends StatelessWidget {
   MainMenuScreen({Key? key}) : super(key: key);
@@ -153,9 +154,9 @@ class MainMenuScreen extends StatelessWidget {
                       }).toList(),
                     );
                   } else {
-                    return Image.asset(
-                      "assets/icons/atm-card.png",
-                      fit: BoxFit.contain,
+                    return NoDataFoundWidget(
+                      message:
+                          "Anda Belum Memiliki undangan  \n Segera buat undangan anda",
                     );
                   }
                 } else {
@@ -268,7 +269,7 @@ class MainMenuScreen extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  context.go("/home/listProject/${false}");
+                  context.go("/home/listTemplate");
                 },
                 child: Text(
                   "See More >",

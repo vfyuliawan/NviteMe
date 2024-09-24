@@ -1,9 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:nvite_me/constans.dart';
 
 class NoDataFoundWidget extends StatefulWidget {
-  const NoDataFoundWidget({Key? key}) : super(key: key);
+  final String? message;
+  final String? image;
+  NoDataFoundWidget({Key? key, this.message, this.image}) : super(key: key);
 
   @override
   _NoDataFoundWidgetState createState() => _NoDataFoundWidgetState();
@@ -18,13 +21,25 @@ class _NoDataFoundWidgetState extends State<NoDataFoundWidget> {
         child: Column(
           children: [
             SizedBox(
-              height: 30,
+              height: 8,
             ),
-            Image.asset("assets/images/no-data.png"),
+            Container(
+              child: Image.asset(
+                widget.image ?? "assets/icons/charfif.png",
+                fit: BoxFit.cover,
+              ),
+              height: 170,
+              width: 170,
+            ),
+            SizedBox(
+              height: 8,
+            ),
             Text(
-              "Data Not Found",
+              widget.message ?? "Data Not Found",
               style: TextStyle(
-                fontSize: 20,
+                fontFamily: "Pacifico",
+                color: Constans.secondaryColor,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),

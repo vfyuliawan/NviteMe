@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/bloc/list_project_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/cubit/list_project_cubit.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/cubit/list_template_cubit.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/list_template_screen.dart';
 // import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/bloc/detail_project_template_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/detail_project_template_screen.dart';
@@ -65,6 +67,19 @@ class AppRouter {
                       return listProjectBloc;
                     },
                     child: ListProjectScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'listTemplate',
+                builder: (BuildContext context, GoRouterState state) {
+                  return BlocProvider(
+                    create: (context) {
+                      final listTemplateCubit = ListTemplateCubit();
+                      listTemplateCubit.getFirstProject("Template");
+                      return listTemplateCubit;
+                    },
+                    child: ListTemplateScreen(),
                   );
                 },
               ),

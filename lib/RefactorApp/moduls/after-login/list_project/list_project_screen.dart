@@ -1,14 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/cubit/list_project_cubit.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/widgets/CardListProject.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
-import 'bloc/list_project_bloc.dart';
+import 'package:nvite_me/widgets/NoDataFound.dart';
 
 class ListProjectScreen extends StatelessWidget {
   ListProjectScreen({Key? key}) : super(key: key);
@@ -79,37 +78,64 @@ class ListProjectScreen extends StatelessWidget {
               builder: (context, state) {
                 List<ListProject> listItem = [];
                 bool loadMore = false;
+                int totalPage = 0;
+                String searchValue =
+                    context.read<ListProjectCubit>().searchValue;
+                ;
                 if (state is ListProjectCubitIsLoading) {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is ListProjectCubitIsSuccess) {
                   listItem = state.projects;
+                  totalPage = state.totalElement;
                 } else if (state is ListProjectCubitLoadMore) {
                   loadMore = true;
                   listItem = state.projects;
                 }
-                return Column(
-                  children: [
-                    Expanded(
-                      child: GridView.builder(
-                        controller: scrollController,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.80,
-                        ),
-                        itemCount: listItem.length,
-                        itemBuilder: (context, index) {
-                          return CardListProject(
-                              detailProject: listItem, index: index);
-                        },
-                      ),
-                    ),
-                    loadMore
-                        ? Center(child: CircularProgressIndicator())
-                        : Container()
-                  ],
-                );
-                //  else {
-                // }
+                return listItem.isNotEmpty
+                    ? Column(
+                        children: [
+                          Expanded(
+                            child: GridView.builder(
+                              controller: scrollController,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.80,
+                              ),
+                              itemCount: listItem.length,
+                              itemBuilder: (context, index) {
+                                return CardListProject(
+                                    detailProject: listItem, index: index);
+                              },
+                            ),
+                          ),
+                          loadMore
+                              ? Center(child: CircularProgressIndicator())
+                              : Container()
+                        ],
+                      )
+                    : listItem.isEmpty && totalPage == 0 && searchValue.isEmpty
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
+                              ),
+                              NoDataFoundWidget(
+                                message:
+                                    "Anda Belum Memiliki undangan  \n Segera buat undangan anda",
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
+                              ),
+                              NoDataFoundWidget(
+                                message: "Undangan Tidak ditemukan ",
+                              ),
+                            ],
+                          );
               },
             ),
           ),
