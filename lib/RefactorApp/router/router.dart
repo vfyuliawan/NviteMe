@@ -61,7 +61,7 @@ class AppRouter {
                     create: (context) {
                       final isMyProject = state.pathParameters['isMyProject'];
                       final listProjectBloc = ListProjectCubit();
-                      listProjectBloc.searchProject("");
+                      listProjectBloc.getProject("");
                       return listProjectBloc;
                     },
                     child: ListProjectScreen(),

@@ -28,7 +28,11 @@ class ListProjectScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context
+                  .read<ListProjectCubit>()
+                  .toggleSearch(!context.read<ListProjectCubit>().searchBar);
+            },
             child: Icon(
               Icons.search,
               color: Colors.white,
@@ -44,16 +48,31 @@ class ListProjectScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(color: Constans.secondaryColor),
-            padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-            child: FormTextField(
-              onChanged: (value) {
-                context.read<ListProjectCubit>().searchProject(value);
-              },
-              labelText: "",
-              hintText: "Search",
-            ),
+          BlocBuilder<ListProjectCubit, ListProjectCubitState>(
+            builder: (context, state) {
+              bool searhBar = false;
+              if (state is ListProjectCubitIsSuccess) {
+                searhBar = state.searchBar;
+              } else {
+                searhBar = context.read<ListProjectCubit>().searchBar;
+              }
+              return searhBar
+                  ? Container(
+                      decoration: BoxDecoration(color: Constans.secondaryColor),
+                      padding: const EdgeInsets.only(
+                          right: 20, left: 20, bottom: 20),
+                      child: FormTextField(
+                        initialValue:
+                            context.read<ListProjectCubit>().searchValue,
+                        onChanged: (value) {
+                          context.read<ListProjectCubit>().onSearch(value);
+                        },
+                        labelText: "",
+                        hintText: "Search",
+                      ),
+                    )
+                  : Container();
+            },
           ),
           Expanded(
             child: BlocBuilder<ListProjectCubit, ListProjectCubitState>(
