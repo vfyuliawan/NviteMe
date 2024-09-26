@@ -675,7 +675,7 @@ class DetailProjectTemplateScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: 15, right: 10),
               child: const Text(
-                "Project Template",
+                "Preset Theme",
                 style: TextStyle(
                   fontFamily: 'Pacifico',
                   fontSize: 25,

@@ -40,7 +40,7 @@ class UserScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   content: Container(
-                    height: 210,
+                    height: 230,
                     child: Column(
                       children: [
                         Container(
@@ -52,7 +52,7 @@ class UserScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Text(
-                            "Your Application Need To Be Update \n Please Update The Application"),
+                            "Your Application Need To Be Update \n Please Update The Application\n and enjoing new feature"),
                       ],
                     ),
                   ),

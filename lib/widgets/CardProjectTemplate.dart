@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_get_theme_example.dart';
 import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
 
 class CardProjectTemplate extends StatelessWidget {
@@ -11,7 +11,7 @@ class CardProjectTemplate extends StatelessWidget {
     required this.context,
   });
 
-  final ListProject item;
+  final ListTheme item;
   final String name;
   final BuildContext context;
 
@@ -28,10 +28,10 @@ class CardProjectTemplate extends StatelessWidget {
         height: 200,
         width: 260,
         decoration: BoxDecoration(
-          color: Utilities().cekColor(item.theme.theme),
+          color: Color(int.parse(item.themeColor)),
           image: DecorationImage(
               opacity: 0.4,
-              image: NetworkImage(item.heroImage),
+              image: NetworkImage(item.bgImage),
               fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(
             40,
@@ -44,7 +44,11 @@ class CardProjectTemplate extends StatelessWidget {
               left: -30,
               child: Container(
                 height: 160,
-                padding: EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: 10),
+                width: 160,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(80)),
                 child: Center(
                   child: Container(
                     width: 60,
@@ -52,16 +56,12 @@ class CardProjectTemplate extends StatelessWidget {
                       textAlign: TextAlign.start,
                       name,
                       style: TextStyle(
-                          color: Utilities().cekColor(item.theme.theme),
+                          color: Color(int.parse(item.themeColor)),
                           fontSize: 12,
                           fontFamily: "Pacifico"),
                     ),
                   ),
                 ),
-                width: 160,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(80)),
               ),
             ),
             Positioned(
@@ -69,12 +69,10 @@ class CardProjectTemplate extends StatelessWidget {
               right: 0,
               child: Container(
                 height: 140,
-                child: Image.asset(
-                    "assets/images/theme/${item.theme.theme}.png",
-                    fit: BoxFit.cover),
+                child: Image.network(item.fgImage, fit: BoxFit.cover),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
           ],

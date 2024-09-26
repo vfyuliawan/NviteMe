@@ -6,7 +6,7 @@ sealed class ListTemplateState {}
 final class ListTemplateInitial extends ListTemplateState {}
 
 final class ListTemplateIsSuccess extends ListTemplateState {
-  final List<ListProject> projects;
+  final List<ListTheme> projects;
   final bool searchBarIsOpen;
 
   ListTemplateIsSuccess(this.projects, this.searchBarIsOpen);
@@ -19,7 +19,7 @@ final class ListTemplateIsLoading extends ListTemplateState {
 }
 
 final class ListTemlateLoadMore extends ListTemplateState {
-  final List<ListProject> projects;
+  final List<ListTheme> projects;
   final bool onLoad;
 
   ListTemlateLoadMore(this.projects, this.onLoad);

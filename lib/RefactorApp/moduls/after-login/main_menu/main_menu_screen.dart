@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_get_theme_example.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 import 'package:nvite_me/constans.dart';
@@ -16,8 +16,11 @@ class MainMenuScreen extends StatelessWidget {
   MainMenuScreen({Key? key}) : super(key: key);
 
   List<Map<String, dynamic>> menuAdmin = [
-    {"icon": Image.asset("assets/icons/layout-2.png"), "title": "CMS"},
-    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create"},
+    {
+      "icon": Image.asset("assets/icons/layout-2.png"),
+      "title": "Create\nUndangan"
+    },
+    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create\nTheme"},
     {"icon": Image.asset("assets/icons/user-2.png"), "title": "Contact"},
     {"icon": Image.asset("assets/icons/user.png"), "title": "User"},
     {"icon": Image.asset("assets/icons/stop.png"), "title": "RSVP"},
@@ -25,7 +28,7 @@ class MainMenuScreen extends StatelessWidget {
   ];
 
   List<Map<String, dynamic>> menuUser = [
-    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create"},
+    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create\nUndangan"},
     {"icon": Image.asset("assets/icons/user-2.png"), "title": "Contact"},
     {"icon": Image.asset("assets/icons/stop.png"), "title": "RSVP"},
     {"icon": Image.asset("assets/icons/waiting.png"), "title": "Message"},
@@ -196,6 +199,7 @@ class MainMenuScreen extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 menuAdmin[index]["title"],
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -246,7 +250,7 @@ class MainMenuScreen extends StatelessWidget {
     );
   }
 
-  Widget ProjectTemplate(ResultProjectSample props, BuildContext context) {
+  Widget ProjectTemplate(ResultThemeExample props, BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
         left: 10,
@@ -260,7 +264,7 @@ class MainMenuScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Proect Template",
+                "Preset Theme",
                 style: TextStyle(
                   color: Constans.seventh,
                   fontSize: 18,
@@ -288,10 +292,10 @@ class MainMenuScreen extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: props.projects.map((item) {
+              children: props.listTheme.map((item) {
                 return CardProjectTemplate(
                   item: item,
-                  name: item.title,
+                  name: item.themeName,
                   context: context,
                 );
               }).toList(),

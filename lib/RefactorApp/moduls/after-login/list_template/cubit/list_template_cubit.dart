@@ -2,10 +2,11 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meta/meta.dart';
-import 'package:nvite_me/RefactorApp/domain/model/request/projects/model_request_project_sample.dart';
-import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
-import 'package:nvite_me/RefactorApp/domain/service/projects/projects_service.dart';
+import 'package:nvite_me/RefactorApp/domain/model/request/theme_example/model_theme_example_inquiry.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_get_theme_example.dart';
+import 'package:nvite_me/RefactorApp/domain/service/theme_example_service/theme_example_service.dart';
 import 'package:nvite_me/RefactorApp/utility/Debouncer.dart';
 import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
 
@@ -14,7 +15,7 @@ part 'list_template_state.dart';
 class ListTemplateCubit extends Cubit<ListTemplateState> {
   int curentPage = 0;
   String titleProject = "Template";
-  List<ListProject> projects = [];
+  List<ListTheme> projects = [];
   final debouncer = Debouncer(milliseconds: 900);
   bool searchBar = true;
 
@@ -25,10 +26,10 @@ class ListTemplateCubit extends Cubit<ListTemplateState> {
     emit(ListTemplateIsSuccess(projects, searchBar));
   }
 
-  void searchTemplate(String valueSearch) {
+  void searchTemplate(String valueSearch, BuildContext context) {
     titleProject = valueSearch;
     debouncer.run(() {
-      getFirstProject(valueSearch);
+      getFirstProject(valueSearch, context);
     });
   }
 
@@ -38,7 +39,7 @@ class ListTemplateCubit extends Cubit<ListTemplateState> {
     try {
       final res = await fetchProjectTemplate(titleProject);
       if (res!.result != null) {
-        projects.addAll(res.result.projects);
+        projects.addAll(res.result.listTheme);
         emit(ListTemplateIsSuccess(projects, searchBar));
       } else {
         emit(ListTemplateIsFailed("failed to Load Project"));
@@ -48,7 +49,8 @@ class ListTemplateCubit extends Cubit<ListTemplateState> {
     }
   }
 
-  Future<void> getFirstProject(String titleTemplate) async {
+  Future<void> getFirstProject(
+      String titleTemplate, BuildContext context) async {
     emit(ListTemplateIsLoading(searchBar));
     titleProject = titleTemplate;
     curentPage = 0;
@@ -56,19 +58,21 @@ class ListTemplateCubit extends Cubit<ListTemplateState> {
     try {
       final res = await fetchProjectTemplate(titleTemplate);
       if (res!.result != null) {
-        projects = res.result.projects;
+        projects = res.result.listTheme;
         emit(ListTemplateIsSuccess(projects, searchBar));
       } else {
         emit(ListTemplateIsFailed("failed to get Project"));
       }
     } catch (e) {
       Utilities().showMessage(message: e.toString());
+      // ignore: use_build_context_synchronously
+      context.replace("login");
     }
   }
 
-  Future<ModelResponseGetProject?> fetchProjectTemplate(String title) async {
-    final res = ProjectService().getProjectSampel(ModelRequestProjectSample(
-        currentPage: curentPage, size: 7, title: title));
+  Future<ModelGetThemeExample?> fetchProjectTemplate(String title) async {
+    final res = ThemeExampleService().themeInquiry(ModelThemeExampleInquiry(
+        currentPage: curentPage, pageSize: 7, themeName: title));
     return res;
   }
 }

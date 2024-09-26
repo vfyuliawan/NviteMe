@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
-import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/bloc/list_project_bloc.dart';
+// import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/bloc/list_project_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/cubit/list_project_cubit.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/cubit/list_template_cubit.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/list_template_screen.dart';
@@ -76,7 +76,7 @@ class AppRouter {
                   return BlocProvider(
                     create: (context) {
                       final listTemplateCubit = ListTemplateCubit();
-                      listTemplateCubit.getFirstProject("Template");
+                      listTemplateCubit.getFirstProject("", context);
                       return listTemplateCubit;
                     },
                     child: ListTemplateScreen(),

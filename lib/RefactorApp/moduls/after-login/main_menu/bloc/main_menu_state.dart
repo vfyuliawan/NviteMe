@@ -6,7 +6,7 @@ sealed class MainMenuState {}
 final class MainMenuInitial extends MainMenuState {}
 
 final class GetProjectTemplateIsSuccess extends MainMenuState {
-  final ResultProjectSample projectTemplate;
+  final ResultThemeExample projectTemplate;
   final ResultProjectSample? myProject;
 
   GetProjectTemplateIsSuccess(

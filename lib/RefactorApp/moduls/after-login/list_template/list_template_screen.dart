@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_get_theme_example.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/cubit/list_template_cubit.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/widgets/CardProjectTemplate.dart';
@@ -64,7 +65,9 @@ class ListTemplateScreen extends StatelessWidget {
               child: FormTextField(
                 initialValue: context.read<ListTemplateCubit>().titleProject,
                 onChanged: (value) {
-                  context.read<ListTemplateCubit>().searchTemplate(value);
+                  context
+                      .read<ListTemplateCubit>()
+                      .searchTemplate(value, context);
                 },
                 labelText: "",
                 hintText: "Search",
@@ -79,7 +82,9 @@ class ListTemplateScreen extends StatelessWidget {
                       initialValue:
                           context.read<ListTemplateCubit>().titleProject,
                       onChanged: (value) {
-                        context.read<ListTemplateCubit>().searchTemplate(value);
+                        context
+                            .read<ListTemplateCubit>()
+                            .searchTemplate(value, context);
                       },
                       labelText: "",
                       hintText: "Search",
@@ -94,7 +99,7 @@ class ListTemplateScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: BlocBuilder<ListTemplateCubit, ListTemplateState>(
                   builder: (context, state) {
-                    List<ListProject> listProject = [];
+                    List<ListTheme> listProject = [];
                     bool loadMore = false;
                     String searchVal = '';
                     if (state is ListTemplateIsSuccess) {
@@ -148,11 +153,11 @@ class ListTemplateScreen extends StatelessWidget {
                                     ),
                                   );
                                 }
-                                ListProject detailTemplate = listProject[index];
+                                ListTheme detailTemplate = listProject[index];
 
                                 return CardProjectTemplate(
                                   item: detailTemplate,
-                                  name: detailTemplate.title,
+                                  name: detailTemplate.themeName,
                                   context: context,
                                 );
                               },
