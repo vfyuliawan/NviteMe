@@ -45,6 +45,15 @@ class Utilities {
     }
   }
 
+  bool validateFields(Map<String, dynamic> data) {
+    for (var value in data.values) {
+      if (value == null || (value is String && value.isEmpty)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<String?> pickedImage() async {
     try {
       final pickedFile = await _picker.pickImage(
@@ -66,7 +75,7 @@ class Utilities {
           final base64Image = base64Encode(bytes);
 
           // Determine MIME type, default to image/jpeg if unknown
-          final mimeType = pickedFile.mimeType ?? 'image/jpeg';
+          final mimeType = 'image/png';
           final base64WithPrefix = 'data:$mimeType;base64,$base64Image';
 
           return base64WithPrefix;

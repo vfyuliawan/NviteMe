@@ -11,6 +11,7 @@ import 'package:nvite_me/widgets/CardListProject.dart';
 import 'package:nvite_me/widgets/CardProjectTemplate.dart';
 import 'package:nvite_me/widgets/IImageBase64Component.dart';
 import 'package:nvite_me/widgets/NoDataFound.dart';
+import 'package:path/path.dart';
 
 class MainMenuScreen extends StatelessWidget {
   MainMenuScreen({Key? key}) : super(key: key);
@@ -18,20 +19,57 @@ class MainMenuScreen extends StatelessWidget {
   List<Map<String, dynamic>> menuAdmin = [
     {
       "icon": Image.asset("assets/icons/layout-2.png"),
-      "title": "Create\nUndangan"
+      "title": "Create\nUndangan",
+      "route": Constans.routeMenu.createUndangan,
     },
-    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create\nTheme"},
-    {"icon": Image.asset("assets/icons/user-2.png"), "title": "Contact"},
-    {"icon": Image.asset("assets/icons/user.png"), "title": "User"},
-    {"icon": Image.asset("assets/icons/stop.png"), "title": "RSVP"},
-    {"icon": Image.asset("assets/icons/waiting.png"), "title": "Message"},
+    {
+      "icon": Image.asset("assets/icons/Hero.png"),
+      "title": "Create\nPreset",
+      "route": Constans.routeMenu.createPreset,
+    },
+    {
+      "icon": Image.asset("assets/icons/user-2.png"),
+      "title": "Contact",
+      "route": Constans.routeMenu.listcontact,
+    },
+    {
+      "icon": Image.asset("assets/icons/user.png"),
+      "title": "User",
+      "route": Constans.routeMenu.listUser,
+    },
+    {
+      "icon": Image.asset("assets/icons/stop.png"),
+      "title": "RSVP",
+      "route": Constans.routeMenu.listRsvp,
+    },
+    {
+      "icon": Image.asset("assets/icons/waiting.png"),
+      "title": "Message",
+      "route": Constans.routeMenu.listMessage,
+    },
   ];
 
   List<Map<String, dynamic>> menuUser = [
-    {"icon": Image.asset("assets/icons/Hero.png"), "title": "Create\nUndangan"},
-    {"icon": Image.asset("assets/icons/user-2.png"), "title": "Contact"},
-    {"icon": Image.asset("assets/icons/stop.png"), "title": "RSVP"},
-    {"icon": Image.asset("assets/icons/waiting.png"), "title": "Message"},
+    {
+      "icon": Image.asset("assets/icons/Hero.png"),
+      "title": "Create\nUndangan",
+      "route": Constans.routeMenu.createUndangan,
+    },
+    {
+      "icon": Image.asset("assets/icons/user-2.png"),
+      "title": "Contact",
+      "route": Constans.routeMenu.listcontact,
+    },
+    {
+      "icon": Image.asset("assets/icons/stop.png"),
+      "title": "RSVP",
+      "route": Constans.routeMenu.listRsvp,
+    },
+    {
+      "icon": Image.asset("assets/icons/waiting.png"),
+      "title": "Message",
+      "route": Constans.routeMenu.listMessage,
+    },
   ];
 
   @override
@@ -74,10 +112,12 @@ class MainMenuScreen extends StatelessWidget {
                     BlocBuilder<UserBloc, UserState>(
                       builder: (context, state) {
                         if (state is UserIsSuccess) {
+                          print(state.detailUser.role);
+
                           if (state.detailUser.role == "ADMIN") {
-                            return MenuAdmin();
+                            return MenuAdmin(context);
                           } else {
-                            return MenuUser();
+                            return MenuUser(context);
                           }
                         }
                         return Container();
@@ -175,7 +215,7 @@ class MainMenuScreen extends StatelessWidget {
     );
   }
 
-  Container MenuAdmin() {
+  Container MenuAdmin(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
       child: Wrap(
@@ -186,15 +226,21 @@ class MainMenuScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+              GestureDetector(
+                onTap: () {
+                  // ignore: prefer_interpolation_to_compose_strings
+                  context.go("/home/" + menuAdmin[index]["route"]);
+                },
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: EdgeInsets.all(15),
+                  child: menuAdmin[index]["icon"],
                 ),
-                padding: EdgeInsets.all(15),
-                child: menuAdmin[index]["icon"],
               ),
               SizedBox(height: 4),
               Text(
@@ -213,7 +259,7 @@ class MainMenuScreen extends StatelessWidget {
     );
   }
 
-  Container MenuUser() {
+  Container MenuUser(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
       child: Wrap(
@@ -224,19 +270,25 @@ class MainMenuScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+              GestureDetector(
+                onTap: () {
+                  context.go("/home/${menuUser[index]["route"]}");
+                },
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: EdgeInsets.all(15),
+                  child: menuUser[index]["icon"],
                 ),
-                padding: EdgeInsets.all(15),
-                child: menuUser[index]["icon"],
               ),
               SizedBox(height: 4),
               Text(
                 menuUser[index]["title"],
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -264,7 +316,7 @@ class MainMenuScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Preset Theme",
+                "Preset",
                 style: TextStyle(
                   color: Constans.seventh,
                   fontSize: 18,

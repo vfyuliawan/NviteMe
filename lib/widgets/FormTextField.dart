@@ -94,7 +94,7 @@ class _FormTextFieldState extends State<FormTextField> {
               hintText: widget.hintText ?? "",
               hintStyle: TextStyle(color: Colors.black26, fontSize: 18),
               fillColor:
-                  widget.enable == true ? Colors.white : Colors.grey.shade200,
+                  widget.enable == false ? Colors.grey.shade300 : Colors.white,
               filled: true,
               labelText: _focusNode.hasFocus ? null : null,
               suffixIconColor: Constans.textColor,

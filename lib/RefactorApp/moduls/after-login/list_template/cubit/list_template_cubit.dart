@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:meta/meta.dart';
 import 'package:nvite_me/RefactorApp/domain/model/request/theme_example/model_theme_example_inquiry.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_get_theme_example.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_response_delete_theme.dart';
 import 'package:nvite_me/RefactorApp/domain/service/theme_example_service/theme_example_service.dart';
 import 'package:nvite_me/RefactorApp/utility/Debouncer.dart';
 import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
@@ -67,6 +68,15 @@ class ListTemplateCubit extends Cubit<ListTemplateState> {
       Utilities().showMessage(message: e.toString());
       // ignore: use_build_context_synchronously
       context.replace("login");
+    }
+  }
+
+  Future<void> deleteTheme(String id, BuildContext context) async {
+    emit(ListTemplateIsLoading(searchBar));
+    projects.removeWhere((element) => element.id == id);
+    ModelResponseDeleteTheme? res = await ThemeExampleService().deleteTheme(id);
+    if (res?.result != null) {
+      emit(ListTemplateIsSuccess(projects, searchBar));
     }
   }
 

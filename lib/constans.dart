@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class Constans {
   static final theme = _Theme();
+  static final routeMenu = RouteMenu();
   static var primaryColor = Color(0xff296e48);
   static var secondaryColor = Color(0xff3A8891);
   static var thirdColor = Color(0xffEBD9B4);
@@ -71,4 +72,13 @@ class _Theme {
   final String luxuryCream = "LuxuryCream";
   final String luxuryGreen = "LuxuryGreen";
   final String luxuryPink = "LuxuryPink";
+}
+
+class RouteMenu {
+  final String createPreset = "createPreset";
+  final String createUndangan = "createUndangan";
+  final String listcontact = "listcontact";
+  final String listUser = "listUser";
+  final String listRsvp = "listRsvp";
+  final String listMessage = "listMessage";
 }

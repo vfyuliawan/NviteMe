@@ -17,66 +17,56 @@ class CardProjectTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.go(
-          '/home/templateDetail/${item.id}',
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.only(right: 25),
-        height: 200,
-        width: 260,
-        decoration: BoxDecoration(
-          color: Color(int.parse(item.themeColor)),
-          image: DecorationImage(
-              opacity: 0.4,
-              image: NetworkImage(item.bgImage),
-              fit: BoxFit.cover),
-          borderRadius: BorderRadius.circular(
-            40,
-          ),
+    return Container(
+      margin: EdgeInsets.only(right: 25),
+      height: 200,
+      width: 260,
+      decoration: BoxDecoration(
+        color: Color(int.parse(item.themeColor)),
+        image: DecorationImage(
+            opacity: 0.4, image: NetworkImage(item.bgImage), fit: BoxFit.cover),
+        borderRadius: BorderRadius.circular(
+          40,
         ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: -30,
-              left: -30,
-              child: Container(
-                height: 160,
-                padding: const EdgeInsets.only(right: 10),
-                width: 160,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(80)),
-                child: Center(
-                  child: Container(
-                    width: 60,
-                    child: Text(
-                      textAlign: TextAlign.start,
-                      name,
-                      style: TextStyle(
-                          color: Color(int.parse(item.themeColor)),
-                          fontSize: 12,
-                          fontFamily: "Pacifico"),
-                    ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: -30,
+            left: -30,
+            child: Container(
+              height: 160,
+              padding: const EdgeInsets.only(right: 10),
+              width: 160,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(80)),
+              child: Center(
+                child: Container(
+                  width: 60,
+                  child: Text(
+                    textAlign: TextAlign.start,
+                    name,
+                    style: TextStyle(
+                        color: Color(int.parse(item.themeColor)),
+                        fontSize: 12,
+                        fontFamily: "Pacifico"),
                   ),
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                height: 140,
-                child: Image.network(item.fgImage, fit: BoxFit.cover),
-              ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 10,
+            child: Container(
+              height: 120,
+              child: Image.network(item.fgImage, fit: BoxFit.cover),
             ),
-            const SizedBox(
-              height: 15,
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+        ],
       ),
     );
   }

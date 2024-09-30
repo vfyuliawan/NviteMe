@@ -24,6 +24,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       try {
         await UserService().getUserDetail().then((value) async {
           if (value != null) {
+            print(value.result.role + "fasdfasdfa");
             final getVErsion = await VersionService().getVersionActive();
             if (getVErsion!.result.currentVersion == Constans.version) {
               emit(
@@ -49,7 +50,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
                       name: value.result.name,
                       email: value.result.email,
                       alamat: value.result.alamat,
-                      photo: value.result.photo),
+                      photo: value.result.photo,
+                      role: value.result.role),
                 ),
               );
             }

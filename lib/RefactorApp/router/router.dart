@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/create_preset/create_preset_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/create_preset/cubit/create_preset_cubit.dart';
 // import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
 // import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/bloc/list_project_bloc.dart';
@@ -15,6 +17,7 @@ import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_t
 // import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 // import 'package:nvite_me/RefactorApp/moduls/example/testComponent.dart';
 import 'package:nvite_me/RefactorApp/moduls/pre-login/login/login_screen.dart';
+import 'package:nvite_me/constans.dart';
 
 import '../moduls/after-login/list_project/list_project_screen.dart';
 import '../moduls/pre-login/onboarding/onboarding_screen.dart';
@@ -80,6 +83,19 @@ class AppRouter {
                       return listTemplateCubit;
                     },
                     child: ListTemplateScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Constans.routeMenu.createPreset,
+                builder: (BuildContext context, GoRouterState state) {
+                  return BlocProvider(
+                    create: (context) {
+                      final createPresetCubit = CreatePresetCubit();
+                      // listTemplateCubit.getFirstProject("", context);
+                      return createPresetCubit;
+                    },
+                    child: const CreatePresetScreen(),
                   );
                 },
               ),

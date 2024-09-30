@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_get_theme_example.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/cubit/list_template_cubit.dart';
@@ -30,6 +31,16 @@ class ListTemplateScreen extends StatelessWidget {
     setUpScroll(context);
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            GoRouter.of(context).pushReplacement('/home');
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+            size: 25,
+          ),
+        ),
         actions: [
           GestureDetector(
             onTap: () {
@@ -60,7 +71,7 @@ class ListTemplateScreen extends StatelessWidget {
 
           return Stack(children: [
             Container(
-              decoration: BoxDecoration(color: Constans.secondaryColor),
+              decoration: BoxDecoration(color: Constans.fourthColor),
               padding: const EdgeInsets.only(right: 20, left: 20, bottom: 30),
               child: FormTextField(
                 initialValue: context.read<ListTemplateCubit>().titleProject,
@@ -132,7 +143,7 @@ class ListTemplateScreen extends StatelessWidget {
                     }
                     return listProject.isNotEmpty
                         ? Container(
-                            margin: EdgeInsets.only(bottom: 40),
+                            margin: EdgeInsets.only(bottom: 20),
                             decoration: BoxDecoration(
                                 color: Constans.fourthColor,
                                 borderRadius: BorderRadius.only(
@@ -155,10 +166,20 @@ class ListTemplateScreen extends StatelessWidget {
                                 }
                                 ListTheme detailTemplate = listProject[index];
 
-                                return CardProjectTemplate(
-                                  item: detailTemplate,
-                                  name: detailTemplate.themeName,
-                                  context: context,
+                                return Dismissible(
+                                  direction: DismissDirection.endToStart,
+                                  onDismissed: (direction) {
+                                    context
+                                        .read<ListTemplateCubit>()
+                                        .deleteTheme(
+                                            detailTemplate.id, context);
+                                  },
+                                  key: Key(detailTemplate.id),
+                                  child: CardProjectTemplate(
+                                    item: detailTemplate,
+                                    name: detailTemplate.themeName,
+                                    context: context,
+                                  ),
                                 );
                               },
                             ),
