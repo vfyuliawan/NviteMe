@@ -1,9 +1,8 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/theme_example/model_get_theme_example.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/cubit/list_template_cubit.dart';
 import 'package:nvite_me/constans.dart';

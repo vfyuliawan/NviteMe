@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,12 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:nvite_me/RefactorApp/domain/model/request/theme_example/model_request_create_theme.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/create_preset/cubit/create_preset_cubit.dart';
-import 'package:nvite_me/RefactorApp/utility/Utilities.dart';
 import 'package:nvite_me/constans.dart';
 import 'package:nvite_me/widgets/FormTextField.dart';
 import 'package:nvite_me/widgets/IBodyRoundedWidget.dart';
 import 'package:nvite_me/widgets/IImageBase64Component.dart';
-import 'package:path/path.dart';
 
 class CreatePresetScreen extends StatelessWidget {
   const CreatePresetScreen({Key? key}) : super(key: key);

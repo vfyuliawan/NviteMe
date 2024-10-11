@@ -11,7 +11,6 @@ import 'package:nvite_me/widgets/CardListProject.dart';
 import 'package:nvite_me/widgets/CardProjectTemplate.dart';
 import 'package:nvite_me/widgets/IImageBase64Component.dart';
 import 'package:nvite_me/widgets/NoDataFound.dart';
-import 'package:path/path.dart';
 
 class MainMenuScreen extends StatelessWidget {
   MainMenuScreen({Key? key}) : super(key: key);
@@ -163,10 +162,10 @@ class MainMenuScreen extends StatelessWidget {
                   context.go("/home/listProject/${true}");
                 },
                 child: Text(
-                  "See More >",
+                  "See More Project >",
                   style: TextStyle(
                     color: const Color.fromARGB(255, 219, 125, 3),
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -328,10 +327,10 @@ class MainMenuScreen extends StatelessWidget {
                   context.go("/home/listTemplate");
                 },
                 child: Text(
-                  "See More >",
+                  "See More Preset >",
                   style: TextStyle(
                     color: const Color.fromARGB(255, 219, 125, 3),
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

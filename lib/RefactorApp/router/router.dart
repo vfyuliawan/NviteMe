@@ -14,6 +14,7 @@ import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/list_templ
 // import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/bloc/detail_project_template_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/detail_project_template_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/web_view/web_view_screen.dart';
 // import 'package:nvite_me/RefactorApp/moduls/after-login/user/bloc/user_bloc.dart';
 // import 'package:nvite_me/RefactorApp/moduls/example/testComponent.dart';
 import 'package:nvite_me/RefactorApp/moduls/pre-login/login/login_screen.dart';
@@ -97,6 +98,13 @@ class AppRouter {
                     },
                     child: const CreatePresetScreen(),
                   );
+                },
+              ),
+              GoRoute(
+                path: 'webView/:slug',
+                builder: (BuildContext context, GoRouterState state) {
+                  final slugContent = state.pathParameters["slug"];
+                  return WebViewScreen(slug: slugContent!);
                 },
               ),
             ],

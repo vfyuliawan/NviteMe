@@ -25,6 +25,7 @@ class Constans {
   static var luxuryPink = Color(0xffDBC4CA);
 
   static var baseUrlDev = 'localhost:3000/?a=';
+  // static var baseUrlDev = 'localhost:3000/?a=';
   static var version = "V.0.0.1";
   static var baseUrlDeploy =
       'https://your-wedding-day-git-main-vfyuliawans-projects.vercel.app/?a=';
