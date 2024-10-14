@@ -12,8 +12,9 @@ import 'package:nvite_me/widgets/NoDataFound.dart';
 
 class ListTemplateScreen extends StatelessWidget {
   final ScrollController scrollController = ScrollController();
+  final bool isHome;
 
-  ListTemplateScreen({Key? key}) : super(key: key);
+  ListTemplateScreen({Key? key, required this.isHome}) : super(key: key);
 
   void setUpScroll(BuildContext context) {
     scrollController.addListener(() {
@@ -32,7 +33,12 @@ class ListTemplateScreen extends StatelessWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            GoRouter.of(context).pushReplacement('/home');
+            print("isHome ${isHome}");
+            if (isHome) {
+              GoRouter.of(context).pushReplacement('/home');
+            } else {
+              context.pop();
+            }
           },
           child: Icon(
             Icons.arrow_back_ios,
@@ -55,7 +61,7 @@ class ListTemplateScreen extends StatelessWidget {
         ],
         backgroundColor: Constans.secondaryColor,
         title: Text(
-          "List Template",
+          "List Theme",
           style: TextStyle(color: Colors.white, fontFamily: "Pacifico"),
         ),
       ),
@@ -165,21 +171,34 @@ class ListTemplateScreen extends StatelessWidget {
                                 }
                                 ListTheme detailTemplate = listProject[index];
 
-                                return Dismissible(
-                                  direction: DismissDirection.endToStart,
-                                  onDismissed: (direction) {
-                                    context
-                                        .read<ListTemplateCubit>()
-                                        .deleteTheme(
-                                            detailTemplate.id, context);
-                                  },
-                                  key: Key(detailTemplate.id),
-                                  child: CardProjectTemplate(
-                                    item: detailTemplate,
-                                    name: detailTemplate.themeName,
-                                    context: context,
-                                  ),
-                                );
+                                return isHome
+                                    ? Dismissible(
+                                        direction: DismissDirection.endToStart,
+                                        onDismissed: (direction) {
+                                          context
+                                              .read<ListTemplateCubit>()
+                                              .deleteTheme(
+                                                  detailTemplate.id ?? "",
+                                                  context);
+                                        },
+                                        key: Key(detailTemplate.id ?? ""),
+                                        child: CardProjectTemplate(
+                                          item: detailTemplate,
+                                          name: detailTemplate.themeName ?? "",
+                                          context: context,
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          context.pop(detailTemplate);
+                                          //send param etailTemplate.themeName
+                                        },
+                                        child: CardProjectTemplate(
+                                          item: detailTemplate,
+                                          name: detailTemplate.themeName ?? "",
+                                          context: context,
+                                        ),
+                                      );
                               },
                             ),
                           )

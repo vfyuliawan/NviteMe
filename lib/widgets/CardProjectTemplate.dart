@@ -22,9 +22,11 @@ class CardProjectTemplate extends StatelessWidget {
       height: 200,
       width: 260,
       decoration: BoxDecoration(
-        color: Color(int.parse(item.themeColor)),
+        color: Color(int.parse(item.primaryColor ?? "")),
         image: DecorationImage(
-            opacity: 0.4, image: NetworkImage(item.bgImage), fit: BoxFit.cover),
+            opacity: 0.4,
+            image: NetworkImage(item.bgImage ?? ""),
+            fit: BoxFit.cover),
         borderRadius: BorderRadius.circular(
           40,
         ),
@@ -42,12 +44,12 @@ class CardProjectTemplate extends StatelessWidget {
                   color: Colors.white, borderRadius: BorderRadius.circular(80)),
               child: Center(
                 child: Container(
-                  width: 60,
+                  // width: 70,
                   child: Text(
                     textAlign: TextAlign.start,
                     name,
                     style: TextStyle(
-                        color: Color(int.parse(item.themeColor)),
+                        color: Color(int.parse(item.primaryColor ?? "")),
                         fontSize: 12,
                         fontFamily: "Pacifico"),
                   ),
@@ -60,7 +62,7 @@ class CardProjectTemplate extends StatelessWidget {
             right: 10,
             child: Container(
               height: 120,
-              child: Image.network(item.fgImage, fit: BoxFit.cover),
+              child: Image.network(item.fgImage ?? "", fit: BoxFit.cover),
             ),
           ),
           const SizedBox(

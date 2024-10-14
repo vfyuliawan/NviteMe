@@ -324,7 +324,7 @@ class MainMenuScreen extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  context.go("/home/listTemplate");
+                  context.go("/home/listTemplate/true");
                 },
                 child: Text(
                   "See More Preset >",
@@ -346,7 +346,7 @@ class MainMenuScreen extends StatelessWidget {
               children: props.listTheme.map((item) {
                 return CardProjectTemplate(
                   item: item,
-                  name: item.themeName,
+                  name: item.themeName ?? "",
                   context: context,
                 );
               }).toList(),

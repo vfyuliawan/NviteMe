@@ -71,7 +71,7 @@ class CreatePresetCubit extends Cubit<CreatePresetState> {
     if (chceck) {
       final res = await ThemeExampleService().createTheme(dataSubmit);
       if (res != null || res?.result != null) {
-        context.go("/home/listTemplate");
+        context.go("/home/listTemplate/true");
         Utilities().showMessage(message: "Berhasil input tema baru");
       }
     } else {

@@ -148,7 +148,7 @@ class Theme {
   String slug;
   String alamat;
   String embeded;
-  String theme;
+  ThemeUsed theme;
   String music;
 
   Theme({
@@ -167,7 +167,7 @@ class Theme {
         slug: json["slug"],
         alamat: json["alamat"],
         embeded: json["embeded"],
-        theme: json["theme"],
+        theme: ThemeUsed.fromJson(json["theme"]),
         music: json["music"],
       );
 
@@ -177,5 +177,40 @@ class Theme {
         "embeded": embeded,
         "theme": theme,
         "music": music,
+      };
+}
+
+class ThemeUsed {
+  String themeName;
+  String primaryColor;
+  String secondaryColor;
+
+  ThemeUsed({
+    required this.themeName,
+    required this.primaryColor,
+    required this.secondaryColor,
+  });
+
+  ThemeUsed copyWith({
+    String? themeName,
+    String? primaryColor,
+    String? secondaryColor,
+  }) =>
+      ThemeUsed(
+        themeName: themeName ?? this.themeName,
+        primaryColor: primaryColor ?? this.primaryColor,
+        secondaryColor: secondaryColor ?? this.secondaryColor,
+      );
+
+  factory ThemeUsed.fromJson(Map<String, dynamic> json) => ThemeUsed(
+        themeName: json["themeName"],
+        primaryColor: json["primaryColor"],
+        secondaryColor: json["secondaryColor"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "themeName": themeName,
+        "primaryColor": primaryColor,
+        "secondaryColor": secondaryColor,
       };
 }

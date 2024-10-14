@@ -1,8 +1,9 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/contact/contact_screen.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/create_preset/create_preset_screen.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/create_preset/cubit/create_preset_cubit.dart';
 // import 'package:nvite_me/RefactorApp/moduls/after-login/home/bloc/home_bloc.dart';
@@ -11,6 +12,8 @@ import 'package:nvite_me/RefactorApp/moduls/after-login/home/home_screen.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_project/cubit/list_project_cubit.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/cubit/list_template_cubit.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/list_template/list_template_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/project/create_project/create_project_screen.dart';
+import 'package:nvite_me/RefactorApp/moduls/after-login/project/create_project/cubit/create_project_cubit.dart';
 // import 'package:nvite_me/RefactorApp/moduls/after-login/main_menu/bloc/main_menu_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/bloc/detail_project_template_bloc.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/project/detail_project_template.dart/detail_project_template_screen.dart';
@@ -75,15 +78,17 @@ class AppRouter {
                 },
               ),
               GoRoute(
-                path: 'listTemplate',
+                path: 'listTemplate/:isHome',
                 builder: (BuildContext context, GoRouterState state) {
+                  final isHomeParam = state.pathParameters['isHome'];
+                  print(isHomeParam);
                   return BlocProvider(
                     create: (context) {
                       final listTemplateCubit = ListTemplateCubit();
                       listTemplateCubit.getFirstProject("", context);
                       return listTemplateCubit;
                     },
-                    child: ListTemplateScreen(),
+                    child: ListTemplateScreen(isHome: isHomeParam == "true"),
                   );
                 },
               ),
@@ -101,12 +106,79 @@ class AppRouter {
                 },
               ),
               GoRoute(
+                path: Constans.routeMenu.listcontact,
+                pageBuilder: (context, state) {
+                  return CustomTransitionPage(
+                    transitionDuration: Duration(milliseconds: 1000),
+                    key: state.pageKey,
+                    child: ContactScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      // Define the offset for the slide transition
+                      const begin = Offset(0.0, 1.0); // Start from the bottom
+                      const end = Offset.zero; // End at the original position
+                      const curve = Curves.easeIn; // Use the desired curve
+
+                      // Apply the animation for position
+                      var slideTween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var slideAnimation = animation.drive(slideTween);
+
+                      // Apply the animation for opacity
+                      var opacityTween = Tween(begin: 0.0, end: 1.0);
+                      var opacityAnimation =
+                          opacityTween.animate(CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeIn,
+                      ));
+
+                      return SlideTransition(
+                        position: slideAnimation,
+                        child: FadeTransition(
+                          opacity: opacityAnimation,
+                          child: child,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              GoRoute(
                 path: 'webView/:slug',
                 builder: (BuildContext context, GoRouterState state) {
                   final slugContent = state.pathParameters["slug"];
                   return WebViewScreen(slug: slugContent!);
                 },
               ),
+              GoRoute(
+                  path: Constans.routeMenu.createUndangan,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return BlocProvider(
+                      create: (context) {
+                        final cubit = CreateProjectCubit();
+                        return cubit;
+                      },
+                      child: CreateProjectScreen(),
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'listTemplate/:isHome',
+                      builder: (BuildContext context, GoRouterState state) {
+                        final isHomeParam = state.pathParameters['isHome'];
+                        print(isHomeParam);
+                        return BlocProvider(
+                          create: (context) {
+                            final listTemplateCubit = ListTemplateCubit();
+                            listTemplateCubit.getFirstProject("", context);
+                            return listTemplateCubit;
+                          },
+                          child:
+                              ListTemplateScreen(isHome: isHomeParam == "true"),
+                        );
+                      },
+                    ),
+                  ]),
             ],
           ),
         ],

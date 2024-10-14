@@ -125,7 +125,7 @@ class LoginScreen extends StatelessWidget {
                                   height: 60,
                                 ),
                                 FormTextField(
-                                  height: 50,
+                                  // height: 50,
                                   labelText: "Email",
                                   valueColor: Constans.secondaryColor,
                                   labelColor: Constans.sixth,
@@ -144,7 +144,7 @@ class LoginScreen extends StatelessWidget {
                                   height: 20,
                                 ),
                                 FormTextField(
-                                  height: 50,
+                                  // height: 50,
                                   labelSize: 18,
                                   valueColor: Constans.secondaryColor,
                                   obscureText: !hidePassword,

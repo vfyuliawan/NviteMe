@@ -26,7 +26,7 @@ class ModelGetThemeExample {
   ModelGetThemeExample copyWith({
     String? code,
     String? message,
-    dynamic messageError,
+    String? messageError,
     ResultThemeExample? result,
   }) =>
       ModelGetThemeExample(
@@ -84,17 +84,19 @@ class ResultThemeExample {
 }
 
 class ListTheme {
-  String id;
-  String themeName;
-  String themeColor;
-  String bgImage;
-  String fgImage;
+  String? id;
+  String? themeName;
+  String? primaryColor;
+  String? secondaryColor;
+  String? bgImage;
+  String? fgImage;
   DateTime createdAt;
 
   ListTheme({
     required this.id,
     required this.themeName,
-    required this.themeColor,
+    required this.primaryColor,
+    required this.secondaryColor,
     required this.bgImage,
     required this.fgImage,
     required this.createdAt,
@@ -103,7 +105,8 @@ class ListTheme {
   ListTheme copyWith({
     String? id,
     String? themeName,
-    String? themeColor,
+    String? primaryColor,
+    String? secondaryColor,
     String? bgImage,
     String? fgImage,
     DateTime? createdAt,
@@ -111,7 +114,8 @@ class ListTheme {
       ListTheme(
         id: id ?? this.id,
         themeName: themeName ?? this.themeName,
-        themeColor: themeColor ?? this.themeColor,
+        primaryColor: primaryColor ?? this.primaryColor,
+        secondaryColor: secondaryColor ?? this.secondaryColor,
         bgImage: bgImage ?? this.bgImage,
         fgImage: fgImage ?? this.fgImage,
         createdAt: createdAt ?? this.createdAt,
@@ -120,7 +124,8 @@ class ListTheme {
   factory ListTheme.fromJson(Map<String, dynamic> json) => ListTheme(
         id: json["id"],
         themeName: json["themeName"],
-        themeColor: json["themeColor"],
+        primaryColor: json["primaryColor"],
+        secondaryColor: json["secondaryColor"],
         bgImage: json["bgImage"],
         fgImage: json["fgImage"],
         createdAt: DateTime.parse(json["createdAt"]),
@@ -129,7 +134,8 @@ class ListTheme {
   Map<String, dynamic> toJson() => {
         "id": id,
         "themeName": themeName,
-        "themeColor": themeColor,
+        "primaryColor": primaryColor,
+        "secondaryColor": secondaryColor,
         "bgImage": bgImage,
         "fgImage": fgImage,
         "createdAt": createdAt.toIso8601String(),

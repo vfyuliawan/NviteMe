@@ -1,5 +1,7 @@
+import 'package:nvite_me/RefactorApp/domain/model/request/projects/model_request_cek_slug.dart';
 import 'package:nvite_me/RefactorApp/domain/model/request/projects/model_request_create_project.dart';
 import 'package:nvite_me/RefactorApp/domain/model/request/projects/model_request_project_sample.dart';
+import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_cek_slug.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_create_project.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_detail_sample.dart';
 import 'package:nvite_me/RefactorApp/domain/model/response/projects/model_response_project_sample.dart';
@@ -27,5 +29,10 @@ class ProjectService {
       ModelRequestCreateProject props) async {
     final result = await ProjectRepository().createNewProject(props);
     return result;
+  }
+
+  Future<ModelResponseCekSlug?> cekSlug(ModelRequesCekSlug props) async {
+    final res = await ProjectRepository().cekSlug(props);
+    return res;
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nvite_me/RefactorApp/domain/model/request/theme_example/model_request_create_theme.dart';
 import 'package:nvite_me/RefactorApp/moduls/after-login/create_preset/cubit/create_preset_cubit.dart';
 import 'package:nvite_me/constans.dart';
@@ -18,7 +19,12 @@ class CreatePresetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IBodyRoundedWidget(
-          widget: _content(context), bodyColor: Constans.fourthColor),
+          goBack: () {
+            context.pop();
+          },
+          titleAppBar: "Create Preset Template",
+          widget: _content(context),
+          bodyColor: Constans.fourthColor),
     );
   }
 
@@ -62,6 +68,8 @@ class CreatePresetScreen extends StatelessWidget {
                 child: FormTextField(
                   topSpace: 4,
                   enable: false,
+                  initialValue:
+                      context.read<CreatePresetCubit>().dataSubmit.themeColor,
                   onChanged: (value) {},
                   labelText: "Primary Color",
                   labelColor: Colors.black45,

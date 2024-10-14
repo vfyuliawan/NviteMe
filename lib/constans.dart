@@ -15,6 +15,8 @@ class Constans {
   static var seventh = Color(0xff3A8891);
   static var eight = Color.fromARGB(255, 239, 239, 239);
   static var nine = Color.fromARGB(255, 240, 240, 240);
+  static var ten = Color.fromARGB(255, 248, 240, 232);
+
   static var textColor = const Color(0xff3C3633);
   static var textColor2 = Color.fromARGB(255, 88, 75, 70);
   static var alertColor = Color.fromARGB(255, 252, 239, 214);

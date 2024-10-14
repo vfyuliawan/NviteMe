@@ -1,7 +1,10 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:custom_alert_dialog_box/custom_alert_dialog_box.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -88,5 +91,194 @@ class Utilities {
       Utilities().showMessage(message: e.toString());
       return null;
     }
+  }
+
+  void showDialogConfrimation(BuildContext context, String title, String desc,
+      Function onSubmit) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Constans.fourthColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0), // Rounded corners
+            side: BorderSide(color: Constans.sixth, width: 4), // Blue border
+          ),
+          shadowColor: Colors.black54,
+          titleTextStyle: TextStyle(
+              color: Constans.sixth,
+              fontFamily: "Roboto-Black",
+              fontSize: 24,
+              fontWeight: FontWeight.bold),
+          title: Text(
+            title,
+            textAlign: TextAlign.center,
+          ),
+          content: Container(
+            // decoration: BoxDecoration(color: Colors.red),
+            height: 300,
+            width: 300,
+            child: Column(
+              children: [
+                Container(
+                  height: 160,
+                  child: Image.asset("assets/images/please.png",
+                      fit: BoxFit.cover),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(desc),
+                SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          // ignore: sort_child_properties_last
+                          child: Text(
+                            "No",
+                            style: TextStyle(
+                                fontFamily: 'Roboto-Black',
+                                fontSize: 16,
+                                color: Colors.white),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Constans.sixth,
+                          ),
+                          width: 70,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          onSubmit();
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          // ignore: sort_child_properties_last
+                          child: Text(
+                            "Yes",
+                            style: TextStyle(
+                                fontFamily: 'Roboto-Black',
+                                fontSize: 16,
+                                color: Colors.white),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Constans.sixth,
+                          ),
+                          width: 70,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[],
+        );
+      },
+    );
+  }
+
+  void showModalInfo(
+      BuildContext context, String title, String desc, String? image) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Constans.fourthColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0), // Rounded corners
+            side: BorderSide(color: Constans.sixth, width: 4), // Blue border
+          ),
+          shadowColor: Colors.black54,
+          titleTextStyle: TextStyle(
+              color: Constans.sixth,
+              fontFamily: "Roboto-Black",
+              fontSize: 24,
+              fontWeight: FontWeight.bold),
+          title: Text(
+            title,
+            textAlign: TextAlign.center,
+          ),
+          content: Container(
+            // decoration: BoxDecoration(color: Colors.red),
+            height: 300,
+            width: 300,
+            child: Column(
+              children: [
+                Container(
+                  height: 160,
+                  child: Image.asset(image ?? "assets/images/please.png",
+                      fit: BoxFit.cover),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  desc,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          // ignore: sort_child_properties_last
+                          child: Text(
+                            "Tutup",
+                            style: TextStyle(
+                                fontFamily: 'Roboto-Black',
+                                fontSize: 16,
+                                color: Colors.white),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Constans.sixth,
+                          ),
+                          width: 70,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[],
+        );
+      },
+    );
   }
 }
